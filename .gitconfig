@@ -88,5 +88,3 @@
 
 [web]
 	browser = links
-[push]
-	default = matching
