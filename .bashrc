@@ -124,9 +124,3 @@ fi
 
 source ~/.git-completion.bash
 source ~/.bashprofile
-alias sublime='/Applications/Sublime\ Text\ 2/sublime_text &'
-. ~/.bashz
-
-. /repos/smith/smith.sh
-. ~/Applications/z/z.sh
-. ~/Applications/smith/smith.sh
