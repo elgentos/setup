@@ -124,3 +124,6 @@ fi
 
 source ~/.git-completion.bash
 source ~/.bashprofile
+
+alias pull-all-master='for i in ~/git/*/; do echo "Git pull: $i"; echo; cd "$i"; git reset --hard HEAD; git checkout master; git pull upstream master; echo; echo; done; for i in ~/git/*/; do echo "Git garbage collection: $i"; echo; cd "$i"; git gc; echo; echo; cd ..; done;'
+alias pull-all-branch='for i in ~/git/*/; do cd "$i"; echo "Git pull upstream $(git rev-parse --abbrev-ref HEAD): $i"; echo; git pull upstream "$(git rev-parse --abbrev-ref HEAD)"; echo; echo; done; for i in ~/git/*/; do echo "Git garbage collection: $i"; echo; cd "$i"; git gc; echo; echo; cd ..; done;'
