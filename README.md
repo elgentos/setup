@@ -1,4 +1,0 @@
-Dotfiles
-========
-
-Dotfiles
