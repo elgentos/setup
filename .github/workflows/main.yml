@@ -1,0 +1,16 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test install target
+    steps:
+      - uses: actions/checkout@v2
+      - name: make install
+        run: make install
