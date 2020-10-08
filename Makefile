@@ -73,7 +73,7 @@ $(DOCKER_CONFIG): $(DOCKER)
 
 $(ZSH):
 	sudo apt install zsh -y
-	chsh --shell $(ZSH)
+	test '[[ "'$$CI'" == "" ]]' && chsh --shell $(ZSH)
 
 $(ZSHRC):
 	ln -s "$(shell pwd)/.zshrc" "$(ZSHRC)"
