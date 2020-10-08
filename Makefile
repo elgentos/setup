@@ -38,8 +38,8 @@ $(GITIGNORE):
 $(GITPROJECTS):
 	mkdir -p "$(GITPROJECTS)"
 
-$(GIT): $(GITCONFIG) $(GITIGNORE) $(GITPROJECTS)
-	@command -v git > /dev/null || sudo apt install git -y
+$(GIT): | $(GITCONFIG) $(GITIGNORE) $(GITPROJECTS)
+	sudo apt install git -y
 
 $(JQ):
 	sudo apt install jq -y
@@ -47,11 +47,11 @@ $(JQ):
 $(CURL):
 	sudo apt install curl -y
 
-$(JETBRAINS_TOOLBOX): $(JQ) $(CURL)
+$(JETBRAINS_TOOLBOX): | $(JQ) $(CURL)
 	$(CURL) -L --output - $(shell $(CURL) 'https://data.services.jetbrains.com/products/releases?code=TBA&latest=true&type=release' | $(JQ) '.TBA[0].downloads.linux.link' | sed 's/"//g') | tar zxf - -C /tmp
 	sudo mv /tmp/jetbrains-toolbox-*/jetbrains-toolbox $(JETBRAINS_TOOLBOX)
 
-$(JETBRAINS_TOOLBOX_SETTINGS): $(JETBRAINS_TOOLBOX)
+$(JETBRAINS_TOOLBOX_SETTINGS): | $(JETBRAINS_TOOLBOX)
 	mkdir -p $(shell dirname $(JETBRAINS_TOOLBOX_SETTINGS))
 	echo $(INTERACTIVE) | grep -q '1' && $(JETBRAINS_TOOLBOX) || echo '{}' > $(JETBRAINS_TOOLBOX_SETTINGS)
 	
@@ -65,7 +65,7 @@ $(DOCKER):
 	newgrp docker
 	sudo systemctl enable docker
 
-$(DOCKER_CONFIG): $(DOCKER)
+$(DOCKER_CONFIG): | $(DOCKER)
 	sudo usermod -aG docker $$USER
 	echo $(INTERACTIVE) | grep -q '1' && su -c 'docker run --rm hello-world' $$USER || echo 'Skipping Docker test'
 	mkdir -p $(shell dirname $(DOCKER_CONFIG))
@@ -84,12 +84,12 @@ $(ZSHRC):
 $(BASH):
 	sudo apt install bash -y
 
-$(OH_MY_ZSH): $(ZSH) $(CURL) $(BASH)
+$(OH_MY_ZSH): | $(ZSH) $(CURL) $(BASH)
 	$(CURL) -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh \
 		| ZSH=$(shell dirname $(OH_MY_ZSH)) $(BASH) -s -- --keep-zshrc --unattended
 
-$(CHROME): $(CURL)
-	$(CURL) https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+$(CHROME): | $(CURL)
+	$(CURL) -L https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
     		--output /tmp/google-chrome-stable_current_amd64.deb
 	sudo dpkg --install /tmp/google-chrome-stable_current_amd64.deb
 	rm -f /tmp/google-chrome-stable_current_amd64.deb
