@@ -1,5 +1,7 @@
 # Workstation setup
 
+[![Build](https://github.com/johmanx10/setup/workflows/Build/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3ABuild)
+
 This repository can be used to bootstrap a fresh workstation.
 
 # Prerequisites
