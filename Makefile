@@ -1,3 +1,5 @@
+INTERACTIVE=1
+
 GITCONFIG := $(shell echo "$$HOME/.gitconfig")
 GITIGNORE := $(shell echo "$$HOME/.gitignore")
 GITPROJECTS := $(shell echo "$$HOME/git")
@@ -73,7 +75,7 @@ $(DOCKER_CONFIG): $(DOCKER)
 
 $(ZSH):
 	sudo apt install zsh -y
-	test '[[ $$- == *i* ]]' && chsh --shell $(ZSH)
+	echo $(INTERACTIVE) | grep -q '1' && chsh --shell $(ZSH) || echo 'Skipping shell change'
 
 $(ZSHRC):
 	ln -s "$(shell pwd)/.zshrc" "$(ZSHRC)"

@@ -13,4 +13,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: make install
-        run: make install
+        run: make install INTERACTIVE=0
