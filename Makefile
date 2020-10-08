@@ -52,7 +52,7 @@ $(JETBRAINS_TOOLBOX): $(JQ) $(CURL)
 	sudo mv /tmp/jetbrains-toolbox-*/jetbrains-toolbox $(JETBRAINS_TOOLBOX)
 
 $(JETBRAINS_TOOLBOX_SETTINGS): $(JETBRAINS_TOOLBOX)
-	$(JETBRAINS_TOOLBOX)
+	echo $(INTERACTIVE) | grep -q '1' && $(JETBRAINS_TOOLBOX) || echo '{}' > $(JETBRAINS_TOOLBOX_SETTINGS)
 	
 $(DOCKER):
 	sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
@@ -66,7 +66,7 @@ $(DOCKER):
 
 $(DOCKER_CONFIG): $(DOCKER)
 	sudo usermod -aG docker $$USER
-	su -c 'docker run --rm hello-world' $$USER
+	echo $(INTERACTIVE) | grep -q '1' && su -c 'docker run --rm hello-world' $$USER || echo 'Skipping Docker test'
 	mkdir -p $(shell dirname $(DOCKER_CONFIG))
 	echo '{}' > $(DOCKER_CONFIG)
 	@echo ""
