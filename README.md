@@ -59,6 +59,7 @@ The following software has been installed:
 - cURL
 - Docker
 - GIT
+- Google Chrome
 - JetBrains Toolbox
 - jq
 - OhMyZsh

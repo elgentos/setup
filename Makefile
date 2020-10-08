@@ -5,6 +5,8 @@ GITPROJECTS := $(shell echo "$$HOME/git")
 JETBRAINS_TOOLBOX := $(shell command -v jetbrains-toolbox || echo /usr/local/bin/jetbrains-toolbox)
 JETBRAINS_TOOLBOX_SETTINGS := $(shell echo "$$HOME/.local/share/JetBrains/Toolbox/.settings.json")
 
+CHROME := $(shell command -v google-chrome || echo /usr/bin/google-chrome)
+
 DOCKER := $(shell command -v docker || echo /usr/bin/docker)
 DOCKER_CONFIG := $(shell echo "$$HOME/.docker/config.json")
 
@@ -18,6 +20,7 @@ GIT := $(shell command -v git || echo /usr/bin/git)
 BASH := $(shell command -v bash || echo /bin/bash)
 
 install: \
+	$(CHROME) \
 	$(GIT) \
 	$(ZSHRC) \
 	$(OH_MY_ZSH) \
@@ -81,3 +84,9 @@ $(BASH):
 $(OH_MY_ZSH): $(ZSH) $(CURL) $(BASH)
 	$(CURL) -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh \
 		| ZSH=$(shell dirname $(OH_MY_ZSH)) $(BASH) -s -- --keep-zshrc --unattended
+
+$(CHROME): $(CURL)
+	$(CURL) https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+    		--output /tmp/google-chrome-stable_current_amd64.deb
+	sudo dpkg --install /tmp/google-chrome-stable_current_amd64.deb
+	rm -f /tmp/google-chrome-stable_current_amd64.deb
