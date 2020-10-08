@@ -9,7 +9,7 @@ DOCKER_CONFIG := $(shell echo "$$HOME/.docker/config.json")
 
 ZSH := $(shell command -v zsh || echo /usr/bin/zsh)
 ZSHRC := $(shell echo "$$HOME/.zshrc")
-OH_MY_ZSH := $(shell echo "$$HOME/.oh-my-zsh")
+OH_MY_ZSH := $(shell echo "$$HOME/.oh-my-zsh/oh-my-zsh.sh")
 
 JQ := $(shell command -v jq || echo /usr/bin/jq)
 CURL := $(shell command -v curl || echo /usr/bin/curl)
@@ -18,6 +18,7 @@ BASH := $(shell command -v bash || echo /bin/bash)
 
 install: \
 	$(GIT) \
+	$(ZSHRC) \
 	$(OH_MY_ZSH) \
 	$(DOCKER_CONFIG) \
 	$(JETBRAINS_TOOLBOX_SETTINGS)
@@ -73,6 +74,6 @@ $(ZSHRC):
 $(BASH):
 	sudo apt install bash -y
 
-$(OH_MY_ZSH): $(ZSH) $(ZSHRC) $(CURL) $(BASH)
+$(OH_MY_ZSH): $(ZSH) $(CURL) $(BASH)
 	$(CURL) -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh \
-		| $(BASH) -s -- --keep-zshrc --unattended
+		| ZSH=$(shell dirname $(OH_MY_ZSH)) $(BASH) -s -- --keep-zshrc --unattended
