@@ -52,6 +52,7 @@ $(JETBRAINS_TOOLBOX): $(JQ) $(CURL)
 	sudo mv /tmp/jetbrains-toolbox-*/jetbrains-toolbox $(JETBRAINS_TOOLBOX)
 
 $(JETBRAINS_TOOLBOX_SETTINGS): $(JETBRAINS_TOOLBOX)
+	mkdir -p $(shell dirname $(JETBRAINS_TOOLBOX_SETTINGS))
 	echo $(INTERACTIVE) | grep -q '1' && $(JETBRAINS_TOOLBOX) || echo '{}' > $(JETBRAINS_TOOLBOX_SETTINGS)
 	
 $(DOCKER):
