@@ -66,7 +66,7 @@ $(DOCKER):
 
 $(DOCKER_CONFIG): $(DOCKER)
 	sudo usermod -aG docker $$USER
-	su -c 'docker run -it --rm hello-world' $$USER
+	su -c 'docker run --rm hello-world' $$USER
 	mkdir -p $(shell dirname $(DOCKER_CONFIG))
 	echo '{}' > $(DOCKER_CONFIG)
 	@echo ""
