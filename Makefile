@@ -1,4 +1,5 @@
 GITCONFIG := $(shell echo "$$HOME/.gitconfig")
+GITIGNORE := $(shell echo "$$HOME/.gitignore")
 GITPROJECTS := $(shell echo "$$HOME/git")
 
 JETBRAINS_TOOLBOX := $(shell command -v jetbrains-toolbox || echo /usr/local/bin/jetbrains-toolbox)
@@ -26,10 +27,13 @@ install: \
 $(GITCONFIG):
 	ln -s "$(shell pwd)/.gitconfig" "$(GITCONFIG)"
 
+$(GITIGNORE):
+	ln -s "$(shell pwd)/.gitignore" "$(GITIGNORE)"
+
 $(GITPROJECTS):
 	mkdir -p "$(GITPROJECTS)"
 
-$(GIT): $(GITCONFIG) $(GITPROJECTS)
+$(GIT): $(GITCONFIG) $(GITIGNORE) $(GITPROJECTS)
 	@command -v git > /dev/null || sudo apt install git -y
 
 $(JQ):
