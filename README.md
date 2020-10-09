@@ -67,8 +67,17 @@ The following software has been installed:
 - OhMyZsh
 - ZSH
 
-# Additional software
+# Optional software
+
+All the following software can be installed at-once using:
+
+```
+make optional
+```
+
+To cherry-pick optional software, use the following phony targets:
 
 | Name                    | Target |
 |:------------------------|:-------|
 | Transmission Remote GTK | `make transmission-remote` |
+| GIMP                    | `make gimp` |

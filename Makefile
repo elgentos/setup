@@ -11,6 +11,8 @@ TRANSMISSION_REMOTE := $(shell command -v transmission-remote-gtk | echo /usr/bi
 
 CHROME := $(shell command -v google-chrome || echo /usr/bin/google-chrome)
 
+GIMP := $(shell command -v gimp || echo /usr/bin/gimp)
+
 DOCKER := $(shell command -v docker || echo /usr/bin/docker)
 DOCKER_CONFIG := $(shell echo "$$HOME/.docker/config.json")
 
@@ -96,7 +98,16 @@ $(CHROME): | $(CURL)
 	sudo dpkg --install /tmp/google-chrome-stable_current_amd64.deb
 	rm -f /tmp/google-chrome-stable_current_amd64.deb
 
+optional: | \
+	transmission-remote \
+	gimp
+
 $(TRANSMISSION_REMOTE):
 	sudo apt install transmission-remote-gtk -y
 
 transmission-remote: | $(TRANSMISSION_REMOTE)
+
+$(GIMP):
+	sudo apt install gimp -y
+
+gimp: | $(GIMP)
