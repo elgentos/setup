@@ -66,3 +66,9 @@ The following software has been installed:
 - jq
 - OhMyZsh
 - ZSH
+
+# Additional software
+
+| Name                    | Target |
+|:------------------------|:-------|
+| Transmission Remote GTK | `make transmission-remote` |

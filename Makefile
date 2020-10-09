@@ -7,6 +7,8 @@ GITPROJECTS := $(shell echo "$$HOME/git")
 JETBRAINS_TOOLBOX := $(shell command -v jetbrains-toolbox || echo /usr/local/bin/jetbrains-toolbox)
 JETBRAINS_TOOLBOX_SETTINGS := $(shell echo "$$HOME/.local/share/JetBrains/Toolbox/.settings.json")
 
+TRANSMISSION_REMOTE := $(shell command -v transmission-remote-gtk | echo /usr/bin/transmission-remote-gtk)
+
 CHROME := $(shell command -v google-chrome || echo /usr/bin/google-chrome)
 
 DOCKER := $(shell command -v docker || echo /usr/bin/docker)
@@ -93,3 +95,8 @@ $(CHROME): | $(CURL)
     		--output /tmp/google-chrome-stable_current_amd64.deb
 	sudo dpkg --install /tmp/google-chrome-stable_current_amd64.deb
 	rm -f /tmp/google-chrome-stable_current_amd64.deb
+
+$(TRANSMISSION_REMOTE):
+	sudo apt install transmission-remote-gtk -y
+
+transmission-remote: | $(TRANSMISSION_REMOTE)
