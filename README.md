@@ -4,6 +4,10 @@
 
 This repository can be used to bootstrap a fresh workstation.
 
+Current supported operating systems:
+
+- Ubuntu 20.04
+
 # Prerequisites
 
 Ensure the `git` client has been installed.

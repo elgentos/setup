@@ -27,6 +27,7 @@
 [core]
 	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 	excludesfile = ~/.gitignore
+	editor = vim
 
 ; Add aliases to your ~/.gitconfig file:
 

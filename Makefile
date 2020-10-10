@@ -33,6 +33,7 @@ JQ := $(shell command -v jq || echo /usr/bin/jq)
 CURL := $(shell command -v curl || echo /usr/bin/curl)
 GIT := $(shell command -v git || echo /usr/bin/git)
 BASH := $(shell command -v bash || echo /bin/bash)
+VIM := $(shell command -v vim || echo /usr/bin/vim)
 
 install: | \
 	$(CHROME) \
@@ -51,7 +52,7 @@ $(GITIGNORE):
 $(GITPROJECTS):
 	mkdir -p "$(GITPROJECTS)"
 
-$(GIT): | $(GITCONFIG) $(GITIGNORE) $(GITPROJECTS)
+$(GIT): | $(GITCONFIG) $(GITIGNORE) $(GITPROJECTS) $(VIM)
 	sudo apt install git -y
 
 $(JQ):
@@ -138,7 +139,7 @@ $(STEAM): | $(CURL) $(STEAM_TERMINAL) $(ZENITY)
 		--output /tmp/steam.deb
 	sudo dpkg --install /tmp/steam.deb
 	rm -f /tmp/steam.deb
-	dpkg --add-architecture i386
+	sudo dpkg --add-architecture i386
 	sudo apt update -y
 	sudo apt install libgl1-mesa-dri:i386 libgl1:i386 libc6:i386 -y
 
