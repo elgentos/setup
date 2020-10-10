@@ -84,8 +84,8 @@ make optional
 
 To cherry-pick optional software, use the following phony targets:
 
-| Name                    | Target |
-|:------------------------|:-------|
-| GIMP                    | `make gimp` |
-| Steam                   | `make steam` |
-| Transmission Remote GTK | `make transmission-remote` |
+| Name                    | Target                     | Build status |
+|:------------------------|:---------------------------|:-------------|
+| GIMP                    | `make gimp`                | ![Install optional](https://github.com/johmanx10/setup/workflows/Install%20GIMP/badge.svg) |
+| Steam                   | `make steam`               | ![Install optional](https://github.com/johmanx10/setup/workflows/Install%20Steam/badge.svg) |
+| Transmission Remote GTK | `make transmission-remote` | ![Install optional](https://github.com/johmanx10/setup/workflows/Install%20Transmission%20Remote/badge.svg) |
