@@ -13,12 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Update APT repositories
-        run: apt update -y
+        run: sudo apt update -y
       - name: Install required software
         run: make install INTERACTIVE=0
       - name: Install optional software
         run: make optional INTERACTIVE=0
       - name: Upgrade APT packages
-        run: apt upgrade -y
+        run: sudo apt upgrade -y
       - name: Clean up
-        run: apt autoremove -y
+        run: sudo apt autoremove -y
