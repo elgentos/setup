@@ -24,7 +24,7 @@ cat ~/.ssh/id_rsa.pub
 
 # Required software
 
-[![Install required](https://github.com/johmanx10/setup/workflows/Install%20required/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22Install+required%22)
+![Install required](https://github.com/johmanx10/setup/workflows/make%20install/badge.svg)]
 
 Create the `git` directory.
 
@@ -74,7 +74,7 @@ The following software has been installed:
 
 # Optional software
 
-[![Install optional](https://github.com/johmanx10/setup/workflows/Install%20optional/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22Install+optional%22)
+![make optional](https://github.com/johmanx10/setup/workflows/make%20optional/badge.svg)
 
 All the following software can be installed at-once using:
 
@@ -86,6 +86,6 @@ To cherry-pick optional software, use the following phony targets:
 
 | Name                    | Target                     | Build status |
 |:------------------------|:---------------------------|:-------------|
-| GIMP                    | `make gimp`                | ![Install optional](https://github.com/johmanx10/setup/workflows/Install%20GIMP/badge.svg) |
-| Steam                   | `make steam`               | ![Install optional](https://github.com/johmanx10/setup/workflows/Install%20Steam/badge.svg) |
-| Transmission Remote GTK | `make transmission-remote` | ![Install optional](https://github.com/johmanx10/setup/workflows/Install%20Transmission%20Remote/badge.svg) |
+| GIMP                    | `make gimp`                | ![make gimp](https://github.com/johmanx10/setup/workflows/make%20gimp/badge.svg) |
+| Steam                   | `make steam`               | ![make steam](https://github.com/johmanx10/setup/workflows/make%20steam/badge.svg) |
+| Transmission Remote GTK | `make transmission-remote` | ![make transmission-remote](https://github.com/johmanx10/setup/workflows/make%20transmission-remote/badge.svg) |

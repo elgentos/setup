@@ -1,4 +1,4 @@
-name: Install optional
+name: make optional
 
 on:
   push:

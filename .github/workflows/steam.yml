@@ -1,4 +1,4 @@
-name: Install Steam
+name: make steam
 
 on:
   push:
@@ -17,5 +17,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Update APT repositories
         run: sudo apt update -y
-      - name: Install optional software
+      - name: Install Steam
         run: make steam INTERACTIVE=0

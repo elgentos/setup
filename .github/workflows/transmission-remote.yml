@@ -1,4 +1,4 @@
-name: Install Transmission Remote
+name: make transmission-remote
 
 on:
   push:
@@ -17,5 +17,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Update APT repositories
         run: sudo apt update -y
-      - name: Install optional software
+      - name: Install Transmission Remote
         run: make transmission-remote INTERACTIVE=0
