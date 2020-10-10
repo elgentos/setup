@@ -89,3 +89,16 @@ To cherry-pick optional software, use the following phony targets:
 | GIMP                    | `make gimp`                | ![make gimp](https://github.com/johmanx10/setup/workflows/make%20gimp/badge.svg) |
 | Steam                   | `make steam`               | ![make steam](https://github.com/johmanx10/setup/workflows/make%20steam/badge.svg) |
 | Transmission Remote GTK | `make transmission-remote` | ![make transmission-remote](https://github.com/johmanx10/setup/workflows/make%20transmission-remote/badge.svg) |
+
+# Development
+
+In order to locally test a Make target, run the following:
+
+```
+docker run --rm -it -v $PWD:/setup -w /setup ubuntu:20.04 bash
+apt update -y
+apt install -y build-essential sudo
+make <TARGET>
+```
+
+Where `<TARGET>` is the target to be tested. E.g.: `steam` for Steam.
