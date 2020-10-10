@@ -19,7 +19,3 @@ jobs:
         run: sudo apt update -y
       - name: Install optional software
         run: make steam INTERACTIVE=0
-      - name: Upgrade APT packages
-        run: sudo apt upgrade -y
-      - name: Clean up
-        run: sudo apt autoremove -y
