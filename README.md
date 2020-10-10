@@ -69,6 +69,7 @@ The following software has been installed:
 - JetBrains Toolbox
 - jq
 - OhMyZsh
+- Vim
 - ZSH
 
 # Optional software
