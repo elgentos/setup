@@ -8,8 +8,11 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
-    name: Ubuntu 20.04
+    strategy:
+      matrix:
+        ubuntu_version: [20.04]
+    runs-on: ubuntu-${{ ubuntu_version }}
+    name: Ubuntu ${{ ubuntu_version }}
     steps:
       - uses: actions/checkout@v2
       - name: Update APT repositories
