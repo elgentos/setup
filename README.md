@@ -24,7 +24,7 @@ cat ~/.ssh/id_rsa.pub
 
 # Required software
 
-![Install required](https://github.com/johmanx10/setup/workflows/make%20install/badge.svg)]
+![Install required](https://github.com/johmanx10/setup/workflows/make%20install/badge.svg)
 
 Create the `git` directory.
 
