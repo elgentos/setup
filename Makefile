@@ -141,6 +141,7 @@ $(STEAM): | $(CURL) $(STEAM_TERMINAL) $(ZENITY)
 	rm -f /tmp/steam.deb
 	sudo dpkg --add-architecture i386
 	sudo apt update -y
+	sudo apt install libc6 -y
 	sudo apt install libgl1-mesa-dri:i386 libgl1:i386 libc6:i386 -y
 
 steam: | $(STEAM)
