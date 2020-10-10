@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -e
+
+make docker
+
+COMMANDS=(
+  'set -e'
+  'apt update -y'
+  'DEBIAN_FRONTEND=noninteractive apt install sudo build-essential tzdata keyboard-configuration -y'
+  "make --trace --debug ${@} INTERACTIVE=0"
+)
+
+IFS=';'
+docker run \
+  --rm \
+  -v $PWD:/setup \
+  -w /setup \
+  ${IMAGE:=ubuntu:20.04} \
+  bash -c "${COMMANDS[*]}"

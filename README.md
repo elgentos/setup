@@ -61,22 +61,27 @@ make install
 The following files have been symbolically linked from the current repository to
 the home directory:
 
-- `.gitconfig`
-- `.gitignore`
-- `.zshrc`
+| File         | Target alias     |
+|:-------------|:-----------------|
+| `.gitconfig` | `make gitconfig` |
+| `.gitignore` | `make gitignore` |
+| `.zshrc`     | `make zshrc`     |
 
 The following software has been installed:
 
-- Bash
-- cURL
-- Docker
-- GIT
-- Google Chrome
-- JetBrains Toolbox
-- jq
-- OhMyZsh
-- Vim
-- ZSH
+| Name              | Target alias             |
+|:------------------|:-------------------------|
+| Bash              | `make bash`              |
+| cURL              | `make curl`              |
+| Docker            | `make docker`            |
+| GIT               | `make git`               |
+| Google Chrome     | `make google-chrome`     |
+| JetBrains Toolbox | `make jetbrains-toolbox` |
+| jq                | `make jq`                |
+| lsb_release       | `make lsb_release`       |
+| Oh My ZSH         | `make oh-my-zsh`         |
+| Vim               | `make vim`               |
+| ZSH               | `make zsh`               |
 
 # Optional
 
@@ -98,15 +103,25 @@ To cherry-pick optional software, use the following phony targets:
 
 # Development
 
+![docker-make vim](https://github.com/johmanx10/setup/workflows/docker-make%20vim/badge.svg)
+
 In order to locally test a Make target, run the following:
 
 ```
-docker run --rm -it -v $PWD:/setup -w /setup ubuntu:20.04 bash
-apt update -y
-apt install -y build-essential sudo
-make <TARGET>
+./docker-make <TARGET>
 ```
 
 Where `<TARGET>` is the target to be tested. E.g.: `steam` for Steam.
 
-To test all installations, choose `all` as target.
+To test all installations, run:
+
+```
+./docker-make all
+```
+
+To specify the Docker image that runs the build, provide the `IMAGE` environment
+variable. It defaults to `ubuntu:20.04`.
+
+```
+IMAGE=ubuntu:18.04 ./docker-make all
+```
