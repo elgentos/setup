@@ -9,10 +9,16 @@ on:
 jobs:
   test:
     runs-on: ubuntu-20.04
-    name: Test install target
+    name: Ubuntu 20.04
     steps:
       - uses: actions/checkout@v2
-      - name: make install
+      - name: Update APT repositories
+        run: apt update -y
+      - name: Install required software
         run: make install INTERACTIVE=0
-      - name: make optional
+      - name: Install optional software
         run: make optional INTERACTIVE=0
+      - name: Upgrade APT packages
+        run: apt upgrade -y
+      - name: Clean up
+        run: apt autoremove -y
