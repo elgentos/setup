@@ -8,10 +8,16 @@ Current supported operating systems:
 
 # Prerequisites
 
-Ensure the `git` client has been installed.
+Ensure essential software has been installed.
 
 ```
-apt install git -y
+apt install git build-essential sudo -y
+```
+
+Or, if you are not running as a super user, assuming `sudo` is available.
+
+```
+sudo apt install git build-essential -y
 ```
 
 Add an SSH key to the list of
@@ -21,10 +27,6 @@ Add an SSH key to the list of
 ssh-keygen -t rsa -C github@johmanx.com
 cat ~/.ssh/id_rsa.pub
 ```
-
-# Required software
-
-![Install required](https://github.com/johmanx10/setup/workflows/make%20install/badge.svg)
 
 Create the `git` directory.
 
@@ -43,6 +45,10 @@ Navigate into the setup directory.
 ```
 cd ~/git/setup
 ```
+
+# Install
+
+![Install required](https://github.com/johmanx10/setup/workflows/make%20install/badge.svg)
 
 Run the installation.
 
@@ -72,7 +78,7 @@ The following software has been installed:
 - Vim
 - ZSH
 
-# Optional software
+# Optional
 
 ![make optional](https://github.com/johmanx10/setup/workflows/make%20optional/badge.svg)
 
@@ -102,3 +108,5 @@ make <TARGET>
 ```
 
 Where `<TARGET>` is the target to be tested. E.g.: `steam` for Steam.
+
+To test all installations, choose `all` as target.

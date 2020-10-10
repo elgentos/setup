@@ -22,6 +22,8 @@ STEAM_TERMINAL := $(shell command -v gnome-terminal \
 	|| command -v x-terminal-emulator \
 	|| echo /usr/bin/gnome-terminal)
 
+SLACK := $(shell command -v slack || echo /usr/bin/slack)
+
 DOCKER := $(shell command -v docker || echo /usr/bin/docker)
 DOCKER_CONFIG := $(shell echo "$$HOME/.docker/config.json")
 
@@ -109,9 +111,10 @@ $(CHROME): | $(CURL)
 	rm -f /tmp/google-chrome-stable_current_amd64.deb
 
 optional: | \
-	transmission-remote \
 	gimp \
-	steam
+	slack \
+	steam \
+	transmission-remote
 
 $(TRANSMISSION_REMOTE):
 	sudo apt install transmission-remote-gtk -y
@@ -145,3 +148,17 @@ $(STEAM): | $(CURL) $(STEAM_TERMINAL) $(ZENITY)
 	sudo dpkg --configure -a
 
 steam: | $(STEAM)
+
+$(SLACK): | $(CURL)
+	sudo apt install libgtk-3-0 libappindicator3-1 libnotify4 libnss3 libxss1 libxtst6 xdg-utils libatspi2.0-0 -y
+	sudo dpkg --list | awk '{ print $2 }' | grep -qE 'kde-cli-tools|kde-runtime|trash-cli|libglib2.0-bin|gvfs-bin' \
+		|| sudo apt install gvfs-bin -y
+	$(CURL) -L $(shell $(CURL) -L https://slack.com/intl/en-nl/downloads/instructions/ubuntu \
+			| grep -oe 'https://downloads.slack-edge.com/linux_releases/slack-desktop-[0-9]*.[0-9]*.[0-9]*-amd64.deb') \
+		--output /tmp/slack.deb
+	sudo dpkg --install /tmp/slack.deb
+	rm -f /tmp/slack.deb
+
+slack: | $(SLACK)
+
+all: | install optional
