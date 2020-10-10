@@ -1,8 +1,5 @@
 # Workstation setup
 
-[![Install required](https://github.com/johmanx10/setup/workflows/Install%20required/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22Install+required%22)
-[![Install optional](https://github.com/johmanx10/setup/workflows/Install%20optional/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22Install+optional%22)
-
 This repository can be used to bootstrap a fresh workstation.
 
 Current supported operating systems:
@@ -25,7 +22,9 @@ ssh-keygen -t rsa -C github@johmanx.com
 cat ~/.ssh/id_rsa.pub
 ```
 
-# Installation
+# Required software
+
+[![Install required](https://github.com/johmanx10/setup/workflows/Install%20required/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22Install+required%22)
 
 Create the `git` directory.
 
@@ -74,6 +73,8 @@ The following software has been installed:
 - ZSH
 
 # Optional software
+
+[![Install optional](https://github.com/johmanx10/setup/workflows/Install%20optional/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22Install+optional%22)
 
 All the following software can be installed at-once using:
 
