@@ -14,7 +14,13 @@ CHROME := $(shell command -v google-chrome || echo /usr/bin/google-chrome)
 GIMP := $(shell command -v gimp || echo /usr/bin/gimp)
 
 LIB_NVIDIA_GL := $(shell dpkg -l | grep -e 'libnvidia-gl-[0-9][0-9]*:amd64' | awk '{print $2}')
+ZENITY := $(shell command -v zenity || echo /usr/bin/zenity)
 STEAM := $(shell command -v steam || echo /bin/steam)
+STEAM_TERMINAL := $(shell command -v gnome-terminal \
+	|| command -v xterm \
+	|| command -v konsole \
+	|| command -v x-terminal-emulator \
+	|| echo /usr/bin/gnome-terminal)
 
 DOCKER := $(shell command -v docker || echo /usr/bin/docker)
 DOCKER_CONFIG := $(shell echo "$$HOME/.docker/config.json")
@@ -116,7 +122,13 @@ $(GIMP):
 
 gimp: | $(GIMP)
 
-$(STEAM): | $(CURL)
+$(STEAM_TERMINAL):
+	sudo apt install gnome-terminal -y
+
+$(ZENITY):
+	sudo apt install zenity -y
+
+$(STEAM): | $(CURL) $(STEAM_TERMINAL) $(ZENITY)
 	# See: https://github.com/ValveSoftware/steam-for-linux/issues/7067#issuecomment-622390607
 	echo $(LIB_NVIDIA_GL) | grep -q ':amd64' \
 		&& sudo apt install $(shell echo $(LIB_NVIDIA_GL) | cut -d: -f1):i386 -y \
