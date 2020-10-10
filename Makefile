@@ -16,8 +16,8 @@ GIMP := $(shell command -v gimp || echo /usr/bin/gimp)
 LIB_NVIDIA_GL := $(shell dpkg -l | grep -e 'libnvidia-gl-[0-9][0-9]*:amd64' | awk '{print $2}')
 ZENITY := $(shell command -v zenity || echo /usr/bin/zenity)
 STEAM := $(shell command -v steam || echo /bin/steam)
-STEAM_TERMINAL := $(shell command -v xterm \
-	|| command -v gnome-terminal \
+STEAM_TERMINAL := $(shell command -v gnome-terminal \
+	|| command -v xterm \
 	|| command -v konsole \
 	|| command -v x-terminal-emulator \
 	|| echo /usr/bin/gnome-terminal)
@@ -123,7 +123,7 @@ $(GIMP):
 gimp: | $(GIMP)
 
 $(STEAM_TERMINAL):
-	sudo apt install xterm -y
+	sudo apt install gnome-terminal -y
 
 $(ZENITY):
 	sudo apt install zenity -y
