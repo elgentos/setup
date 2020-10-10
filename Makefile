@@ -13,6 +13,8 @@ CHROME := $(shell command -v google-chrome || echo /usr/bin/google-chrome)
 
 GIMP := $(shell command -v gimp || echo /usr/bin/gimp)
 
+DISCORD := $(shell command -v discord || echo /usr/bin/discord)
+
 LIB_NVIDIA_GL := $(shell dpkg -l | grep -e 'libnvidia-gl-[0-9][0-9]*:amd64' | awk '{print $2}')
 ZENITY := $(shell command -v zenity || echo /usr/bin/zenity)
 STEAM := $(shell command -v steam || echo /bin/steam)
@@ -174,6 +176,7 @@ $(CHROME): | $(CURL)
 google-chrome: | $(CHROME)
 
 optional: | \
+	discord \
 	gimp \
 	slack \
 	steam \
@@ -223,5 +226,23 @@ $(SLACK): | $(CURL)
 	rm -f /tmp/slack.deb
 
 slack: | $(SLACK)
+
+$(DISCORD): | $(CURL)
+	sudo apt install -y \
+		libasound2 \
+		libgconf-2-4 \
+		libnotify4 \
+		libnspr4 \
+		libnss3 \
+		libxss1 \
+		libxtst6 \
+		libappindicator1 \
+		libc++1
+	$(CURL) -L 'https://discord.com/api/download?platform=linux&format=deb' \
+		--output /tmp/discord.deb
+	sudo dpkg --install /tmp/discord.deb
+	rm -f /tmp/discord.deb
+
+discord: | $(DISCORD)
 
 all: | install optional
