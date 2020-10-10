@@ -1,6 +1,7 @@
 # Workstation setup
 
-[![Build](https://github.com/johmanx10/setup/workflows/Build/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3ABuild)
+[![Install required](https://github.com/johmanx10/setup/workflows/Install%20required/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22Install+required%22)
+[![Install optional](https://github.com/johmanx10/setup/workflows/Install%20optional/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22Install+optional%22)
 
 This repository can be used to bootstrap a fresh workstation.
 
