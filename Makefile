@@ -13,6 +13,9 @@ CHROME := $(shell command -v google-chrome || echo /usr/bin/google-chrome)
 
 GIMP := $(shell command -v gimp || echo /usr/bin/gimp)
 
+LIB_NVIDIA_GL := $(shell dpkg -l | grep -e 'libnvidia-gl-[0-9][0-9]*:amd64' | awk '{print $2}')
+STEAM := $(shell command -v steam || echo /bin/steam)
+
 DOCKER := $(shell command -v docker || echo /usr/bin/docker)
 DOCKER_CONFIG := $(shell echo "$$HOME/.docker/config.json")
 
@@ -25,7 +28,7 @@ CURL := $(shell command -v curl || echo /usr/bin/curl)
 GIT := $(shell command -v git || echo /usr/bin/git)
 BASH := $(shell command -v bash || echo /bin/bash)
 
-install: \
+install: | \
 	$(CHROME) \
 	$(GIT) \
 	$(ZSHRC) \
@@ -100,7 +103,8 @@ $(CHROME): | $(CURL)
 
 optional: | \
 	transmission-remote \
-	gimp
+	gimp \
+	steam
 
 $(TRANSMISSION_REMOTE):
 	sudo apt install transmission-remote-gtk -y
@@ -111,3 +115,18 @@ $(GIMP):
 	sudo apt install gimp -y
 
 gimp: | $(GIMP)
+
+$(STEAM): | $(CURL)
+	# See: https://github.com/ValveSoftware/steam-for-linux/issues/7067#issuecomment-622390607
+	echo $(LIB_NVIDIA_GL) | grep -q ':amd64' \
+		&& sudo apt install $(shell echo $(LIB_NVIDIA_GL) | cut -d: -f1):i386 -y \
+		|| echo 'Skipping NVIDIA closed driver fix'
+	rm -rf $$HOME/.steam
+	$(CURL) -L https://cdn.cloudflare.steamstatic.com/client/installer/steam.deb \
+		--output /tmp/steam.deb
+	sudo dpkg --install /tmp/steam.deb
+	rm -f /tmp/steam.deb
+	sudo apt update -y
+	sudo apt install libgl1-mesa-dri:i386 libgl1:i386 libc6:i386 -y
+
+steam: | $(STEAM)

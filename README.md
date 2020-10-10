@@ -79,5 +79,6 @@ To cherry-pick optional software, use the following phony targets:
 
 | Name                    | Target |
 |:------------------------|:-------|
-| Transmission Remote GTK | `make transmission-remote` |
 | GIMP                    | `make gimp` |
+| Steam                   | `make steam` |
+| Transmission Remote GTK | `make transmission-remote` |
