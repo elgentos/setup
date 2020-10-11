@@ -61,11 +61,12 @@ make install
 The following files have been symbolically linked from the current repository to
 the home directory:
 
-| File         | Target alias     |
-|:-------------|:-----------------|
-| `.gitconfig` | `make gitconfig` |
-| `.gitignore` | `make gitignore` |
-| `.zshrc`     | `make zshrc`     |
+| File              | Target alias          |
+|:------------------|:----------------------|
+| `.gitconfig`      | `make gitconfig`      |
+| `.gitconfig-user` | `make gitconfig-user` |
+| `.gitignore`      | `make gitignore`      |
+| `.zshrc`          | `make zshrc`          |
 
 The following software has been installed:
 

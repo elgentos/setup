@@ -1,6 +1,5 @@
-[user]
-	name = Jan-Marten de Boer
-	email = github@johmanx.com
+[include]
+    path = .gitconfig-user
 
 [color]
 	ui = auto

@@ -1,5 +1,6 @@
 INTERACTIVE=1
 
+GITCONFIG_USER := $(shell echo "$$HOME/.gitconfig-user")
 GITCONFIG := $(shell echo "$$HOME/.gitconfig")
 GITIGNORE := $(shell echo "$$HOME/.gitignore")
 GITPROJECTS := $(shell echo "$$HOME/git")
@@ -43,7 +44,7 @@ VIM := $(shell command -v vim || echo /usr/bin/vim)
 
 install: | \
 	$(CHROME) \
-	$(GIT) \
+	$(GITCONFIG_USER) \
 	$(ZSHRC) \
 	$(OH_MY_ZSH) \
 	$(DOCKER_CONFIG) \
@@ -70,7 +71,19 @@ vim: | $(VIM)
 $(GIT): | $(GITCONFIG) $(GITIGNORE) $(GITPROJECTS) $(VIM)
 	sudo apt install git -y
 
-git: | $(GIT)
+$(GITCONFIG_USER): | $(GIT) $(GITCONFIG)
+	@echo $(INTERACTIVE) | grep -q '1' \
+			&& read -p 'Github user name: ' username \
+			|| username="$(shell whoami)"; \
+		git config --file $(GITCONFIG_USER) user.name "$$username"
+	@echo $(INTERACTIVE) | grep -q '1' \
+			&& read -p 'Github user email: ' email \
+			|| email="$(shell whoami)@$(shell hostname)"; \
+		git config --file $(GITCONFIG_USER) user.email "$$email"
+
+gitconfig-user: | $(GITCONFIG_USER)
+
+git: | $(GIT) $(GITCONFIG_USER)
 
 $(JQ):
 	sudo apt install jq -y
