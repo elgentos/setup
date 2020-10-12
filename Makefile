@@ -28,6 +28,8 @@ STEAM_TERMINAL := $(shell command -v gnome-terminal \
 SOFTWARE_PROPERTIES_COMMON := $(shell command -v add-apt-repository || echo /usr/bin/add-apt-repository)
 LUTRIS := $(shell command -v lutris || echo /usr/games/lutris)
 
+EPIC_GAMES_STORE := $(shell echo "$$HOME/Games/epic-games-store/drive_c/Program\ Files*/Epic\ Games/Launcher/Engine/Binaries/Win*/EpicGamesLauncher.exe")
+
 SLACK := $(shell command -v slack || echo /usr/bin/slack)
 
 LSB_RELEASE := $(shell command -v lsb_release || echo /usr/bin/lsb_release)
@@ -193,6 +195,7 @@ google-chrome: | $(CHROME)
 
 optional: | \
 	discord \
+	epic-games-store \
 	gimp \
 	lutris \
 	slack \
@@ -271,5 +274,12 @@ $(LUTRIS): | $(SOFTWARE_PROPERTIES_COMMON)
 	sudo apt install lutris -y
 
 lutris: | $(LUTRIS)
+
+$(EPIC_GAMES_STORE): | $(LUTRIS)
+	echo $(INTERACTIVE) | grep -q '1' \
+		&& $(LUTRIS) --install 'https://lutris.net/api/installers/epic-games-store-latest?format=json' \
+		|| echo 'Lutris currently does not support unattended installations. See https://github.com/lutris/lutris/pull/3029'
+
+epic-games-store: | $(EPIC_GAMES_STORE)
 
 all: | install optional
