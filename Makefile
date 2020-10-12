@@ -39,6 +39,9 @@ DOCKER_CONFIG := $(shell echo "$$HOME/.docker/config.json")
 
 DOCKER_COMPOSE := $(shell command -v docker-compose || echo /usr/local/bin/docker-compose)
 
+DOCKER_COMPOSE_DEVELOPMENT := $(shell echo "$(GITPROJECTS)/development")
+DOCKER_COMPOSE_DEVELOPMENT_PROFILE := $(shell echo "$$HOME/.zshrc-development")
+
 ZSH := $(shell command -v zsh || echo /usr/bin/zsh)
 ZSHRC := $(shell echo "$$HOME/.zshrc")
 OH_MY_ZSH := $(shell echo "$$HOME/.oh-my-zsh/oh-my-zsh.sh")
@@ -146,6 +149,22 @@ $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
 
 docker-compose: | $(DOCKER_COMPOSE)
 
+$(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(GIT) $(GITPROJECTS)
+	git clone git@github.com:JeroenBoersma/docker-compose-development.git $(DOCKER_COMPOSE_DEVELOPMENT)
+	sudo service docker start
+	for volume in "$(shell docker volume ls -q | grep dockerdev-)"; do \
+		for container in $(shell docker ps -a --filter volume=$$volume); do \
+			docker rm $$container;\
+		done; \
+		docker volume rm $$volume; \
+	done
+	"$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" setup
+
+$(DOCKER_COMPOSE_DEVELOPMENT_PROFILE): | $(DOCKER_COMPOSE_DEVELOPMENT) $(ZSHRC)
+	"$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" profile > $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE)
+
+docker-compose-development: | $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE)
+
 $(ZSH):
 	sudo apt install zsh -y
 	echo $(INTERACTIVE) | grep -q '1' && chsh --shell $(ZSH) || echo 'Skipping shell change'
@@ -207,6 +226,7 @@ google-chrome: | $(CHROME)
 optional: | \
 	discord \
 	docker-compose \
+	docker-compose-development \
 	epic-games-store \
 	gimp \
 	lutris \

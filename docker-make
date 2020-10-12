@@ -15,6 +15,11 @@ IFS=';'
 docker run \
   --rm \
   -v $PWD:/setup \
+  -v $HOME/.ssh:/root/.ssh:ro \
+  -v $SSH_AUTH_SOCK:/ssh-agent:ro \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -e SSH_AUTH_SOCK=/ssh-agent \
+  --net host \
   -w /setup \
   ${IMAGE:=ubuntu:20.04} \
   bash -c "${COMMANDS[*]}"
