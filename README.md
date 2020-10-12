@@ -100,6 +100,7 @@ To cherry-pick optional software, use the following phony targets:
 |:------------------------|:---------------------------|:-------------|
 | Discord                 | `make discord`             | ![make discord](https://github.com/johmanx10/setup/workflows/make%20discord/badge.svg) |
 | GIMP                    | `make gimp`                | ![make gimp](https://github.com/johmanx10/setup/workflows/make%20gimp/badge.svg) |
+| Lutris                  | `make lutris`              | ![make lutris](https://github.com/johmanx10/setup/workflows/make%20lutris/badge.svg) |
 | Slack                   | `make slack`               | ![make steam](https://github.com/johmanx10/setup/workflows/make%20slack/badge.svg) |
 | Steam                   | `make steam`               | ![make steam](https://github.com/johmanx10/setup/workflows/make%20steam/badge.svg) |
 | Transmission Remote GTK | `make transmission-remote` | ![make transmission-remote](https://github.com/johmanx10/setup/workflows/make%20transmission-remote/badge.svg) |
