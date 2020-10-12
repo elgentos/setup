@@ -152,8 +152,8 @@ docker-compose: | $(DOCKER_COMPOSE)
 $(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(GIT) $(GITPROJECTS)
 	git clone git@github.com:JeroenBoersma/docker-compose-development.git $(DOCKER_COMPOSE_DEVELOPMENT)
 	sudo service docker start
-	for volume in "$(shell docker volume ls -q | grep dockerdev-)"; do \
-		for container in $(shell docker ps -a --filter volume=$$volume); do \
+	for volume in $(shell docker volume ls -q | grep dockerdev-); do \
+		for container in $(shell docker ps -a --filter volume=$$volume | tail -n +2); do \
 			docker rm $$container;\
 		done; \
 		docker volume rm $$volume; \
