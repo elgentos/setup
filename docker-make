@@ -21,5 +21,6 @@ docker run \
   -e SSH_AUTH_SOCK=/ssh-agent \
   --net host \
   -w /setup \
+  -t \
   ${IMAGE:=ubuntu:20.04} \
   bash -c "${COMMANDS[*]}"

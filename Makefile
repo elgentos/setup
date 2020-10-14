@@ -30,6 +30,8 @@ LUTRIS := $(shell command -v lutris || echo /usr/games/lutris)
 
 EPIC_GAMES_STORE := $(shell echo "$$HOME/Games/epic-games-store/drive_c/Program\ Files*/Epic\ Games/Launcher/Engine/Binaries/Win*/EpicGamesLauncher.exe")
 
+RETROARCH := $(shell command -v retroarch || echo /usr/bin/retroarch)
+
 SLACK := $(shell command -v slack || echo /usr/bin/slack)
 
 LSB_RELEASE := $(shell command -v lsb_release || echo /usr/bin/lsb_release)
@@ -85,11 +87,11 @@ $(GITCONFIG_USER): | $(GIT) $(GITCONFIG)
 	@echo $(INTERACTIVE) | grep -q '1' \
 			&& read -p 'Git user name: ' username \
 			|| username="$(shell whoami)"; \
-		git config --file $(GITCONFIG_USER) user.name "$$username"
+		$(GIT) config --file $(GITCONFIG_USER) user.name "$$username"
 	@echo $(INTERACTIVE) | grep -q '1' \
 			&& read -p 'Git user email: ' email \
 			|| email="$(shell whoami)@$(shell hostname)"; \
-		git config --file $(GITCONFIG_USER) user.email "$$email"
+		$(GIT) config --file $(GITCONFIG_USER) user.email "$$email"
 
 gitconfig-user: | $(GITCONFIG_USER)
 
@@ -149,14 +151,14 @@ $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
 
 docker-compose: | $(DOCKER_COMPOSE)
 
-$(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(GIT) $(GITPROJECTS)
-	git clone git@github.com:JeroenBoersma/docker-compose-development.git $(DOCKER_COMPOSE_DEVELOPMENT)
+$(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(GIT) $(GITPROJECTS)
+	$(GIT) clone git@github.com:JeroenBoersma/docker-compose-development.git $(DOCKER_COMPOSE_DEVELOPMENT)
 	sudo service docker start
-	for volume in $(shell docker volume ls -q | grep dockerdev-); do \
-		for container in $(shell docker ps -a --filter volume=$$volume | tail -n +2); do \
-			docker rm $$container;\
+	for volume in $(shell $(DOCKER) volume ls -q | grep dockerdev-); do \
+		for container in $(shell $(DOCKER) ps -a --filter volume=$$volume | tail -n +2); do \
+			$(DOCKER) rm $$container;\
 		done; \
-		docker volume rm $$volume; \
+		$(DOCKER) volume rm $$volume; \
 	done
 	"$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" setup
 
@@ -230,6 +232,7 @@ optional: | \
 	epic-games-store \
 	gimp \
 	lutris \
+	retroarch \
 	slack \
 	steam \
 	transmission-remote
@@ -313,5 +316,12 @@ $(EPIC_GAMES_STORE): | $(LUTRIS)
 		|| echo 'Lutris currently does not support unattended installations. See https://github.com/lutris/lutris/pull/3029'
 
 epic-games-store: | $(EPIC_GAMES_STORE)
+
+$(RETROARCH): | $(SOFTWARE_PROPERTIES_COMMON)
+	sudo add-apt-repository ppa:libretro/stable -y
+	sudo apt-get update -y
+	sudo apt-get install retroarch* -y
+
+retroarch: | $(RETROARCH)
 
 all: | install optional
