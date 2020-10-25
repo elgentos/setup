@@ -34,6 +34,8 @@ RETROARCH := $(shell command -v retroarch || echo /usr/bin/retroarch)
 
 SLACK := $(shell command -v slack || echo /usr/bin/slack)
 
+TEAMVIEWER := $(shell command -v teamviewer || echo /usr/bin/teamviewer)
+
 LSB_RELEASE := $(shell command -v lsb_release || echo /usr/bin/lsb_release)
 
 DOCKER := $(shell command -v docker || echo /usr/bin/docker)
@@ -235,6 +237,7 @@ optional: | \
 	retroarch \
 	slack \
 	steam \
+	teamviewer \
 	transmission-remote
 
 $(TRANSMISSION_REMOTE):
@@ -323,5 +326,23 @@ $(RETROARCH): | $(SOFTWARE_PROPERTIES_COMMON)
 	sudo apt-get install retroarch* -y
 
 retroarch: | $(RETROARCH)
+
+$(TEAMVIEWER): | $(CURL)
+	sudo apt install -y \
+		libqt5qml5 \
+		libqt5quick5 \
+		libqt5webkit5 \
+		libqt5x11extras5 \
+		qml-module-qtquick2 \
+		qml-module-qtquick-controls \
+		qml-module-qtquick-dialogs \
+		qml-module-qtquick-window2 \
+		qml-module-qtquick-layouts
+	$(CURL) -L https://download.teamviewer.com/download/linux/teamviewer_amd64.deb \
+		--output /tmp/teamviewer.deb
+	sudo dpkg --install /tmp/teamviewer.deb
+	rm -f /tmp/teamviewer.deb
+
+teamviewer: | $(TEAMVIEWER)
 
 all: | install optional
