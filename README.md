@@ -88,6 +88,12 @@ The following software has been installed:
 | [Vim](https://www.vim.org/)                                                                   | `make vim`               |
 | [ZSH](https://www.zsh.org/)                                                                   | `make zsh`               |
 
+The following software has been installed as a ZSH alias, using Docker:
+
+| Alias | Image                                                     |
+|:------|:----------------------------------------------------------|
+| `aws` | [amazon/aws-cli](https://hub.docker.com/r/amazon/aws-cli) |
+
 # Optional
 
 [![make optional](https://github.com/johmanx10/setup/workflows/make%20optional/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+optional%22)
