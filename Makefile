@@ -60,7 +60,6 @@ BASH := $(shell command -v bash || echo /bin/bash)
 VIM := $(shell command -v vim || echo /usr/bin/vim)
 
 install: | \
-	$(CHROME) \
 	$(GITCONFIG_USER) \
 	$(ZSHRC) \
 	$(OH_MY_ZSH) \
@@ -236,6 +235,7 @@ optional: | \
 	docker-compose-development \
 	epic-games-store \
 	gimp \
+	google-chrome \
 	lutris \
 	node \
 	retroarch \
