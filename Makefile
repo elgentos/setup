@@ -351,6 +351,7 @@ teamviewer: | $(TEAMVIEWER)
 
 $(NODE): | $(CURL) $(BASH)
 	$(CURL) -sL https://deb.nodesource.com/setup_current.x | sudo -E $(BASH) -
+	sudo apt update
 	sudo apt install -y nodejs
 
 node: | $(NODE)
