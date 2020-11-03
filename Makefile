@@ -38,6 +38,9 @@ TEAMVIEWER := $(shell command -v teamviewer || echo /usr/bin/teamviewer)
 
 LSB_RELEASE := $(shell command -v lsb_release || echo /usr/bin/lsb_release)
 
+NPM := $(shell command -v npm || echo /usr/bin/npm)
+NODE := $(shell command -v node || echo /usr/bin/node)
+
 DOCKER := $(shell command -v docker || echo /usr/bin/docker)
 DOCKER_CONFIG := $(shell echo "$$HOME/.docker/config.json")
 
@@ -234,6 +237,7 @@ optional: | \
 	epic-games-store \
 	gimp \
 	lutris \
+	node \
 	retroarch \
 	slack \
 	steam \
@@ -344,5 +348,14 @@ $(TEAMVIEWER): | $(CURL)
 	rm -f /tmp/teamviewer.deb
 
 teamviewer: | $(TEAMVIEWER)
+
+$(NODE): $(CURL)
+	$(CURL) -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
+	sudo apt install -y nodejs
+
+node: | $(NODE)
+
+$(NPM): | $(NODE)
+npm: | $(NPM)
 
 all: | install optional
