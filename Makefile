@@ -10,7 +10,9 @@ JETBRAINS_TOOLBOX_SETTINGS := $(shell echo "$$HOME/.local/share/JetBrains/Toolbo
 
 TRANSMISSION_REMOTE := $(shell command -v transmission-remote-gtk || echo /usr/bin/transmission-remote-gtk)
 
+BRAVE := $(shell command -v brave-browser || echo /usr/bin/brave-browser)
 CHROME := $(shell command -v google-chrome || echo /usr/bin/google-chrome)
+FIREFOX := $(shell command -v firefox || echo /usr/bin/firefox)
 
 GIMP := $(shell command -v gimp || echo /usr/bin/gimp)
 
@@ -230,10 +232,12 @@ $(CHROME): | $(CURL)
 google-chrome: | $(CHROME)
 
 optional: | \
+	brave \
 	discord \
 	docker-compose \
 	docker-compose-development \
 	epic-games-store \
+	firefox \
 	gimp \
 	google-chrome \
 	lutris \
@@ -351,12 +355,28 @@ teamviewer: | $(TEAMVIEWER)
 
 $(NODE): | $(CURL) $(BASH)
 	$(CURL) -sL https://deb.nodesource.com/setup_current.x | sudo -E $(BASH) -
-	sudo apt update
+	sudo apt update -y
 	sudo apt install -y nodejs
 
 node: | $(NODE)
 
 $(NPM): | $(NODE)
 npm: | $(NPM)
+
+$(BRAVE): | $(CURL)
+	sudo apt install -y apt-transport-https curl gnupg
+	$(CURL) -s https://brave-browser-apt-release.s3.brave.com/brave-core.asc \
+		| sudo apt-key --keyring /etc/apt/trusted.gpg.d/brave-browser-release.gpg add -
+	echo "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main" \
+		| sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+	sudo apt update -y
+	sudo apt install -y brave-browser
+
+brave: | $(BRAVE)
+
+$(FIREFOX):
+	sudo apt install -y firefox
+
+firefox: | $(FIREFOX)
 
 all: | install optional
