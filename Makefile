@@ -68,6 +68,7 @@ BASH := $(shell command -v bash || echo /bin/bash)
 VIM := $(shell command -v vim || echo /usr/bin/vim)
 
 AWS := $(shell command -v aws || echo /usr/local/bin/aws)
+SSG := $(shell command -v ssg || echo /usr/bin/ssg)
 
 install: | \
 	$(GITCONFIG_USER) \
@@ -255,6 +256,7 @@ optional: | \
 	node \
 	retroarch \
 	slack \
+	ssg \
 	steam \
 	teamviewer \
 	transmission-remote
@@ -444,5 +446,14 @@ $(AWS): | git $(DOCKER)
 	$(AWS) --version
 
 aws: | $(AWS)
+
+$(SSG): | git $(NPM) $(BASH)
+	$(BASH) -c '[ -d "$$HOME/.ssh" ] || mkdir -p "$$HOME/.ssh"'
+	$(BASH) -c '[ -f "$$HOME/.ssh/config" ] || touch "$$HOME/.ssh/config"'
+	$(GIT) clone git@github.com:elgentos/ssg-js.git $(GITPROJECTS)/ssg-js
+	cd $(GITPROJECTS)/ssg-js && $(NPM) install
+	cd $(GITPROJECTS)/ssg-js && sudo $(NPM) install -g ssg-js
+
+ssg: | $(SSG)
 
 all: | install optional

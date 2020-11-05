@@ -8,6 +8,8 @@ COMMANDS=(
   'set -e'
   'apt update -y'
   'DEBIAN_FRONTEND=noninteractive apt install sudo build-essential tzdata keyboard-configuration -y'
+  'mkdir -p /root/.ssh'
+  'cp /root/.ssh-user/* /root/.ssh'
   "make --trace --debug ${@} INTERACTIVE=0"
 )
 
@@ -17,7 +19,7 @@ IFS=';'
 docker run \
   --rm \
   -v $PWD:/setup \
-  -v $HOME/.ssh:/root/.ssh:ro \
+  -v $HOME/.ssh:/root/.ssh-user:ro \
   -v $SSH_AUTH_SOCK:/ssh-agent:ro \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e SSH_AUTH_SOCK=/ssh-agent \
