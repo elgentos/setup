@@ -88,12 +88,6 @@ The following software has been installed:
 | [Vim](https://www.vim.org/)                                                                   | `make vim`               |
 | [ZSH](https://www.zsh.org/)                                                                   | `make zsh`               |
 
-The following software has been installed as a ZSH alias, using Docker:
-
-| Alias | Image                                                     |
-|:------|:----------------------------------------------------------|
-| `aws` | [amazon/aws-cli](https://hub.docker.com/r/amazon/aws-cli) |
-
 # Optional
 
 [![make optional](https://github.com/johmanx10/setup/workflows/make%20optional/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+optional%22)
@@ -108,6 +102,7 @@ To cherry-pick optional software, use the following phony targets:
 
 | Name                                                                                      | Target                                    | Build status |
 |:------------------------------------------------------------------------------------------|:------------------------------------------|:-------------|
+| [AWS CLI](https://gist.github.com/JeroenBoersma/87e29fd4aa06ec42216c80a6e3649fa5) w/💘    | `make aws`                                | [![make aws](https://github.com/johmanx10/setup/workflows/make%20aws/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+aws%22) |
 | [Brave Browser](https://brave.com/)                                                       | `make brave`                              | [![make brave](https://github.com/johmanx10/setup/workflows/make%20brave/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+brave%22) |
 | [Discord](https://discord.com/)                                                           | `make discord`                            | [![make discord](https://github.com/johmanx10/setup/workflows/make%20discord/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+discord%22) |
 | [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)                                  | `make dnsmasq`                            | [![make dnsmasq](https://github.com/johmanx10/setup/workflows/make%20dnsmasq/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+dnsmasq%22) |

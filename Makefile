@@ -67,6 +67,8 @@ GIT := $(shell command -v git || echo /usr/bin/git)
 BASH := $(shell command -v bash || echo /bin/bash)
 VIM := $(shell command -v vim || echo /usr/bin/vim)
 
+AWS := $(shell command -v aws || echo /usr/local/bin/aws)
+
 install: | \
 	$(GITCONFIG_USER) \
 	$(ZSHRC) \
@@ -238,6 +240,7 @@ $(CHROME): | $(CURL)
 google-chrome: | $(CHROME)
 
 optional: | \
+	aws \
 	brave \
 	discord \
 	dnsmasq \
@@ -431,5 +434,15 @@ $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): | $(DNSMASQ) $(DOCKER_COMPOSE_DEVELOPMENT
 	$(BASH) -c 'source "$(DOCKER_COMPOSE_DEVELOPMENT)/.env" && dig setup.localhost +short'
 
 docker-compose-development-dnsmasq: | $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ)
+
+$(AWS): | git $(DOCKER)
+	$(GIT) clone \
+		git@gist.github.com:87e29fd4aa06ec42216c80a6e3649fa5.git \
+		$(GITPROJECTS)/aws-cli
+	chmod +x $(GITPROJECTS)/aws-cli/aws.sh
+	sudo ln -s $(GITPROJECTS)/aws-cli/aws.sh $(AWS)
+	$(AWS) --version
+
+aws: | $(AWS)
 
 all: | install optional
