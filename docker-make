@@ -11,6 +11,8 @@ COMMANDS=(
   "make --trace --debug ${@} INTERACTIVE=0"
 )
 
+[[ "$TINKER" == "" ]] || COMMANDS+=("$TINKER")
+
 IFS=';'
 docker run \
   --rm \
@@ -21,6 +23,5 @@ docker run \
   -e SSH_AUTH_SOCK=/ssh-agent \
   --net host \
   -w /setup \
-  -t \
-  ${IMAGE:=ubuntu:20.04} \
+  "${IMAGE:=ubuntu:20.04}" \
   bash -c "${COMMANDS[*]}"
