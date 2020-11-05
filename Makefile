@@ -163,7 +163,8 @@ $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
 
 docker-compose: | $(DOCKER_COMPOSE)
 
-clean-docker-compose-development-volumes: | $(DOCKER)
+$(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(GIT) $(GITPROJECTS)
+	$(GIT) clone git@github.com:JeroenBoersma/docker-compose-development.git $(DOCKER_COMPOSE_DEVELOPMENT)
 	sudo service docker start
 	for volume in $(shell $(DOCKER) volume ls -q | grep dockerdev-); do \
 		for container in `$(DOCKER) ps -aq --filter volume=$$volume`; do \
@@ -171,10 +172,6 @@ clean-docker-compose-development-volumes: | $(DOCKER)
 		done; \
 		$(DOCKER) volume rm $$volume; \
 	done
-
-$(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(GIT) $(GITPROJECTS) clean-docker-compose-development-volumes
-	$(GIT) clone git@github.com:JeroenBoersma/docker-compose-development.git $(DOCKER_COMPOSE_DEVELOPMENT)
-	sudo service docker start
 	"$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" setup
 
 $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE): | $(DOCKER_COMPOSE_DEVELOPMENT) $(ZSHRC)
