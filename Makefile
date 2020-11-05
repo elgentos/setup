@@ -1,5 +1,8 @@
 INTERACTIVE=1
 
+# Use systemctl, or a dummy.
+SYSTEMCTL := $(shell command -v systemctl || echo echo systemctl)
+
 GITCONFIG_USER := $(shell echo "$$HOME/.gitconfig-user")
 GITCONFIG := $(shell echo "$$HOME/.gitconfig")
 GITIGNORE := $(shell echo "$$HOME/.gitignore")
@@ -48,8 +51,11 @@ DOCKER_CONFIG := $(shell echo "$$HOME/.docker/config.json")
 
 DOCKER_COMPOSE := $(shell command -v docker-compose || echo /usr/local/bin/docker-compose)
 
-DOCKER_COMPOSE_DEVELOPMENT := $(shell echo "$(GITPROJECTS)/development")
+DNSMASQ = /etc/dnsmasq.d
+
+DOCKER_COMPOSE_DEVELOPMENT := $(shell echo "$$HOME/development")
 DOCKER_COMPOSE_DEVELOPMENT_PROFILE := $(shell echo "$$HOME/.zshrc-development")
+DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ := $(shell echo "$(DNSMASQ)/docker-compose-development.conf")
 
 ZSH := $(shell command -v zsh || echo /usr/bin/zsh)
 ZSHRC := $(shell echo "$$HOME/.zshrc")
@@ -157,15 +163,18 @@ $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
 
 docker-compose: | $(DOCKER_COMPOSE)
 
-$(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(GIT) $(GITPROJECTS)
-	$(GIT) clone git@github.com:JeroenBoersma/docker-compose-development.git $(DOCKER_COMPOSE_DEVELOPMENT)
+clean-docker-compose-development-volumes: | $(DOCKER)
 	sudo service docker start
 	for volume in $(shell $(DOCKER) volume ls -q | grep dockerdev-); do \
-		for container in $(shell $(DOCKER) ps -a --filter volume=$$volume | tail -n +2); do \
+		for container in `$(DOCKER) ps -aq --filter volume=$$volume`; do \
 			$(DOCKER) rm $$container;\
 		done; \
 		$(DOCKER) volume rm $$volume; \
 	done
+
+$(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(GIT) $(GITPROJECTS) clean-docker-compose-development-volumes
+	$(GIT) clone git@github.com:JeroenBoersma/docker-compose-development.git $(DOCKER_COMPOSE_DEVELOPMENT)
+	sudo service docker start
 	"$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" setup
 
 $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE): | $(DOCKER_COMPOSE_DEVELOPMENT) $(ZSHRC)
@@ -234,8 +243,10 @@ google-chrome: | $(CHROME)
 optional: | \
 	brave \
 	discord \
+	dnsmasq \
 	docker-compose \
 	docker-compose-development \
+	docker-compose-development-dnsmasq \
 	epic-games-store \
 	firefox \
 	gimp \
@@ -378,5 +389,50 @@ $(FIREFOX):
 	sudo apt install -y firefox
 
 firefox: | $(FIREFOX)
+
+$(DNSMASQ): | $(BASH)
+	$(BASH) -c '[ -f /.dockerenv ] || sudo $(SYSTEMCTL) disable --now systemd-resolved'
+	$(BASH) -c '[ -f /.dockerenv ] || sudo rm -f /etc/resolv.conf'
+	echo 'nameserver 127.0.0.1' | sudo tee    /etc/resolv.conf
+	echo 'nameserver 1.1.1.1'   | sudo tee -a /etc/resolv.conf
+	echo 'nameserver 9.9.9.9'   | sudo tee -a /etc/resolv.conf
+	sudo apt install -y dnsmasq
+	sudo rm -f /etc/dnsmasq.conf
+	echo port=53                  | sudo tee    /etc/dnsmasq.conf
+	echo domain-needed            | sudo tee -a /etc/dnsmasq.conf
+	echo expand-hosts             | sudo tee -a /etc/dnsmasq.conf
+	echo bogus-priv               | sudo tee -a /etc/dnsmasq.conf
+	echo listen-address=127.0.0.1 | sudo tee -a /etc/dnsmasq.conf
+	echo cache-size=1000          | sudo tee -a /etc/dnsmasq.conf
+	dnsmasq --test
+	sudo mkdir -p "$(DNSMASQ)"
+	sudo service dnsmasq restart
+	sudo ufw allow from 192.168.0.0/16 to any port 53 proto udp
+	sudo ufw allow from 10.0.0.0/16    to any port 53 proto udp
+
+FORCE:
+
+dnsmasq: | $(DNSMASQ)
+
+$(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): | $(DNSMASQ) $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE) $(BASH)
+	$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev down
+	$(BASH) -c '[ -f /.dockerenv ] || sudo rm -f /etc/resolv.conf'
+	sudo touch /etc/resolv.conf
+	DOCKER_GATEWAY="$(shell ip route | grep -E 'docker[0-9]' | awk '{ print $$9 }')" \
+		&& $(BASH) -c \
+			'source "$(DOCKER_COMPOSE_DEVELOPMENT)/.env" && echo "address=/$$DOMAINSUFFIX/'$$DOCKER_GATEWAY'"' \
+		| sudo tee $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ) \
+		&& echo nameserver $$DOCKER_GATEWAY | sudo tee -a /etc/resolv.conf \
+		&& cat /etc/dnsmasq.conf \
+			| sed -E 's/listen-address=.+/listen-address='$$DOCKER_GATEWAY \
+			| sudo tee /etc/dnsmasq.conf
+	echo nameserver 127.0.0.1 | sudo tee -a /etc/resolv.conf
+	echo nameserver 1.1.1.1   | sudo tee -a /etc/resolv.conf
+	echo nameserver 9.9.9.9   | sudo tee -a /etc/resolv.conf
+	sudo service dnsmasq restart
+	sudo service docker restart
+	$(BASH) -c 'source "$(DOCKER_COMPOSE_DEVELOPMENT)/.env" && dig setup.localhost +short'
+
+docker-compose-development-dnsmasq: | $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ)
 
 all: | install optional
