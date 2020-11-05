@@ -448,8 +448,6 @@ $(AWS): | git $(DOCKER)
 aws: | $(AWS)
 
 $(SSG): | git $(NPM) $(BASH)
-	$(BASH) -c '[ -d "$$HOME/.ssh" ] || mkdir -p "$$HOME/.ssh"'
-	$(BASH) -c '[ -f "$$HOME/.ssh/config" ] || touch "$$HOME/.ssh/config"'
 	$(GIT) clone git@github.com:elgentos/ssg-js.git $(GITPROJECTS)/ssg-js
 	cd $(GITPROJECTS)/ssg-js && $(NPM) install
 	cd $(GITPROJECTS)/ssg-js && sudo $(NPM) install -g ssg-js
