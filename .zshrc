@@ -19,7 +19,7 @@ plugins=(
 for repo in ~/git/*; do hash -d "$(basename "$repo")=$repo"; done
 
 # Make all workspaces into named directories.
-for workspace in ~/git/development/workspace/*; do
+for workspace in ~/development/workspace/*; do
     hash -d "$(basename "$workspace")=$workspace";
 done
 
