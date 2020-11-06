@@ -24,7 +24,3 @@ jobs:
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Install optional software
         run: make optional INTERACTIVE=0
-      - name: Upgrade APT packages
-        run: sudo apt upgrade -y
-      - name: Clean up
-        run: sudo apt autoremove -y
