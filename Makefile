@@ -400,7 +400,7 @@ $(DNSMASQ): | $(BASH)
 	echo 'nameserver 9.9.9.9'   | sudo tee -a /etc/resolv.conf
 	sudo mkdir -p /etc/NetworkManager/conf.d
 	echo "[main]\ndns=none\nrc-manager=unmanaged" | sudo tee /etc/NetworkManager/conf.d/dnsmasq.conf
-	sudo service network-manager restart
+	sudo service --status-all | awk '{ print $$4 }' | grep -qv network-manager || sudo service network-manager restart
 	sleep 2
 	for con in $(shell nmcli con show --active | tail -n +2 | awk '{ print $$1 }'); do \
 		nmcli con mod "$$con" ipv4.ignore-auto-dns yes; \
