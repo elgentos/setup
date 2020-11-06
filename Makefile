@@ -398,6 +398,17 @@ $(DNSMASQ): | $(BASH)
 	echo 'nameserver 127.0.0.1' | sudo tee    /etc/resolv.conf
 	echo 'nameserver 1.1.1.1'   | sudo tee -a /etc/resolv.conf
 	echo 'nameserver 9.9.9.9'   | sudo tee -a /etc/resolv.conf
+	sudo mkdir -p /etc/NetworkManager/conf.d
+	echo "[main]\ndns=none\nrc-manager=unmanaged" | sudo tee /etc/NetworkManager/conf.d/dnsmasq.conf
+	sudo service network-manager restart
+	sleep 2
+	for con in $(shell nmcli con show --active | tail -n +2 | awk '{ print $$1 }'); do \
+		nmcli con mod "$$con" ipv4.ignore-auto-dns yes; \
+		nmcli con mod "$$con" ipv4.dns '127.0.0.1 1.1.1.1 9.9.9.9'; \
+		nmcli con down "$$con"; \
+		nmcli con up "$$con"; \
+		sudo nmcli con reload; \
+	done
 	sudo apt install -y dnsmasq
 	sudo rm -f /etc/dnsmasq.conf
 	echo port=53                  | sudo tee    /etc/dnsmasq.conf
@@ -409,31 +420,37 @@ $(DNSMASQ): | $(BASH)
 	dnsmasq --test
 	sudo mkdir -p "$(DNSMASQ)"
 	sudo service dnsmasq restart
-	sudo ufw allow from 192.168.0.0/16 to any port 53 proto udp
-	sudo ufw allow from 10.0.0.0/16    to any port 53 proto udp
-
-FORCE:
 
 dnsmasq: | $(DNSMASQ)
 
-$(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): | $(DNSMASQ) $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE) $(BASH)
+$(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): $(DNSMASQ) | $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE) $(BASH)
 	$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev down
 	$(BASH) -c '[ -f /.dockerenv ] || sudo rm -f /etc/resolv.conf'
 	sudo touch /etc/resolv.conf
-	DOCKER_GATEWAY="$(shell ip route | grep -E 'docker[0-9]' | awk '{ print $$9 }')" \
+	DOCKER_GATEWAY="$(shell ip route | grep -E 'docker[0-9]' | awk '{ print $$9 }' | grep '.')" \
 		&& $(BASH) -c \
 			'source "$(DOCKER_COMPOSE_DEVELOPMENT)/.env" && echo "address=/$$DOMAINSUFFIX/'$$DOCKER_GATEWAY'"' \
 		| sudo tee $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ) \
 		&& echo nameserver $$DOCKER_GATEWAY | sudo tee -a /etc/resolv.conf \
 		&& cat /etc/dnsmasq.conf \
-			| sed -E 's/listen-address=.+/listen-address='$$DOCKER_GATEWAY \
+			| sed -E 's/listen-address=.+/listen-address='$$DOCKER_GATEWAY'/' \
 			| sudo tee /etc/dnsmasq.conf
 	echo nameserver 127.0.0.1 | sudo tee -a /etc/resolv.conf
 	echo nameserver 1.1.1.1   | sudo tee -a /etc/resolv.conf
 	echo nameserver 9.9.9.9   | sudo tee -a /etc/resolv.conf
+	for con in $(shell nmcli con show --active | tail -n +2 | awk '{ print $$1 }'); do \
+		nmcli con mod "$$con" ipv4.dns "$(shell ip route | grep -E 'docker[0-9]' | awk '{ print $$9 }' | grep '.') 127.0.0.1 1.1.1.1 9.9.9.9"; \
+		nmcli con down "$$con"; \
+		nmcli con up "$$con"; \
+		sudo nmcli con reload; \
+	done
+	for iface in $(shell ip route | grep -Eo 'docker[0-9]' | uniq); do \
+		sudo ufw allow in on "$$iface" to any port 53 proto udp; \
+	done
+	dnsmasq --test
 	sudo service dnsmasq restart
 	sudo service docker restart
-	$(BASH) -c 'source "$(DOCKER_COMPOSE_DEVELOPMENT)/.env" && dig setup.localhost +short'
+	$(BASH) -c 'source "$(DOCKER_COMPOSE_DEVELOPMENT)/.env" && $(DOCKER) run --rm -t tutum/dnsutils dig setup$$DOMAINSUFFIX +short'
 
 docker-compose-development-dnsmasq: | $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ)
 
