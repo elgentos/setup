@@ -465,7 +465,8 @@ $(AWS): | git $(DOCKER)
 aws: | $(AWS)
 
 $(SSG): | git $(NPM) $(BASH)
-	$(GIT) clone git@github.com:elgentos/ssg-js.git $(GITPROJECTS)/ssg-js
+	$(GIT) clone git@github.com:elgentos/ssg-js.git $(GITPROJECTS)/ssg-js \
+		|| $(GIT) clone https://github.com/elgentos/ssg-js.git $(GITPROJECTS)/ssg-js
 	cd $(GITPROJECTS)/ssg-js && $(NPM) install
 	cd $(GITPROJECTS)/ssg-js && sudo $(NPM) install -g ssg-js
 
