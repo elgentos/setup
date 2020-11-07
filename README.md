@@ -122,6 +122,30 @@ To cherry-pick optional software, use the following phony targets:
 | [Teamviewer](https://www.teamviewer.com/)                                                 | `make teamviewer`                         | [![make teamviewer](https://github.com/johmanx10/setup/workflows/make%20teamviewer/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+teamviewer%22) |
 | [Transmission Remote GTK](https://linux.die.net/man/1/transmission-remote)                | `make transmission-remote`                | [![make transmission-remote](https://github.com/johmanx10/setup/workflows/make%20transmission-remote/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+transmission-remote%22) |
 
+# elgentos
+
+[![make elgentos](https://github.com/johmanx10/setup/workflows/make%20elgentos/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+elgentos%22)
+
+This is a curated software list, by elgentos, for their workstation setups.
+It installs the `install` target, and additionally the following targets:
+
+- `aws`
+- `brave`
+- `dnsmasq`
+- `docker`
+- `docker-compose-development`
+- `docker-compose-development-dnsmasq`
+- `firefox`
+- `gimp`
+- `google-chrome`
+- `node`
+- `slack`
+- `ssg`
+- `symlinks`
+- `tmux`
+- `tmuxinator`
+- `tmuxinator_completion`
+
 # Development
 
 [![docker-make vim](https://github.com/johmanx10/setup/workflows/docker-make%20vim/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22docker-make+vim%22)

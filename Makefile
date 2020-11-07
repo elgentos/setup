@@ -67,8 +67,18 @@ GIT := $(shell command -v git || echo /usr/bin/git)
 BASH := $(shell command -v bash || echo /bin/bash)
 VIM := $(shell command -v vim || echo /usr/bin/vim)
 
+UFW := $(shell command -v ufw || echo /usr/sbin/ufw)
+IP := $(shell command -v ip || echo /usr/sbin/ip)
+
 AWS := $(shell command -v aws || echo /usr/local/bin/aws)
 SSG := $(shell command -v ssg || echo /usr/bin/ssg)
+
+# elgentos curated
+SYMLINKS := $(shell command -v symlinks || echo /usr/bin/symlinks)
+TMUX := $(shell command -v tmux || echo /usr/bin/tmux)
+TMUXINATOR := $(shell command -v tmuxinator || echo /usr/bin/tmuxinator)
+TMUXINATOR_COMPLETION_ZSH = /usr/local/share/zsh/site-functions/_tmuxinator
+TMUXINATOR_COMPLETION_BASH = /etc/bash_completion.d/tmuxinator.bash
 
 install: | \
 	$(GITCONFIG_USER) \
@@ -76,6 +86,17 @@ install: | \
 	$(OH_MY_ZSH) \
 	$(DOCKER_CONFIG) \
 	$(JETBRAINS_TOOLBOX_SETTINGS)
+
+$(UFW): $(BASH)
+	sudo apt install -y ufw
+	$(BASH) -c '[ -f /.dockerenv ] || sudo ufw enable'
+
+ufw: | $(UFW)
+
+$(IP):
+	sudo apt install -y iproute2
+
+ip: $(IP)
 
 $(GITCONFIG):
 	ln -s "$(shell pwd)/.gitconfig" "$(GITCONFIG)"
@@ -166,7 +187,7 @@ $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
 
 docker-compose: | $(DOCKER_COMPOSE)
 
-$(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(GIT) $(GITPROJECTS)
+$(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(GIT) $(GITPROJECTS) $(UFW) $(IP)
 	$(GIT) clone git@github.com:JeroenBoersma/docker-compose-development.git $(DOCKER_COMPOSE_DEVELOPMENT)
 	sudo service docker start
 	for volume in $(shell $(DOCKER) volume ls -q | grep dockerdev-); do \
@@ -174,6 +195,11 @@ $(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(
 			$(DOCKER) rm $$container;\
 		done; \
 		$(DOCKER) volume rm $$volume; \
+	done
+	for iface in $(shell $(IP) route | grep -Eo 'docker[0-9]' | uniq); do \
+		sudo $(UFW) allow in on "$$iface" to any port 80 proto tcp; \
+		sudo $(UFW) allow in on "$$iface" to any port 443 proto tcp; \
+		sudo $(UFW) allow in on "$$iface" to any port 9000 proto tcp; \
 	done
 	"$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" setup
 
@@ -392,7 +418,7 @@ $(FIREFOX):
 
 firefox: | $(FIREFOX)
 
-$(DNSMASQ): | $(BASH)
+$(DNSMASQ): | $(BASH) $(UFW)
 	$(BASH) -c '[ -f /.dockerenv ] || sudo $(SYSTEMCTL) disable --now systemd-resolved'
 	$(BASH) -c '[ -f /.dockerenv ] || sudo rm -f /etc/resolv.conf'
 	echo 'nameserver 127.0.0.1' | sudo tee    /etc/resolv.conf
@@ -409,6 +435,8 @@ $(DNSMASQ): | $(BASH)
 		nmcli con up "$$con"; \
 		sudo nmcli con reload; \
 	done
+	sudo $(UFW) allow out to 1.1.1.1 port 53 proto udp;
+	sudo $(UFW) allow out to 9.9.9.9 port 53 proto udp;
 	sudo apt install -y dnsmasq
 	sudo rm -f /etc/dnsmasq.conf
 	echo port=53                  | sudo tee    /etc/dnsmasq.conf
@@ -419,38 +447,39 @@ $(DNSMASQ): | $(BASH)
 	echo cache-size=1000          | sudo tee -a /etc/dnsmasq.conf
 	dnsmasq --test
 	sudo mkdir -p "$(DNSMASQ)"
-	sudo service dnsmasq restart
+	$(BASH) -c '[ -f /.dockerenv ] || sudo service dnsmasq restart'
 
 dnsmasq: | $(DNSMASQ)
 
-$(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): $(DNSMASQ) | $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE) $(BASH)
+$(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): $(DNSMASQ) | $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE) $(BASH) $(UFW) $(IP)
 	$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev down
 	$(BASH) -c '[ -f /.dockerenv ] || sudo rm -f /etc/resolv.conf'
 	sudo touch /etc/resolv.conf
-	DOCKER_GATEWAY="$(shell ip route | grep -E 'docker[0-9]' | awk '{ print $$9 }' | grep '.')" \
+	DOCKER_GATEWAY="$(shell $(IP) route | grep -E 'docker[0-9]' | awk '{ print $$9 }' | grep '.')" \
 		&& $(BASH) -c \
-			'source "$(DOCKER_COMPOSE_DEVELOPMENT)/.env" && echo "address=/$$DOMAINSUFFIX/'$$DOCKER_GATEWAY'"' \
+			'source "$(DOCKER_COMPOSE_DEVELOPMENT)/.env" && echo "address=/$$DOMAINSUFFIX/'$${$DOCKER_GATEWAY:-127.0.0.1}'"' \
 		| sudo tee $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ) \
-		&& echo nameserver $$DOCKER_GATEWAY | sudo tee -a /etc/resolv.conf \
+		&& echo nameserver $${$DOCKER_GATEWAY:-127.0.0.1} | sudo tee -a /etc/resolv.conf \
 		&& cat /etc/dnsmasq.conf \
-			| sed -E 's/listen-address=.+/listen-address='$$DOCKER_GATEWAY'/' \
+			| sed -E 's/listen-address=.+/listen-address='$${$DOCKER_GATEWAY:-127.0.0.1}'/' \
 			| sudo tee /etc/dnsmasq.conf
 	echo nameserver 127.0.0.1 | sudo tee -a /etc/resolv.conf
 	echo nameserver 1.1.1.1   | sudo tee -a /etc/resolv.conf
 	echo nameserver 9.9.9.9   | sudo tee -a /etc/resolv.conf
 	for con in $(shell nmcli con show --active | tail -n +2 | awk '{ print $$1 }'); do \
-		nmcli con mod "$$con" ipv4.dns "$(shell ip route | grep -E 'docker[0-9]' | awk '{ print $$9 }' | grep '.') 127.0.0.1 1.1.1.1 9.9.9.9"; \
+		nmcli con mod "$$con" ipv4.dns "$(shell $(IP) route | grep -E 'docker[0-9]' | awk '{ print $$9 }' | grep '.') 127.0.0.1 1.1.1.1 9.9.9.9"; \
 		nmcli con down "$$con"; \
 		nmcli con up "$$con"; \
 		sudo nmcli con reload; \
 	done
-	for iface in $(shell ip route | grep -Eo 'docker[0-9]' | uniq); do \
-		sudo ufw allow in on "$$iface" to any port 53 proto udp; \
+	for iface in $(shell $(IP) route | grep -Eo 'docker[0-9]' | uniq); do \
+		sudo $(UFW) allow in on "$$iface" to any port 53 proto udp; \
 	done
+	cat /etc/dnsmasq.conf
 	dnsmasq --test
-	sudo service dnsmasq restart
+	$(BASH) -c '[ -f /.dockerenv ] || sudo service dnsmasq restart'
 	sudo service docker restart
-	$(BASH) -c 'source "$(DOCKER_COMPOSE_DEVELOPMENT)/.env" && $(DOCKER) run --rm -t tutum/dnsutils dig setup$$DOMAINSUFFIX +short'
+	$(BASH) -c 'source "$(DOCKER_COMPOSE_DEVELOPMENT)/.env" && sudo $(DOCKER) run --rm -t tutum/dnsutils dig setup$$DOMAINSUFFIX +short'
 
 docker-compose-development-dnsmasq: | $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ)
 
@@ -460,16 +489,54 @@ $(AWS): | git $(DOCKER)
 		$(GITPROJECTS)/aws-cli
 	chmod +x $(GITPROJECTS)/aws-cli/aws.sh
 	sudo ln -s $(GITPROJECTS)/aws-cli/aws.sh $(AWS)
-	$(AWS) --version
+	sudo $(AWS) --version
 
 aws: | $(AWS)
 
 $(SSG): | git $(NPM) $(BASH)
-	$(GIT) clone git@github.com:elgentos/ssg-js.git $(GITPROJECTS)/ssg-js \
-		|| $(GIT) clone https://github.com/elgentos/ssg-js.git $(GITPROJECTS)/ssg-js
+	$(GIT) clone git@github.com:elgentos/ssg-js.git $(GITPROJECTS)/ssg-js
 	cd $(GITPROJECTS)/ssg-js && $(NPM) install
 	cd $(GITPROJECTS)/ssg-js && sudo $(NPM) install -g ssg-js
 
 ssg: | $(SSG)
 
 all: | install optional
+
+$(SYMLINKS):
+	sudo apt install -y symlinks
+
+symlinks: | $(SYMLINKS)
+
+$(TMUX):
+	sudo apt install -y tmux
+
+tmux: | $(TMUX)
+
+$(TMUXINATOR): | $(TMUX)
+	sudo apt install -y tmuxinator
+
+tmuxinator: | $(TMUXINATOR)
+
+$(TMUXINATOR_COMPLETION_ZSH): | $(TMUXINATOR) $(ZSH) $(CURL)
+	$(CURL) -L https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.zsh \
+		| sudo tee $(TMUXINATOR_COMPLETION_ZSH)
+
+$(TMUXINATOR_COMPLETION_BASH): | $(TMUXINATOR) $(BASH) $(CURL)
+	$(CURL) -L https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.bash \
+		| sudo tee $(TMUXINATOR_COMPLETION_BASH)
+
+tmuxinator_completion: | $(TMUXINATOR_COMPLETION_ZSH) $(TMUXINATOR_COMPLETION_BASH)
+
+elgentos: | \
+	install \
+	aws \
+	brave \
+	docker-compose-development-dnsmasq \
+	firefox \
+	gimp \
+	google-chrome \
+	symlinks \
+	node \
+	slack \
+	ssg \
+	tmuxinator_completion

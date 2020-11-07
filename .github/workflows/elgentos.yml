@@ -1,4 +1,4 @@
-name: make ssg
+name: make elgentos
 
 on:
   push:
@@ -22,5 +22,5 @@ jobs:
         with:
           host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Install SSG
-        run: make ssg INTERACTIVE=0
+      - name: Install elgentos workstation
+        run: make elgentos INTERACTIVE=0
