@@ -12,7 +12,7 @@ COMMANDS=(
   "useradd -u $(id -u "$USER") -g $(id -g "$USER") --groups app,sudo app"
   'chown app:app /home/app'
   'passwd --delete app'
-  "su app -c 'make --trace --debug ${@} INTERACTIVE=0'"
+  "su app -c 'make INTERACTIVE=0 --trace --debug ${@}'"
 )
 
 [[ "$TINKER" == "" ]] || COMMANDS+=("$TINKER")
@@ -26,6 +26,7 @@ docker run \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e SSH_AUTH_SOCK=/ssh-agent \
   --net host \
+  -it \
   -w /setup \
   "${IMAGE:=ubuntu:20.04}" \
   bash -c "${COMMANDS[*]}"

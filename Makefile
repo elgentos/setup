@@ -201,7 +201,10 @@ $(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(
 		sudo $(UFW) allow in on "$$iface" to any port 443 proto tcp; \
 		sudo $(UFW) allow in on "$$iface" to any port 9000 proto tcp; \
 	done
-	"$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" setup
+	echo $(INTERACTIVE) | grep -q '1' \
+		&& "$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" setup \
+		|| DOMAINSUFFIX=.localhost echo php80 \
+			| "$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" setup
 
 $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE): | $(DOCKER_COMPOSE_DEVELOPMENT) $(ZSHRC)
 	"$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" profile > $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE)
