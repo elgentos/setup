@@ -87,7 +87,7 @@ install: | \
 	$(DOCKER_CONFIG) \
 	$(JETBRAINS_TOOLBOX_SETTINGS)
 
-$(UFW): $(BASH)
+$(UFW): | $(BASH)
 	sudo apt install -y ufw
 	$(BASH) -c '[ -f /.dockerenv ] || sudo ufw enable'
 
