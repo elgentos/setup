@@ -16,7 +16,7 @@ COMMANDS=(
 )
 
 [[ "$TINKER" == "" ]] || COMMANDS+=("$TINKER")
-[[ "${TTY:-1}" == "1" ]] && TTY_FLAG='-t'
+[[ "${TTY:-1}" == "1" ]] && TTY_FLAG='-it'
 
 IFS=';'
 docker run \
@@ -27,7 +27,7 @@ docker run \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e SSH_AUTH_SOCK=/ssh-agent \
   --net host \
-  -i "${TTY_FLAG:-}" \
+  "${TTY_FLAG:--i}" \
   -w /setup \
   "${IMAGE:=ubuntu:20.04}" \
   bash -c "${COMMANDS[*]}"
