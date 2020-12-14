@@ -19,7 +19,6 @@ jobs:
           - firefox
           - gimp
           - google-chrome
-          - node
           - ssg
           - symlinks
           - tmux

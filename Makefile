@@ -59,6 +59,7 @@ TMUX := $(shell command -v tmux || echo /usr/bin/tmux)
 TMUXINATOR := $(shell command -v tmuxinator || echo /usr/bin/tmuxinator)
 TMUXINATOR_COMPLETION_ZSH = /usr/local/share/zsh/site-functions/_tmuxinator
 TMUXINATOR_COMPLETION_BASH = /etc/bash_completion.d/tmuxinator.bash
+GIMP := $(shell command -v gimp || echo /usr/bin/gimp)
 
 install: | \
 	$(GITCONFIG_USER) \
@@ -437,3 +438,8 @@ $(SSH_KEY): | $(SSH)
 	cat "$(SSH_KEY).pub"
 
 ssh-key: | $(SSH_KEY)
+
+$(GIMP):
+	sudo apt install gimp -y
+
+gimp: | $(GIMP)
