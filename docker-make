@@ -26,7 +26,7 @@ docker run \
   -v $SSH_AUTH_SOCK:/ssh-agent:ro \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e SSH_AUTH_SOCK=/ssh-agent \
-  --net host \
+  --net bridge \
   "${TTY_FLAG:--i}" \
   -w /setup \
   "${IMAGE:=ubuntu:20.04}" \
