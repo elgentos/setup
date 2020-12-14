@@ -35,13 +35,13 @@ jobs:
         with:
           host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          private-key-name: github
+          private-key-name: id_rsa
       - name: Setup GitHub Gist SSH
         uses: MrSquaare/ssh-setup-action@v1
         with:
           host: gist.github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          private-key-name: github-gist
+          private-key-name: id_rsa_gist
       - name: Update APT repositories
         run: sudo apt update -y
       - name: ${{ matrix.installer }} ${{ matrix.target }}
