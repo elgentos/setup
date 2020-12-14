@@ -67,6 +67,7 @@ install: | \
 	$(OH_MY_ZSH) \
 	$(DOCKER_COMPOSE_DEVELOPMENT_PROFILE) \
 	$(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ) \
+	$(NODE) \
 	$(AWS) \
 	$(SLACK) \
 	$(JETBRAINS_TOOLBOX_SETTINGS)
@@ -265,8 +266,6 @@ $(SLACK): | $(CURL)
 
 slack: | $(SLACK)
 
-discord: | $(DISCORD)
-
 $(SOFTWARE_PROPERTIES_COMMON):
 	sudo apt install software-properties-common -y
 
@@ -418,7 +417,6 @@ all: | \
 	gimp \
 	google-chrome \
 	symlinks \
-	node \
 	ssg \
 	tmuxinator_completion
 

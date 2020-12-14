@@ -47,6 +47,7 @@ The following software has been installed:
 - [JetBrains Toolbox](https://www.jetbrains.com/toolbox-app/)
 - [jq](https://stedolan.github.io/jq/)
 - [lsb_release](https://refspecs.linuxfoundation.org/LSB_3.0.0/LSB-PDA/LSB-PDA/lsbrelease.html)
+- [`node`, `npm`, `nvm`](https://nodejs.org/)
 - [Oh My Zsh](https://ohmyz.sh/)
 - [Slack](https://slack.com/)
 - [Vim](https://www.vim.org/)
@@ -75,10 +76,6 @@ To cherry-pick optional software, use the following targets:
 - [`tmux`](https://tracker.debian.org/pkg/tmux)
 - [`tmuxinator`](https://tracker.debian.org/pkg/tmuxinator)
 - [`tmuxinator_completion`](https://github.com/tmuxinator/tmuxinator/tree/master/completion)
-
-## Web development
-
-- [`node`, `npm`, `nvm`](https://nodejs.org/)
 
 ## Example
 
