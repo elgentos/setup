@@ -25,7 +25,8 @@ SLACK := $(shell command -v slack || echo /usr/bin/slack)
 LSB_RELEASE := $(shell command -v lsb_release || echo /usr/bin/lsb_release)
 
 NPM := $(shell command -v npm || echo /usr/bin/npm)
-NODE := $(shell command -v node || echo /usr/bin/node)
+NODE := $(shell command -v node || echo "$$HOME/.nvm/versions/node/v*.*.*/bin/node")
+NVM := $(shell command -v nvm || echo "$$HOME/.nvm/nvm.sh")
 
 DOCKER := $(shell command -v docker || echo /usr/bin/docker)
 DOCKER_CONFIG := $(shell echo "$$HOME/.docker/config.json")
@@ -269,11 +270,14 @@ discord: | $(DISCORD)
 $(SOFTWARE_PROPERTIES_COMMON):
 	sudo apt install software-properties-common -y
 
-# Todo: Solve this using nvm
-$(NODE): | $(CURL) $(BASH)
-	$(CURL) -sL https://deb.nodesource.com/setup_current.x | sudo -E $(BASH) -
-	sudo apt update -y
-	sudo apt install -y nodejs
+$(NVM): | $(CURL) $(BASH) $(ZSHRC)
+	$(CURL) -sf https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | $(BASH)
+	echo 'export NVM_DIR="$$HOME/.nvm"' >> $(ZSHRC)
+	echo '[ -s "$$NVM_DIR/nvm.sh" ] && \. "$$NVM_DIR/nvm.sh"  # This loads nvm' >> $(ZSHRC)
+	echo '[ -s "$$NVM_DIR/bash_completion" ] && \. "$$NVM_DIR/bash_completion"  # This loads nvm bash_completion' >> $(ZSHRC)
+
+$(NODE): | $(NVM) $(BASH)
+	$(BASH) -c 'source $(NVM) && nvm install 10'
 
 node: | $(NODE)
 
