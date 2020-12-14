@@ -22,7 +22,7 @@ IFS=';'
 docker run \
   --rm \
   -v $PWD:/setup \
-  -v $HOME/.ssh:/home/app/.ssh:ro \
+  -v $HOME/.ssh:/home/app/.ssh:rw \
   -v $SSH_AUTH_SOCK:/ssh-agent:ro \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e SSH_AUTH_SOCK=/ssh-agent \
