@@ -17,6 +17,8 @@ jobs:
           - ./docker-make install
     runs-on: ubuntu-${{ matrix.version }}
     name: Ubuntu ${{ matrix.version }}
+    env:
+      TTY: 0
     steps:
       - uses: actions/checkout@v2
       - name: Setup SSH
