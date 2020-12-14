@@ -38,7 +38,7 @@ fi
 if ! make ssh-key --quiet; then
   make ssh-key;
   echo "";
-  echo "Make sure the your key is registered to your GitHub account before proceeding.";
+  echo "Make sure your key is registered to your GitHub account before proceeding.";
   echo "  https://github.com/settings/keys";
   echo "";
   # shellcheck disable=SC2162
