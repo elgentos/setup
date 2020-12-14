@@ -8,38 +8,19 @@ GITCONFIG := $(shell echo "$$HOME/.gitconfig")
 GITIGNORE := $(shell echo "$$HOME/.gitignore")
 GITPROJECTS := $(shell echo "$$HOME/git")
 
+SSH := $(shell command -v ssh || /usr/bin/ssh)
+SSH_KEY := $(shell echo "$$HOME/.ssh/id_rsa")
+
 JETBRAINS_TOOLBOX := $(shell command -v jetbrains-toolbox || echo /usr/local/bin/jetbrains-toolbox)
 JETBRAINS_TOOLBOX_SETTINGS := $(shell echo "$$HOME/.local/share/JetBrains/Toolbox/.settings.json")
-
-TRANSMISSION_REMOTE := $(shell command -v transmission-remote-gtk || echo /usr/bin/transmission-remote-gtk)
 
 BRAVE := $(shell command -v brave-browser || echo /usr/bin/brave-browser)
 CHROME := $(shell command -v google-chrome || echo /usr/bin/google-chrome)
 FIREFOX := $(shell command -v firefox || echo /usr/bin/firefox)
 
-GIMP := $(shell command -v gimp || echo /usr/bin/gimp)
-
-DISCORD := $(shell command -v discord || echo /usr/bin/discord)
-
-LIB_NVIDIA_GL := $(shell dpkg -l | grep -e 'libnvidia-gl-[0-9][0-9]*:amd64' | awk '{print $2}')
-ZENITY := $(shell command -v zenity || echo /usr/bin/zenity)
-STEAM := $(shell command -v steam || echo /bin/steam)
-STEAM_TERMINAL := $(shell command -v gnome-terminal \
-	|| command -v xterm \
-	|| command -v konsole \
-	|| command -v x-terminal-emulator \
-	|| echo /usr/bin/gnome-terminal)
-
 SOFTWARE_PROPERTIES_COMMON := $(shell command -v add-apt-repository || echo /usr/bin/add-apt-repository)
-LUTRIS := $(shell command -v lutris || echo /usr/games/lutris)
-
-EPIC_GAMES_STORE := $(shell echo "$$HOME/Games/epic-games-store/drive_c/Program\ Files*/Epic\ Games/Launcher/Engine/Binaries/Win*/EpicGamesLauncher.exe")
-
-RETROARCH := $(shell command -v retroarch || echo /usr/bin/retroarch)
 
 SLACK := $(shell command -v slack || echo /usr/bin/slack)
-
-TEAMVIEWER := $(shell command -v teamviewer || echo /usr/bin/teamviewer)
 
 LSB_RELEASE := $(shell command -v lsb_release || echo /usr/bin/lsb_release)
 
@@ -48,7 +29,6 @@ NODE := $(shell command -v node || echo /usr/bin/node)
 
 DOCKER := $(shell command -v docker || echo /usr/bin/docker)
 DOCKER_CONFIG := $(shell echo "$$HOME/.docker/config.json")
-
 DOCKER_COMPOSE := $(shell command -v docker-compose || echo /usr/local/bin/docker-compose)
 
 DNSMASQ = /etc/dnsmasq.d
@@ -73,7 +53,6 @@ IP := $(shell command -v ip || echo /usr/sbin/ip)
 AWS := $(shell command -v aws || echo /usr/local/bin/aws)
 SSG := $(shell command -v ssg || echo /usr/bin/ssg)
 
-# elgentos curated
 SYMLINKS := $(shell command -v symlinks || echo /usr/bin/symlinks)
 TMUX := $(shell command -v tmux || echo /usr/bin/tmux)
 TMUXINATOR := $(shell command -v tmuxinator || echo /usr/bin/tmuxinator)
@@ -82,9 +61,13 @@ TMUXINATOR_COMPLETION_BASH = /etc/bash_completion.d/tmuxinator.bash
 
 install: | \
 	$(GITCONFIG_USER) \
+	$(SSH_KEY) \
 	$(ZSHRC) \
 	$(OH_MY_ZSH) \
-	$(DOCKER_CONFIG) \
+	$(DOCKER_COMPOSE_DEVELOPMENT_PROFILE) \
+	$(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ) \
+	$(AWS) \
+	$(SLACK) \
 	$(JETBRAINS_TOOLBOX_SETTINGS)
 
 $(UFW): | $(BASH)
@@ -99,12 +82,12 @@ $(IP):
 ip: $(IP)
 
 $(GITCONFIG):
-	ln -s "$(shell pwd)/.gitconfig" "$(GITCONFIG)"
+	cp "$(shell pwd)/.gitconfig" "$(GITCONFIG)"
 
 gitconfig: | $(GITCONFIG)
 
 $(GITIGNORE):
-	ln -s "$(shell pwd)/.gitignore" "$(GITIGNORE)"
+	cp "$(shell pwd)/.gitignore" "$(GITIGNORE)"
 
 gitignore: | $(GITIGNORE)
 
@@ -187,7 +170,7 @@ $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
 
 docker-compose: | $(DOCKER_COMPOSE)
 
-$(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(GIT) $(GITPROJECTS) $(UFW) $(IP)
+$(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(GIT) $(GITPROJECTS) $(UFW) $(IP) $(SSH_KEY)
 	$(GIT) clone git@github.com:JeroenBoersma/docker-compose-development.git $(DOCKER_COMPOSE_DEVELOPMENT)
 	sudo service docker start
 	for volume in $(shell $(DOCKER) volume ls -q | grep dockerdev-); do \
@@ -216,7 +199,7 @@ $(ZSH):
 	echo $(INTERACTIVE) | grep -q '1' && chsh --shell $(ZSH) || echo 'Skipping shell change'
 
 $(ZSHRC):
-	ln -s "$(shell pwd)/.zshrc" "$(ZSHRC)"
+	cp "$(shell pwd)/.zshrc" "$(ZSHRC)"
 
 zsh: | $(ZSH) $(ZSHRC)
 
@@ -269,60 +252,6 @@ $(CHROME): | $(CURL)
 
 google-chrome: | $(CHROME)
 
-optional: | \
-	aws \
-	brave \
-	discord \
-	dnsmasq \
-	docker-compose \
-	docker-compose-development \
-	docker-compose-development-dnsmasq \
-	epic-games-store \
-	firefox \
-	gimp \
-	google-chrome \
-	lutris \
-	node \
-	retroarch \
-	slack \
-	ssg \
-	steam \
-	teamviewer \
-	transmission-remote
-
-$(TRANSMISSION_REMOTE):
-	sudo apt install transmission-remote-gtk -y
-
-transmission-remote: | $(TRANSMISSION_REMOTE)
-
-$(GIMP):
-	sudo apt install gimp -y
-
-gimp: | $(GIMP)
-
-$(STEAM_TERMINAL):
-	sudo apt install gnome-terminal -y
-
-$(ZENITY):
-	sudo apt install zenity -y
-
-$(STEAM): | $(CURL) $(STEAM_TERMINAL) $(ZENITY)
-	# See: https://github.com/ValveSoftware/steam-for-linux/issues/7067#issuecomment-622390607
-	echo $(LIB_NVIDIA_GL) | grep -q ':amd64' \
-		&& sudo apt install $(shell echo $(LIB_NVIDIA_GL) | cut -d: -f1):i386 python3-apt -y \
-		|| sudo apt install python3-apt -y
-	rm -rf $$HOME/.steam
-	$(CURL) -L https://cdn.cloudflare.steamstatic.com/client/installer/steam.deb \
-		--output /tmp/steam.deb
-	sudo dpkg --install /tmp/steam.deb
-	rm -f /tmp/steam.deb
-	sudo dpkg --add-architecture i386
-	sudo apt update -y
-	sudo apt install libgl1-mesa-dri:i386 libgl1:i386 libc6:i386 -y -o APT::Immediate-Configure=false -f
-	sudo dpkg --configure -a
-
-steam: | $(STEAM)
-
 $(SLACK): | $(CURL)
 	sudo apt install libgtk-3-0 libappindicator3-1 libnotify4 libnss3 libxss1 libxtst6 xdg-utils libatspi2.0-0 -y
 	sudo dpkg --list | awk '{ print $2 }' | grep -qE 'kde-cli-tools|kde-runtime|trash-cli|libglib2.0-bin|gvfs-bin' \
@@ -335,66 +264,12 @@ $(SLACK): | $(CURL)
 
 slack: | $(SLACK)
 
-$(DISCORD): | $(CURL)
-	sudo apt install -y \
-		libasound2 \
-		libgconf-2-4 \
-		libnotify4 \
-		libnspr4 \
-		libnss3 \
-		libxss1 \
-		libxtst6 \
-		libappindicator1 \
-		libc++1
-	$(CURL) -L 'https://discord.com/api/download?platform=linux&format=deb' \
-		--output /tmp/discord.deb
-	sudo dpkg --install /tmp/discord.deb
-	rm -f /tmp/discord.deb
-
 discord: | $(DISCORD)
 
 $(SOFTWARE_PROPERTIES_COMMON):
 	sudo apt install software-properties-common -y
 
-$(LUTRIS): | $(SOFTWARE_PROPERTIES_COMMON)
-	sudo add-apt-repository ppa:lutris-team/lutris -y
-	sudo apt update -y
-	sudo apt install lutris -y
-
-lutris: | $(LUTRIS)
-
-$(EPIC_GAMES_STORE): | $(LUTRIS)
-	echo $(INTERACTIVE) | grep -q '1' \
-		&& $(LUTRIS) --install 'https://lutris.net/api/installers/epic-games-store-latest?format=json' \
-		|| echo 'Lutris currently does not support unattended installations. See https://github.com/lutris/lutris/pull/3029'
-
-epic-games-store: | $(EPIC_GAMES_STORE)
-
-$(RETROARCH): | $(SOFTWARE_PROPERTIES_COMMON)
-	sudo add-apt-repository ppa:libretro/stable -y
-	sudo apt-get update -y
-	sudo apt-get install retroarch* -y
-
-retroarch: | $(RETROARCH)
-
-$(TEAMVIEWER): | $(CURL)
-	sudo apt install -y \
-		libqt5qml5 \
-		libqt5quick5 \
-		libqt5webkit5 \
-		libqt5x11extras5 \
-		qml-module-qtquick2 \
-		qml-module-qtquick-controls \
-		qml-module-qtquick-dialogs \
-		qml-module-qtquick-window2 \
-		qml-module-qtquick-layouts
-	$(CURL) -L https://download.teamviewer.com/download/linux/teamviewer_amd64.deb \
-		--output /tmp/teamviewer.deb
-	sudo dpkg --install /tmp/teamviewer.deb
-	rm -f /tmp/teamviewer.deb
-
-teamviewer: | $(TEAMVIEWER)
-
+# Todo: Solve this using nvm
 $(NODE): | $(CURL) $(BASH)
 	$(CURL) -sL https://deb.nodesource.com/setup_current.x | sudo -E $(BASH) -
 	sudo apt update -y
@@ -490,7 +365,7 @@ $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): $(DNSMASQ) | $(DOCKER_COMPOSE_DEVELOPMENT
 
 docker-compose-development-dnsmasq: | $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ)
 
-$(AWS): | git $(DOCKER)
+$(AWS): | git $(DOCKER) $(SSH_KEY)
 	$(GIT) clone \
 		git@gist.github.com:87e29fd4aa06ec42216c80a6e3649fa5.git \
 		$(GITPROJECTS)/aws-cli
@@ -500,14 +375,12 @@ $(AWS): | git $(DOCKER)
 
 aws: | $(AWS)
 
-$(SSG): | git $(NPM) $(BASH)
+$(SSG): | git $(NPM) $(BASH) $(SSH_KEY)
 	$(GIT) clone git@github.com:elgentos/ssg-js.git $(GITPROJECTS)/ssg-js
 	cd $(GITPROJECTS)/ssg-js && $(NPM) install
 	cd $(GITPROJECTS)/ssg-js && sudo $(NPM) install -g ssg-js
 
 ssg: | $(SSG)
-
-all: | install optional
 
 $(SYMLINKS):
 	sudo apt install -y symlinks
@@ -534,16 +407,29 @@ $(TMUXINATOR_COMPLETION_BASH): | $(TMUXINATOR) $(BASH) $(CURL)
 
 tmuxinator_completion: | $(TMUXINATOR_COMPLETION_ZSH) $(TMUXINATOR_COMPLETION_BASH)
 
-elgentos: | \
+all: | \
 	install \
-	aws \
 	brave \
-	docker-compose-development-dnsmasq \
 	firefox \
 	gimp \
 	google-chrome \
 	symlinks \
 	node \
-	slack \
 	ssg \
 	tmuxinator_completion
+
+$(SSH): | $(GIT)
+
+ssh: | $(SSH)
+
+$(SSH_KEY): | $(SSH)
+	mkdir -p "$(shell dirname "$(SSH_KEY)")"
+	ssh-keygen \
+		-t rsa \
+		-b 4096 \
+		-C $$USER@elgentos.nl \
+		-f "$(SSH_KEY)"
+	ssh-add "$(SSH_KEY)"
+	cat "$(SSH_KEY).pub"
+
+ssh-key: | $(SSH_KEY)

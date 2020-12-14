@@ -1,4 +1,4 @@
-# Workstation setup
+# elgentos setup
 
 This repository can be used to bootstrap a fresh workstation.
 
@@ -6,149 +6,91 @@ Current supported operating systems:
 
 - Ubuntu 20.04 (x86_64)
 
-# Prerequisites
+# Installation
 
-Ensure essential software has been installed.
+[![make install](https://github.com/elgentos/setup/workflows/make%20install/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22make+install%22)
 
-```
-apt install git build-essential sudo -y
-```
 
-Or, if you are not running as a super user, assuming `sudo` is available.
+Run the following:
 
 ```
-sudo apt install git build-essential -y
+source <(curl -sf https://raw.githubusercontent.com/elgentos/setup/main/install)
 ```
 
-Add an SSH key to the list of
-[allowed Github keys](https://github.com/settings/keys).
+Or, if `curl` is not available, simply download
+[the installer](https://raw.githubusercontent.com/elgentos/setup/main/install)
+to run it directly:
 
 ```
-ssh-keygen -t rsa -C github@johmanx.com
-cat ~/.ssh/id_rsa.pub
-```
-
-Create the `git` directory.
-
-```
-mkdir -p ~/git
-```
-
-Clone the current repository in that directory.
-
-```
-cd ~/git && git clone git@github.com:johmanx10/setup.git
-```
-
-Navigate into the setup directory.
-
-```
-cd ~/git/setup
-```
-
-# Install
-
-[![Install required](https://github.com/johmanx10/setup/workflows/make%20install/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+install%22)
-
-Run the installation.
-
-```
-make install
+./install
 ```
 
 ## Result
 
-The following files have been symbolically linked from the current repository to
-the home directory:
+The following files have been created in the home directory:
 
-| File                                                                             | Target alias     |
-|:---------------------------------------------------------------------------------|:-----------------|
-| [`.gitconfig`](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration) | `make gitconfig` |
-| [`.gitignore`](https://git-scm.com/docs/gitignore)                               | `make gitignore` |
-| [`.zshrc`](http://zsh.sourceforge.net/Doc/Release/Files.html#Files)              | `make zshrc`     |
-
-In addition, the following files have been generated:
-
-| File                                                                                  | Target alias          |
-|:--------------------------------------------------------------------------------------|:----------------------|
-| [`.gitconfig-user`](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration) | `make gitconfig-user` |
+- [`.gitconfig`](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration)
+- [`.gitconfig-user`](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration)
+- [`.gitignore`](https://git-scm.com/docs/gitignore)
+- [`.zshrc`](http://zsh.sourceforge.net/Doc/Release/Files.html#Files)
 
 The following software has been installed:
 
-| Name                                                                                          | Target alias             |
-|:----------------------------------------------------------------------------------------------|:-------------------------|
-| [Bash](https://www.gnu.org/software/bash/)                                                    | `make bash`              |
-| [cURL](https://curl.haxx.se/)                                                                 | `make curl`              |
-| [Docker](https://www.docker.com/)                                                             | `make docker`            |
-| [GIT](https://git-scm.com/)                                                                   | `make git`               |
-| [JetBrains Toolbox](https://www.jetbrains.com/toolbox-app/)                                   | `make jetbrains-toolbox` |
-| [jq](https://stedolan.github.io/jq/)                                                          | `make jq`                |
-| [lsb_release](https://refspecs.linuxfoundation.org/LSB_3.0.0/LSB-PDA/LSB-PDA/lsbrelease.html) | `make lsb_release`       |
-| [Oh My Zsh](https://ohmyz.sh/)                                                                | `make oh-my-zsh`         |
-| [Vim](https://www.vim.org/)                                                                   | `make vim`               |
-| [ZSH](https://www.zsh.org/)                                                                   | `make zsh`               |
+- [AWS CLI](https://gist.github.com/JeroenBoersma/87e29fd4aa06ec42216c80a6e3649fa5) w/💘
+- [Bash](https://www.gnu.org/software/bash/)
+- [cURL](https://curl.haxx.se/)
+- [Docker](https://www.docker.com/)
+- [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
+- [Docker compose](https://docs.docker.com/compose/)
+- [Docker compose development](https://github.com/JeroenBoersma/docker-compose-development)
+- [GIT](https://git-scm.com/)
+- [JetBrains Toolbox](https://www.jetbrains.com/toolbox-app/)
+- [jq](https://stedolan.github.io/jq/)
+- [lsb_release](https://refspecs.linuxfoundation.org/LSB_3.0.0/LSB-PDA/LSB-PDA/lsbrelease.html)
+- [Oh My Zsh](https://ohmyz.sh/)
+- [Slack](https://slack.com/)
+- [Vim](https://www.vim.org/)
+- [ZSH](https://www.zsh.org/)
 
 # Optional
 
-[![make optional](https://github.com/johmanx10/setup/workflows/make%20optional/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+optional%22)
+[![make optional](https://github.com/elgentos/setup/workflows/make%20optional/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22make+optional%22)
 
-All the following software can be installed at-once using:
+To cherry-pick optional software, use the following targets:
+
+## Web browsers
+
+- [brave](https://brave.com/)
+- [firefox](https://www.mozilla.org/en-US/firefox/)
+- [google-chrome](https://www.google.com/chrome/)
+
+## Productivity
+
+- [`gimp`](https://www.gimp.org/)
+
+## Tools
+
+- [`ssg`](https://github.com/elgentos/ssg-js) (SSH GUI)
+- [`symlinks`](https://tracker.debian.org/pkg/symlinks)
+- [`tmux`](https://tracker.debian.org/pkg/tmux)
+- [`tmuxinator`](https://tracker.debian.org/pkg/tmuxinator)
+- [`tmuxinator_completion`](https://github.com/tmuxinator/tmuxinator/tree/master/completion)
+
+## Web development
+
+- [`node`, `npm`, `nvm`](https://nodejs.org/)
+
+## Example
+
+The following adds `gimp`, `symlinks` and `ssg` to the installation.
 
 ```
-make optional
+./install gimp symlinks ssg
 ```
-
-To cherry-pick optional software, use the following phony targets:
-
-| Name                                                                                      | Target                                    | Build status |
-|:------------------------------------------------------------------------------------------|:------------------------------------------|:-------------|
-| [AWS CLI](https://gist.github.com/JeroenBoersma/87e29fd4aa06ec42216c80a6e3649fa5) w/💘    | `make aws`                                | [![make aws](https://github.com/johmanx10/setup/workflows/make%20aws/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+aws%22) |
-| [Brave Browser](https://brave.com/)                                                       | `make brave`                              | [![make brave](https://github.com/johmanx10/setup/workflows/make%20brave/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+brave%22) |
-| [Discord](https://discord.com/)                                                           | `make discord`                            | [![make discord](https://github.com/johmanx10/setup/workflows/make%20discord/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+discord%22) |
-| [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)                                  | `make dnsmasq`                            | [![make dnsmasq](https://github.com/johmanx10/setup/workflows/make%20dnsmasq/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+dnsmasq%22) |
-| [Docker compose](https://docs.docker.com/compose/)                                        | `make docker-compose`                     | [![make docker-compose](https://github.com/johmanx10/setup/workflows/make%20docker-compose/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+docker-compose%22) |
-| [Docker compose development](https://github.com/JeroenBoersma/docker-compose-development) | `make docker-compose-development`         | [![make docker-compose-development](https://github.com/johmanx10/setup/workflows/make%20docker-compose-development/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+docker-compose-development%22) |
-| Docker Compose Development: Dnsmasq                                                       | `make docker-compose-development-dnsmasq` | [![make docker-compose-development-dnsmasq](https://github.com/johmanx10/setup/workflows/make%20docker-compose-development-dnsmasq/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+docker-compose-development-dnsmasq%22) |
-| [Epic Games Store](https://www.epicgames.com/store/en-US/)                                | `make epic-games-store`                   | Will be added once [Lutris supports unattended installations](https://github.com/lutris/lutris/pull/3029). |
-| [Firefox](https://www.mozilla.org/en-US/firefox/)                                         | `make firefox`                            | [![make firefox](https://github.com/johmanx10/setup/workflows/make%20firefox/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+firefox%22) |
-| [GIMP](https://www.gimp.org/)                                                             | `make gimp`                               | [![make gimp](https://github.com/johmanx10/setup/workflows/make%20gimp/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+gimp%22) |
-| [Google Chrome](https://www.google.com/chrome/)                                           | `make google-chrome`                      | [![make google-chrome](https://github.com/johmanx10/setup/workflows/make%20google-chrome/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+google-chrome%22) |
-| [Lutris](https://lutris.net/)                                                             | `make lutris`                             | [![make lutris](https://github.com/johmanx10/setup/workflows/make%20lutris/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+lutris%22) |
-| [Node.js](https://nodejs.org/)                                                            | `make node` or `make npm`                 | [![make node](https://github.com/johmanx10/setup/workflows/make%20node/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+node%22) |
-| [RetroArch](https://www.retroarch.com/)                                                   | `make retroarch`                          | [![make retroarch](https://github.com/johmanx10/setup/workflows/make%20retroarch/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+retroarch%22) |
-| [Slack](https://slack.com/)                                                               | `make slack`                              | [![make slack](https://github.com/johmanx10/setup/workflows/make%20slack/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+slack%22) |
-| [ssg-js](https://github.com/elgentos/ssg-js) (SSH GUI)                                    | `make ssg`                                | [![make ssg](https://github.com/johmanx10/setup/workflows/make%20ssg/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+ssg%22) |
-| [Steam](https://store.steampowered.com/)                                                  | `make steam`                              | [![make steam](https://github.com/johmanx10/setup/workflows/make%20steam/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+steam%22) |
-| [Teamviewer](https://www.teamviewer.com/)                                                 | `make teamviewer`                         | [![make teamviewer](https://github.com/johmanx10/setup/workflows/make%20teamviewer/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+teamviewer%22) |
-| [Transmission Remote GTK](https://linux.die.net/man/1/transmission-remote)                | `make transmission-remote`                | [![make transmission-remote](https://github.com/johmanx10/setup/workflows/make%20transmission-remote/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+transmission-remote%22) |
-
-# elgentos
-
-[![make elgentos](https://github.com/johmanx10/setup/workflows/make%20elgentos/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22make+elgentos%22)
-
-This is a curated software list, by elgentos, for their workstation setups.
-It installs the `install` target, and additionally the following targets:
-
-- `aws`
-- `brave`
-- `dnsmasq`
-- `docker`
-- `docker-compose-development`
-- `docker-compose-development-dnsmasq`
-- `firefox`
-- `gimp`
-- `google-chrome`
-- `node`
-- `slack`
-- `ssg`
-- `symlinks`
-- `tmux`
-- `tmuxinator`
-- `tmuxinator_completion`
 
 # Development
 
-[![docker-make vim](https://github.com/johmanx10/setup/workflows/docker-make%20vim/badge.svg)](https://github.com/johmanx10/setup/actions?query=workflow%3A%22docker-make+vim%22)
+[![docker-make vim](https://github.com/elgentos/setup/workflows/docker-make%20vim/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22docker-make+vim%22)
 
 In order to locally test a Make target, run the following:
 
@@ -156,7 +98,7 @@ In order to locally test a Make target, run the following:
 ./docker-make <TARGET>
 ```
 
-Where `<TARGET>` is the target to be tested. E.g.: `steam` for Steam.
+Where `<TARGET>` is the target to be tested. E.g.: `gimp` for Gimp.
 
 To test all installations, run:
 
@@ -168,5 +110,5 @@ To specify the Docker image that runs the build, provide the `IMAGE` environment
 variable. It defaults to `ubuntu:20.04`.
 
 ```
-IMAGE=ubuntu:18.04 ./docker-make all
+IMAGE=ubuntu:20.10 ./docker-make all
 ```

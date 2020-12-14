@@ -7,20 +7,35 @@ on:
     branches: [ main ]
 
 jobs:
-  ubuntu:
+  Makefile:
     strategy:
       matrix:
         version: ['20.04']
+        installer:
+          - 'make INTERACTIVE=0'
+          - ./install
+        target:
+          - brave
+          - firefox
+          - gimp
+          - google-chrome
+          - node
+          - ssg
+          - symlinks
+          - tmux
+          - tmuxinator_completion
     runs-on: ubuntu-${{ matrix.version }}
-    name: Ubuntu ${{ matrix.version }}
+    name: ${{ matrix.target }} @Ubuntu ${{ matrix.version }}
     steps:
       - uses: actions/checkout@v2
-      - name: Update APT repositories
-        run: sudo apt update -y
       - name: Setup SSH
         uses: MrSquaare/ssh-setup-action@v1
         with:
           host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Install optional software
-        run: make optional INTERACTIVE=0
+      - name: Update APT repositories
+        run: sudo apt update -y
+      - name: ${{ matrix.installer }} ${{ matrix.target }}
+        env:
+          INTERACTIVE: 0
+        run: ${{ matrix.installer }} ${{ matrix.target }}

@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+set -e;
+
+# If the make package cannot be satisfied, assume the apt repositories need to
+# be updated.
+if ! sudo apt satisfy make &> /dev/null; then sudo apt update -y; fi
+
+# Ensure `make` is available.
+command -v make &> /dev/null || sudo apt install build-essential -y;
+
+# If the Makefile is missing, assume this script is invoked directly and the
+# repo itself needs to be downloaded.
+if ! [ -f Makefile ]; then
+  # Install curl and unzip, if required.
+  (command -v curl &> /dev/null \
+    && command -v unzip &> /dev/null \
+    && (dpkg -l | tail -n+6 | awk '{ print "~"$2"~" }' | grep -q '~ca-certificates~') \
+  ) || sudo apt install curl ca-certificates zip -y;
+
+  # Download the archive of the main branch.
+  curl -L https://github.com/elgentos/setup/archive/main.zip \
+    --output /tmp/elgentos-setup.zip;
+
+  # Empty the directory stack and remove the setup files when the script exits.
+  trap 'while popd 2>/dev/null; do echo -n ""; done; rm -rf /tmp/setup-main' EXIT;
+
+  # Extract the archive and push its output directory to the top of the stack.
+  # This makes the Makefile and template files available for the rest of the
+  # installation.
+  pushd /tmp;
+  unzip elgentos-setup.zip;
+  rm -f elgentos-setup.zip;
+  pushd setup-main;
+fi
+
+# First test if we need to make the SSH key.
+if ! make ssh-key --quiet; then
+  make ssh-key;
+  echo "";
+  echo "Make sure the your key is registered to your GitHub account before proceeding.";
+  echo "  https://github.com/settings/keys";
+  echo "";
+  # shellcheck disable=SC2162
+  read -p "Press enter to continue, after installing the SSH key. . .";
+fi
+
+# Once the SSH key is installed, proceed with the rest of the installation.
+for target in $(echo "install $*" | tr ' ' '\n' | sort -u); do
+  make --quiet "$target" || \
+    make "-j$(nproc --all)" "INTERACTIVE=${INTERACTIVE:-1}" "$target";
+done
+
+echo "Finished";
