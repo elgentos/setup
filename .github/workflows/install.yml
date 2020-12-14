@@ -21,11 +21,18 @@ jobs:
       TTY: 0
     steps:
       - uses: actions/checkout@v2
-      - name: Setup SSH
+      - name: Setup GitHub SSH
         uses: MrSquaare/ssh-setup-action@v1
         with:
           host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          private-key-name: github
+      - name: Setup GitHub Gist SSH
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+          host: gist.github.com
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          private-key-name: github-gist
       - name: Update APT repositories
         run: sudo apt update -y
       - name: Install required software
