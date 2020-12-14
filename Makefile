@@ -405,10 +405,12 @@ $(TMUXINATOR): | $(TMUX)
 tmuxinator: | $(TMUXINATOR)
 
 $(TMUXINATOR_COMPLETION_ZSH): | $(TMUXINATOR) $(ZSH) $(CURL)
+	sudo mkdir -p "$(shell dirname "$(TMUXINATOR_COMPLETION_ZSH)")";
 	$(CURL) -L https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.zsh \
 		| sudo tee $(TMUXINATOR_COMPLETION_ZSH)
 
 $(TMUXINATOR_COMPLETION_BASH): | $(TMUXINATOR) $(BASH) $(CURL)
+	sudo mkdir -p "$(shell dirname "$(TMUXINATOR_COMPLETION_BASH)")";
 	$(CURL) -L https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.bash \
 		| sudo tee $(TMUXINATOR_COMPLETION_BASH)
 
