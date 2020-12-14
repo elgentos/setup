@@ -26,6 +26,8 @@ jobs:
           - tmuxinator_completion
     runs-on: ubuntu-${{ matrix.version }}
     name: ${{ matrix.target }} @Ubuntu ${{ matrix.version }}
+    env:
+      TTY: 0
     steps:
       - uses: actions/checkout@v2
       - name: Setup SSH
