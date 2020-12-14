@@ -377,7 +377,7 @@ $(AWS): | git $(DOCKER) $(SSH_KEY)
 		$(GITPROJECTS)/aws-cli
 	chmod +x $(GITPROJECTS)/aws-cli/aws.sh
 	sudo ln -s $(GITPROJECTS)/aws-cli/aws.sh $(AWS)
-	sudo $(AWS) --version
+	@echo $(INTERACTIVE) | grep -q '1' && sudo $(AWS) --version || echo -n ''
 
 aws: | $(AWS)
 
