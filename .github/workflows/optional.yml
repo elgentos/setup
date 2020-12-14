@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  Makefile:
+  install:
     strategy:
       matrix:
         version: ['20.04']

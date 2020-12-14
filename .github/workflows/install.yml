@@ -11,6 +11,9 @@ jobs:
     strategy:
       matrix:
         version: ['20.04']
+        installer:
+          - 'make install INTERACTIVE=0'
+          - ./install
     runs-on: ubuntu-${{ matrix.version }}
     name: Ubuntu ${{ matrix.version }}
     steps:
@@ -23,21 +26,4 @@ jobs:
       - name: Update APT repositories
         run: sudo apt update -y
       - name: Install required software
-        run: make install INTERACTIVE=0
-
-  install:
-    strategy:
-      matrix:
-        version: ['20.04']
-    runs-on: ubuntu-${{ matrix.version }}
-    needs: [Makefile]
-    name: Ubuntu ${{ matrix.version }}
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup SSH
-        uses: MrSquaare/ssh-setup-action@v1
-        with:
-          host: github.com
-          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Install using the installer
-        run: ./install
+        run: ${{ matrix.installer }}
