@@ -381,10 +381,11 @@ $(AWS): | git $(DOCKER) $(SSH_KEY)
 
 aws: | $(AWS)
 
-$(SSG): | git $(NPM) $(BASH) $(SSH_KEY)
+$(SSG): | git $(NPM) $(NVM) $(BASH) $(SSH_KEY)
 	$(GIT) clone git@github.com:elgentos/ssg-js.git $(GITPROJECTS)/ssg-js
-	cd $(GITPROJECTS)/ssg-js && $(NPM) install
-	cd $(GITPROJECTS)/ssg-js && sudo $(NPM) install -g ssg-js
+	cd $(GITPROJECTS)/ssg-js \
+		&& 		$(BASH) -c "source $(NVM) && npm install" \
+		&& sudo $(BASH) -c "source $(NVM) && npm install -g ssg-js"
 
 ssg: | $(SSG)
 
