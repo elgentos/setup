@@ -2,29 +2,49 @@ name: make optional
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
-  ubuntu:
+  install:
     strategy:
       matrix:
         version: ['20.04']
+        installer:
+          - 'make INTERACTIVE=0'
+          - ./install
+          - ./docker-make
+        target:
+          - brave
+          - firefox
+          - gimp
+          - google-chrome
+          - ssg
+          - symlinks
+          - tmux
+          - tmuxinator_completion
     runs-on: ubuntu-${{ matrix.version }}
-    name: Ubuntu ${{ matrix.version }}
+    name: ${{ matrix.target }} @Ubuntu ${{ matrix.version }}
+    env:
+      TTY: 0
     steps:
       - uses: actions/checkout@v2
-      - name: Update APT repositories
-        run: sudo apt update -y
-      - name: Setup SSH
+      - name: Setup GitHub SSH
         uses: MrSquaare/ssh-setup-action@v1
         with:
           host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Install optional software
-        run: make optional INTERACTIVE=0
-      - name: Upgrade APT packages
-        run: sudo apt upgrade -y
-      - name: Clean up
-        run: sudo apt autoremove -y
+          private-key-name: id_rsa
+      - name: Setup GitHub Gist SSH
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+          host: gist.github.com
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          private-key-name: id_rsa_gist
+      - name: Update APT repositories
+        run: sudo apt update -y
+      - name: ${{ matrix.installer }} ${{ matrix.target }}
+        env:
+          INTERACTIVE: 0
+        run: ${{ matrix.installer }} ${{ matrix.target }}

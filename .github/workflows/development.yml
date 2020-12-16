@@ -2,9 +2,9 @@ name: docker-make vim
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   ubuntu:
@@ -13,6 +13,8 @@ jobs:
         version: ['20.04']
     runs-on: ubuntu-${{ matrix.version }}
     name: Ubuntu ${{ matrix.version }}
+    env:
+      TTY: 0
     steps:
       - uses: actions/checkout@v2
       - name: Test docker-make with VIM

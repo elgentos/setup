@@ -2,24 +2,38 @@ name: make install
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
-  ubuntu:
+  Makefile:
     strategy:
       matrix:
         version: ['20.04']
+        installer:
+          - 'make install INTERACTIVE=0'
+          - ./install
+          - ./docker-make install
     runs-on: ubuntu-${{ matrix.version }}
     name: Ubuntu ${{ matrix.version }}
+    env:
+      TTY: 0
     steps:
       - uses: actions/checkout@v2
+      - name: Setup GitHub SSH
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+          host: github.com
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          private-key-name: id_rsa
+      - name: Setup GitHub Gist SSH
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+          host: gist.github.com
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          private-key-name: id_rsa_gist
       - name: Update APT repositories
         run: sudo apt update -y
       - name: Install required software
-        run: make install INTERACTIVE=0
-      - name: Upgrade APT packages
-        run: sudo apt upgrade -y
-      - name: Clean up
-        run: sudo apt autoremove -y
+        run: ${{ matrix.installer }}

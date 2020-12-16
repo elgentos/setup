@@ -8,19 +8,26 @@ COMMANDS=(
   'set -e'
   'apt update -y'
   'DEBIAN_FRONTEND=noninteractive apt install sudo build-essential tzdata keyboard-configuration -y'
-  "make --trace --debug ${@} INTERACTIVE=0"
+  "groupadd -g $(id -g "$USER") app"
+  "useradd -u $(id -u "$USER") -g $(id -g "$USER") --groups app,sudo app"
+  'chown app:app /home/app'
+  'passwd --delete app'
+  "su app -c 'make INTERACTIVE=0 --trace --debug ${@}'"
 )
+
+[[ "$TINKER" == "" ]] || COMMANDS+=("$TINKER")
+[[ "${TTY:-1}" == "1" ]] && TTY_FLAG='-it'
 
 IFS=';'
 docker run \
   --rm \
   -v $PWD:/setup \
-  -v $HOME/.ssh:/root/.ssh:ro \
+  -v $HOME/.ssh:/home/app/.ssh:rw \
   -v $SSH_AUTH_SOCK:/ssh-agent:ro \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e SSH_AUTH_SOCK=/ssh-agent \
-  --net host \
+  --net bridge \
+  "${TTY_FLAG:--i}" \
   -w /setup \
-  -t \
-  ${IMAGE:=ubuntu:20.04} \
+  "${IMAGE:=ubuntu:20.04}" \
   bash -c "${COMMANDS[*]}"
