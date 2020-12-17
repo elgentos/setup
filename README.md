@@ -8,7 +8,7 @@ Current supported operating systems:
 
 # Installation
 
-[![make install](https://github.com/elgentos/setup/workflows/make%20install/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22make+install%22)
+[![Install](https://github.com/elgentos/setup/workflows/Install/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22Install%22)
 
 
 Run the following:
@@ -38,6 +38,7 @@ The following software has been installed:
 
 - [AWS CLI](https://gist.github.com/JeroenBoersma/87e29fd4aa06ec42216c80a6e3649fa5) w/💘
 - [Bash](https://www.gnu.org/software/bash/)
+- [Composer](https://getcomposer.org/)
 - [cURL](https://curl.haxx.se/)
 - [Docker](https://www.docker.com/)
 - [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
@@ -55,7 +56,7 @@ The following software has been installed:
 
 # Optional
 
-[![make optional](https://github.com/elgentos/setup/workflows/make%20optional/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22make+optional%22)
+[![Optional](https://github.com/elgentos/setup/workflows/Optional/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22Optional%22)
 
 To cherry-pick optional software, use the following targets:
 
@@ -71,6 +72,8 @@ To cherry-pick optional software, use the following targets:
 
 ## Tools
 
+- [`composer-lock-diff`](https://packagist.org/packages/davidrjonas/composer-lock-diff)
+- [`composer-changelogs`](https://packagist.org/packages/pyrech/composer-changelogs)
 - [`ssg`](https://github.com/elgentos/ssg-js) (SSH GUI)
 - [`symlinks`](https://tracker.debian.org/pkg/symlinks)
 - [`tmux`](https://tracker.debian.org/pkg/tmux)
@@ -87,7 +90,7 @@ The following adds `gimp`, `symlinks` and `ssg` to the installation.
 
 # Development
 
-[![docker-make vim](https://github.com/elgentos/setup/workflows/docker-make%20vim/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22docker-make+vim%22)
+[![Development](https://github.com/elgentos/setup/workflows/Development/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22Develpoment%22)
 
 In order to locally test a Make target, run the following:
 
