@@ -1,4 +1,4 @@
-name: make optional
+name: Optional
 
 on:
   push:
@@ -48,3 +48,30 @@ jobs:
         env:
           INTERACTIVE: 0
         run: ${{ matrix.installer }} ${{ matrix.target }}
+
+  composer:
+    strategy:
+      matrix:
+        version: ['20.04']
+        php: [8]
+        composer: [2]
+        extensions: [zip]
+        target: [composer-changelogs, composer-lock-diff]
+    runs-on: ubuntu-${{ matrix.version }}
+    name: ${{ matrix.target }} @Ubuntu ${{ matrix.version }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install PHP ${{ matrix.php }}, Composer ${{ matrix.composer }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ matrix.extensions }}
+          tools: composer:v${{ matrix.composer }}
+      - name: Setup GitHub SSH
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+          host: github.com
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          private-key-name: id_rsa
+      - name: Composer - ${{ matrix.target }}
+        run: make INTERACTIVE=0 --trace --debug ${{ matrix.target }};

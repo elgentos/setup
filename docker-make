@@ -12,7 +12,7 @@ COMMANDS=(
   "useradd -u $(id -u "$USER") -g $(id -g "$USER") --groups app,sudo app"
   'chown app:app /home/app'
   'passwd --delete app'
-  "su app -c 'make INTERACTIVE=0 --trace --debug ${@}'"
+  "su app -c 'make INTERACTIVE=0 --trace --debug ${*}'"
 )
 
 [[ "$TINKER" == "" ]] || COMMANDS+=("$TINKER")
