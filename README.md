@@ -72,8 +72,9 @@ To cherry-pick optional software, use the following targets:
 
 ## Tools
 
-- [`composer-lock-diff`](https://packagist.org/packages/davidrjonas/composer-lock-diff)
+- [`ag`](https://github.com/ggreer/the_silver_searcher)
 - [`composer-changelogs`](https://packagist.org/packages/pyrech/composer-changelogs)
+- [`composer-lock-diff`](https://packagist.org/packages/davidrjonas/composer-lock-diff)
 - [`ssg`](https://github.com/elgentos/ssg-js) (SSH GUI)
 - [`symlinks`](https://tracker.debian.org/pkg/symlinks)
 - [`tmux`](https://tracker.debian.org/pkg/tmux)

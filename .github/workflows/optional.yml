@@ -16,6 +16,7 @@ jobs:
           - ./install
           - ./docker-make
         target:
+          - ag
           - brave
           - firefox
           - gimp

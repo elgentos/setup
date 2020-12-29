@@ -48,6 +48,7 @@ ZSH := $(shell command -v zsh || echo /usr/bin/zsh)
 ZSHRC := $(shell echo "$$HOME/.zshrc")
 OH_MY_ZSH := $(shell echo "$$HOME/.oh-my-zsh/oh-my-zsh.sh")
 
+AG := $(shell command -v ag || echo /usr/bin/ag)
 JQ := $(shell command -v jq || echo /usr/bin/jq)
 CURL := $(shell command -v curl || echo /usr/bin/curl)
 GIT := $(shell command -v git || echo /usr/bin/git)
@@ -476,3 +477,8 @@ $(COMPOSER_CHANGELOGS): | $(COMPOSER) $(DOCKER_COMPOSE_DEVELOPMENT_WORKSPACE_BIN
 	sudo chmod +x $(COMPOSER_CHANGELOGS)
 
 composer-changelogs: | $(COMPOSER_CHANGELOGS)
+
+$(AG):
+	sudo apt install silversearcher-ag -y
+
+ag: | $(AG)
