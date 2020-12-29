@@ -61,6 +61,7 @@ IP := $(shell command -v ip || echo /usr/sbin/ip)
 AWS := $(shell command -v aws || echo /usr/local/bin/aws)
 SSG := $(shell command -v ssg || echo /usr/bin/ssg)
 
+MULTITAIL := $(shell command -v multitail || echo /usr/bin/multitail)
 SYMLINKS := $(shell command -v symlinks || echo /usr/bin/symlinks)
 TMUX := $(shell command -v tmux || echo /usr/bin/tmux)
 TMUXINATOR := $(shell command -v tmuxinator || echo /usr/bin/tmuxinator)
@@ -482,3 +483,12 @@ $(AG):
 	sudo apt install silversearcher-ag -y
 
 ag: | $(AG)
+
+$(MULTITAIL): | $(BASH) $(GIT) $(GITPROJECTS)
+	sudo apt install libncurses-dev gcc -y
+	$(BASH) -c '[ -d "$(GITPROJECTS)/multitail" ] || $(GIT) clone git@github.com:flok99/multitail.git "$(GITPROJECTS)/multitail"'
+	cd "$(GITPROJECTS)/multitail" && make -f Makefile clean multitail
+	sudo rm -f "$(MULTITAIL)"
+	sudo ln -s "$(GITPROJECTS)/multitail/multitail" "$(MULTITAIL)"
+
+multitail: | $(MULTITAIL)
