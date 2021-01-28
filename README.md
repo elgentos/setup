@@ -11,13 +11,14 @@ Current supported operating systems:
 [![Install](https://github.com/elgentos/setup/workflows/Install/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22Install%22)
 
 
-Run the following:
+Run one the following, depending on the availability of download tools:
 
-```
-source <(curl -sf https://raw.githubusercontent.com/elgentos/setup/main/install)
-```
+| Tool | Command                                                                             |
+|:----:|:------------------------------------------------------------------------------------|
+| wget | `source <(wget -qO- https://raw.githubusercontent.com/elgentos/setup/main/install)` |
+| curl | `source <(curl -sf  https://raw.githubusercontent.com/elgentos/setup/main/install)` |
 
-Or, if `curl` is not available, simply download
+Or, if `wget` or `curl` are not available, simply download
 [the installer](https://raw.githubusercontent.com/elgentos/setup/main/install)
 to run it directly:
 
