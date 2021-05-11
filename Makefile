@@ -490,11 +490,7 @@ $(AG):
 ag: | $(AG)
 
 $(MULTITAIL): | $(BASH) $(GIT) $(GITPROJECTS)
-	sudo apt install libncurses-dev gcc -y
-	$(BASH) -c '[ -d "$(GITPROJECTS)/multitail" ] || $(GIT) clone git@github.com:flok99/multitail.git "$(GITPROJECTS)/multitail"'
-	cd "$(GITPROJECTS)/multitail" && make -f Makefile clean multitail
-	sudo rm -f "$(MULTITAIL)"
-	sudo ln -s "$(GITPROJECTS)/multitail/multitail" "$(MULTITAIL)"
+	sudo apt install multitail -y
 
 multitail: | $(MULTITAIL)
 
