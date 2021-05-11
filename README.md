@@ -61,6 +61,10 @@ The following software has been installed:
 
 To cherry-pick optional software, use the following targets:
 
+## Cloud management
+
+- [gcloud](https://cloud.google.com/sdk/gcloud/)
+
 ## Web browsers
 
 - [brave](https://brave.com/)

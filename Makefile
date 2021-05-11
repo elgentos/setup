@@ -60,6 +60,8 @@ IP := $(shell command -v ip || echo /usr/sbin/ip)
 
 AWS := $(shell command -v aws || echo /usr/local/bin/aws)
 SSG := $(shell command -v ssg || echo /usr/bin/ssg)
+GCLOUD := $(shell command -v gcloud || echo /usr/bin/gcloud)
+GCLOUD_CONFIG := $(shell echo "$$HOME/.config/gcloud")
 
 MULTITAIL := $(shell command -v multitail || echo /usr/bin/multitail)
 SYMLINKS := $(shell command -v symlinks || echo /usr/bin/symlinks)
@@ -430,6 +432,7 @@ all: | \
 	composer-lock-diff \
 	composer-changelogs \
 	firefox \
+	gcloud \
 	gimp \
 	google-chrome \
 	symlinks \
@@ -492,3 +495,22 @@ $(MULTITAIL): | $(BASH) $(GIT) $(GITPROJECTS)
 	sudo ln -s "$(GITPROJECTS)/multitail/multitail" "$(MULTITAIL)"
 
 multitail: | $(MULTITAIL)
+
+/usr/share/keyrings/cloud.google.gpg: | $(CURL)
+	sudo apt install apt-transport-https ca-certificates gnupg -y
+	$(CURL) https://packages.cloud.google.com/apt/doc/apt-key.gpg \
+		| sudo apt-key --keyring $@ add -
+
+/etc/apt/sources.list.d/google-cloud-sdk.list: | /usr/share/keyrings/cloud.google.gpg
+	sudo apt install apt-transport-https ca-certificates gnupg -y
+	echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" \
+		| sudo tee -a $@
+	sudo apt update -y
+
+$(GCLOUD): | /etc/apt/sources.list.d/google-cloud-sdk.list
+	sudo apt install google-cloud-sdk -y
+
+$(GCLOUD_CONFIG): | $(GCLOUD)
+	$(GCLOUD) init
+
+gcloud: | $(GCLOUD) $(GCLOUD_CONFIG)

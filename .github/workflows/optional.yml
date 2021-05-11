@@ -19,6 +19,7 @@ jobs:
           - ag
           - brave
           - firefox
+          - gcloud
           - gimp
           - google-chrome
           - multitail
