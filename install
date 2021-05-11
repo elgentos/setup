@@ -49,10 +49,17 @@ if ! make ssh-key --quiet; then
   read -p "Press enter to continue, after installing the SSH key. . .";
 fi
 
+TARGETS=(install)
+
+for target in $(echo "$*" | tr ' ' '\n' | sort -u | uniq); do
+  TARGETS+=("$target")
+done
+
 # Once the SSH key is installed, proceed with the rest of the installation.
-for target in $(echo "install $*" | tr ' ' '\n' | sort -u); do
+for target in ${TARGETS[*]}; do
+  echo "[Make $target]";
   make --quiet "$target" || \
-    make "-j$(nproc --all)" "INTERACTIVE=${INTERACTIVE:-1}" "$target";
+    make "-j$(nproc --all)" --trace "INTERACTIVE=${INTERACTIVE:-1}" "$target";
 done
 
 echo "Finished";
