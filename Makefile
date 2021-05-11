@@ -428,6 +428,7 @@ tmuxinator_completion: | $(TMUXINATOR_COMPLETION_ZSH) $(TMUXINATOR_COMPLETION_BA
 
 all: | \
 	install \
+	ag \
 	brave \
 	composer-lock-diff \
 	composer-changelogs \
@@ -435,6 +436,7 @@ all: | \
 	gcloud \
 	gimp \
 	google-chrome \
+	multitail \
 	symlinks \
 	ssg \
 	tmuxinator_completion
