@@ -4,13 +4,16 @@ set -e;
 
 # If the make package cannot be satisfied, assume the apt repositories need to
 # be updated.
+echo "[Prime APT repositories]";
 if ! sudo apt satisfy make &> /dev/null; then sudo apt update -y; fi
 
 # Ensure `make` is available.
+echo "[Ensure installation of GNU Make]";
 command -v make &> /dev/null || sudo apt install build-essential -y;
 
 # If the Makefile is missing, assume this script is invoked directly and the
 # repo itself needs to be downloaded.
+echo "[Prepare installation files]";
 if ! [ -f Makefile ]; then
   # Install curl and unzip, if required.
   (command -v curl &> /dev/null \
@@ -35,6 +38,7 @@ if ! [ -f Makefile ]; then
 fi
 
 # First test if we need to make the SSH key.
+echo "[Ensure SSH key exists]";
 if ! make ssh-key --quiet; then
   make ssh-key;
   echo "";
