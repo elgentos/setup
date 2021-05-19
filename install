@@ -4,13 +4,16 @@ set -e;
 
 # If the make package cannot be satisfied, assume the apt repositories need to
 # be updated.
+echo "[Prime APT repositories]";
 if ! sudo apt satisfy make &> /dev/null; then sudo apt update -y; fi
 
 # Ensure `make` is available.
+echo "[Ensure installation of GNU Make]";
 command -v make &> /dev/null || sudo apt install build-essential -y;
 
 # If the Makefile is missing, assume this script is invoked directly and the
 # repo itself needs to be downloaded.
+echo "[Prepare installation files]";
 if ! [ -f Makefile ]; then
   # Install curl and unzip, if required.
   (command -v curl &> /dev/null \
@@ -35,8 +38,9 @@ if ! [ -f Makefile ]; then
 fi
 
 # First test if we need to make the SSH key.
-if ! make ssh-key --quiet; then
-  make ssh-key;
+echo "[Ensure SSH key exists]";
+if ! 2>/dev/null make ssh-key --quiet; then
+  2>/dev/null make ssh-key;
   echo "";
   echo "Make sure your key is registered to your GitHub account before proceeding.";
   echo "  https://github.com/settings/keys";
@@ -46,9 +50,17 @@ if ! make ssh-key --quiet; then
 fi
 
 # Once the SSH key is installed, proceed with the rest of the installation.
-for target in $(echo "install $*" | tr ' ' '\n' | sort -u); do
-  make --quiet "$target" || \
-    make "-j$(nproc --all)" "INTERACTIVE=${INTERACTIVE:-1}" "$target";
+TARGETS=(install)
+
+for target in $(echo "$*" | tr ' ' '\n' | sort -u | uniq); do
+  if 2>/dev/null make --quiet "$target"; then
+    echo "[Skip $target] Already installed";
+  else
+    TARGETS+=("$target");
+  fi
 done
+
+echo "[Make ${TARGETS[*]}]";
+2>/dev/null make "-j$(nproc --all)" --trace "INTERACTIVE=${INTERACTIVE:-1}" "${TARGETS[*]}";
 
 echo "Finished";

@@ -61,6 +61,10 @@ The following software has been installed:
 
 To cherry-pick optional software, use the following targets:
 
+## Cloud management
+
+- [gcloud](https://cloud.google.com/sdk/gcloud/)
+
 ## Web browsers
 
 - [brave](https://brave.com/)
@@ -73,8 +77,10 @@ To cherry-pick optional software, use the following targets:
 
 ## Tools
 
-- [`composer-lock-diff`](https://packagist.org/packages/davidrjonas/composer-lock-diff)
+- [`ag`](https://github.com/ggreer/the_silver_searcher)
 - [`composer-changelogs`](https://packagist.org/packages/pyrech/composer-changelogs)
+- [`composer-lock-diff`](https://packagist.org/packages/davidrjonas/composer-lock-diff)
+- [`multitail`](https://linux.die.net/man/1/multitail)
 - [`ssg`](https://github.com/elgentos/ssg-js) (SSH GUI)
 - [`symlinks`](https://tracker.debian.org/pkg/symlinks)
 - [`tmux`](https://tracker.debian.org/pkg/tmux)

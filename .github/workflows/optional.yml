@@ -16,16 +16,9 @@ jobs:
           - ./install
           - ./docker-make
         target:
-          - brave
-          - firefox
-          - gimp
-          - google-chrome
-          - ssg
-          - symlinks
-          - tmux
-          - tmuxinator_completion
+          - ag brave firefox gcloud gimp google-chrome multitail ssg symlinks tmux tmuxinator_completion
     runs-on: ubuntu-${{ matrix.version }}
-    name: ${{ matrix.target }} @Ubuntu ${{ matrix.version }}
+    name: optional @Ubuntu ${{ matrix.version }}
     env:
       TTY: 0
     steps:
@@ -56,9 +49,10 @@ jobs:
         php: [8]
         composer: [2]
         extensions: [zip]
-        target: [composer-changelogs, composer-lock-diff]
+        target:
+          - composer-changelogs composer-lock-diff
     runs-on: ubuntu-${{ matrix.version }}
-    name: ${{ matrix.target }} @Ubuntu ${{ matrix.version }}
+    name: optional composer @Ubuntu ${{ matrix.version }}
     steps:
       - uses: actions/checkout@v2
       - name: Install PHP ${{ matrix.php }}, Composer ${{ matrix.composer }}
