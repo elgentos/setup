@@ -1,7 +1,3 @@
-DOCKER := $(shell command -v docker || echo /usr/bin/docker)
-DOCKER_CONFIG := $(shell echo "$$HOME/.docker/config.json")
-DOCKER_COMPOSE := $(shell command -v docker-compose || echo /usr/local/bin/docker-compose)
-
 $(DOCKER): | $(LSB_RELEASE) $(CURL) $(SOFTWARE_PROPERTIES_COMMON)
 	sudo apt install apt-transport-https ca-certificates gnupg-agent -y
 	$(CURL) -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -

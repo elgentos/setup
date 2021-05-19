@@ -5,4 +5,4 @@ optional::
 
 all: | install optional
 
--include */*.make */*/*.make */*.make */*/*.make
+include */*.vars.make */*/*.vars.make */*.make */*/*.make

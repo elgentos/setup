@@ -1,8 +1,3 @@
-TMUX := $(shell command -v tmux || echo /usr/bin/tmux)
-TMUXINATOR := $(shell command -v tmuxinator || echo /usr/bin/tmuxinator)
-TMUXINATOR_COMPLETION_ZSH = /usr/local/share/zsh/site-functions/_tmuxinator
-TMUXINATOR_COMPLETION_BASH = /etc/bash_completion.d/tmuxinator.bash
-
 $(TMUX):
 	sudo apt install -y tmux
 

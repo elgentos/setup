@@ -1,7 +1,3 @@
-NPM := $(shell command -v npm || echo "$$HOME/.nvm/versions/node/v*.*.*/bin/npm")
-NODE := $(shell command -v node || echo "$$HOME/.nvm/versions/node/v*.*.*/bin/node")
-NVM := $(shell command -v nvm || echo "$$HOME/.nvm/nvm.sh")
-
 $(NVM): | $(CURL) $(BASH) $(ZSHRC)
 	$(CURL) -sf https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | $(BASH)
 	echo 'export NVM_DIR="$$HOME/.nvm"' >> $(ZSHRC)

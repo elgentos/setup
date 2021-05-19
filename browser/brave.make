@@ -1,4 +1,3 @@
-BRAVE := $(shell command -v brave-browser || echo /usr/bin/brave-browser)
 
 $(BRAVE): | $(CURL)
 	sudo apt install -y apt-transport-https curl gnupg

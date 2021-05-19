@@ -1,5 +1,3 @@
-DNSMASQ = /etc/dnsmasq.d
-
 $(DNSMASQ): | $(BASH) $(UFW)
 	$(BASH) -c '[ -f /.dockerenv ] || sudo $(SYSTEMCTL) disable --now systemd-resolved'
 	$(BASH) -c '[ -f /.dockerenv ] || sudo rm -f /etc/resolv.conf'

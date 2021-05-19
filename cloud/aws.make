@@ -1,5 +1,3 @@
-AWS := $(shell command -v aws || echo /usr/local/bin/aws)
-
 $(AWS): | $(GIT) $(DOCKER) $(SSH_KEY)
 	$(GIT) clone \
 		git@gist.github.com:87e29fd4aa06ec42216c80a6e3649fa5.git \

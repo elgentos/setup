@@ -1,5 +1,3 @@
-UFW := $(shell command -v ufw || echo /usr/sbin/ufw)
-
 $(UFW): | $(BASH)
 	sudo apt install -y ufw
 	$(BASH) -c '[ -f /.dockerenv ] || sudo ufw enable'

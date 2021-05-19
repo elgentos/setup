@@ -1,6 +1,3 @@
-GCLOUD := $(shell command -v gcloud || echo /usr/bin/gcloud)
-GCLOUD_CONFIG := $(shell echo "$$HOME/.config/gcloud")
-
 /usr/share/keyrings/cloud.google.gpg: | $(CURL)
 	sudo apt install apt-transport-https ca-certificates gnupg -y
 	$(CURL) https://packages.cloud.google.com/apt/doc/apt-key.gpg \

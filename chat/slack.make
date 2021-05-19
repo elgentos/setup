@@ -1,5 +1,3 @@
-SLACK := $(shell command -v slack || echo /usr/bin/slack)
-
 $(SLACK): | $(CURL)
 	sudo apt install libgtk-3-0 libappindicator3-1 libnotify4 libnss3 libxss1 libxtst6 xdg-utils libatspi2.0-0 -y
 	sudo dpkg --list | awk '{ print $2 }' | grep -qE 'kde-cli-tools|kde-runtime|trash-cli|libglib2.0-bin|gvfs-bin' \

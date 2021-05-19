@@ -1,5 +1,3 @@
-COMPOSER_LOCK_DIFF := $(shell command -v composer-lock-diff || echo /usr/local/bin/composer-lock-diff)
-
 $(COMPOSER_LOCK_DIFF): | $(COMPOSER) $(DOCKER_COMPOSE_DEVELOPMENT_WORKSPACE_BIN)
 	$(COMPOSER) global require davidrjonas/composer-lock-diff
 	echo '$(COMPOSER) global exec -- composer-lock-diff $$@;\nexit $$?;' > "$(DOCKER_COMPOSE_DEVELOPMENT_WORKSPACE_BIN)/composer-lock-diff"

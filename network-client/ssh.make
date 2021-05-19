@@ -1,6 +1,3 @@
-SSH := $(shell command -v ssh || /usr/bin/ssh)
-SSH_KEY := $(shell echo "$$HOME/.ssh/id_rsa")
-
 $(SSH): | $(GIT)
 
 ssh: | $(SSH)

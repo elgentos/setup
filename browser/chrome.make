@@ -1,5 +1,3 @@
-CHROME := $(shell command -v google-chrome || echo /usr/bin/google-chrome)
-
 $(CHROME): | $(CURL)
 	sudo apt install -y \
 		fonts-liberation \
