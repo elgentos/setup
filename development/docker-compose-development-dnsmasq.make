@@ -4,11 +4,11 @@ $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): $(DNSMASQ) | $(DOCKER_COMPOSE_DEVELOPMENT
 	sudo touch /etc/resolv.conf
 	DOCKER_GATEWAY="$(shell $(IP) route | grep -E 'docker[0-9]' | awk '{ print $$9 }' | grep '.')" \
 		&& $(BASH) -c \
-			'source "$(DOCKER_COMPOSE_DEVELOPMENT)/.env" && echo "address=/$$DOMAINSUFFIX/'$${$DOCKER_GATEWAY:-127.0.0.1}'"' \
+			'source "$(DOCKER_COMPOSE_DEVELOPMENT)/.env" && echo "address=/$$DOMAINSUFFIX/'$${DOCKER_GATEWAY:-127.0.0.1}'"' \
 		| sudo tee $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ) \
-		&& echo nameserver $${$DOCKER_GATEWAY:-127.0.0.1} | sudo tee -a /etc/resolv.conf \
+		&& echo nameserver $${DOCKER_GATEWAY:-127.0.0.1} | sudo tee -a /etc/resolv.conf \
 		&& cat /etc/dnsmasq.conf \
-			| sed -E 's/listen-address=.+/listen-address='$${$DOCKER_GATEWAY:-127.0.0.1}'/' \
+			| sed -E 's/listen-address=.+/listen-address='$${DOCKER_GATEWAY:-127.0.0.1}'/' \
 			| sudo tee /etc/dnsmasq.conf
 	echo nameserver 127.0.0.1 | sudo tee -a /etc/resolv.conf
 	echo nameserver 1.1.1.1   | sudo tee -a /etc/resolv.conf
