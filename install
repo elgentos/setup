@@ -61,6 +61,6 @@ for target in $(echo "$*" | tr ' ' '\n' | sort -u | uniq); do
 done
 
 echo "[Make ${TARGETS[*]}]";
-2>/dev/null make "-j$(nproc --all)" --trace "INTERACTIVE=${INTERACTIVE:-1}" "${TARGETS[*]}";
+2>/dev/null make "-j$(nproc --all)" --trace "INTERACTIVE=${INTERACTIVE:-1}" "CI=${CI}" "${TARGETS[*]}";
 
 echo "Finished";

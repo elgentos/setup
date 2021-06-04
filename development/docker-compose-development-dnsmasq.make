@@ -24,7 +24,7 @@ $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): $(DNSMASQ) | $(DOCKER_COMPOSE_DEVELOPMENT
 	done
 	cat /etc/dnsmasq.conf
 	dnsmasq --test
-	@echo $(INSIDE_DOCKER) | grep -q '1' \
+	@echo "$(INSIDE_DOCKER):$(CI)" | grep -q '1\|true' \
 		&& echo 'sudo service dnsmasq restart' \
 		|| sudo service dnsmasq restart;
 	sudo service docker restart
