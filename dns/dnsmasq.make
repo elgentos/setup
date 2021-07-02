@@ -31,9 +31,7 @@ $(DNSMASQ): | $(BASH) $(UFW)
 	echo cache-size=1000          | sudo tee -a /etc/dnsmasq.conf
 	dnsmasq --test
 	sudo mkdir -p "$(DNSMASQ)"
-	@echo "$(CI)" | grep -q 'true' \
-		&& echo '[SKIP] sudo service dnsmasq restart' \
-		|| sudo service dnsmasq restart;
+	$(BASH) -c '[ -f /.dockerenv ] || sudo service dnsmasq restart'
 
 dnsmasq: | $(DNSMASQ)
 

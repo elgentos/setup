@@ -24,12 +24,8 @@ $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): $(DNSMASQ) | $(DOCKER_COMPOSE_DEVELOPMENT
 	done
 	cat /etc/dnsmasq.conf
 	dnsmasq --test
-	@echo "$(CI)" | grep -q 'true' \
-		&& echo '[SKIP] sudo service dnsmasq restart' \
-		|| sudo service dnsmasq restart;
-	@echo "$(CI)" | grep -q 'true' \
-		&& echo '[SKIP] sudo service docker restart' \
-		|| sudo service docker restart;
+	$(BASH) -c '[ -f /.dockerenv ] || sudo service dnsmasq restart'
+	$(BASH) -c '[ -f /.dockerenv ] || sudo service docker restart'
 	$(BASH) -c 'source "$(DOCKER_COMPOSE_DEVELOPMENT)/.env" && sudo $(DOCKER) run --rm -t tutum/dnsutils dig setup$$DOMAINSUFFIX +short'
 
 docker-compose-development-dnsmasq: | $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ)
