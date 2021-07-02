@@ -14,7 +14,7 @@ $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): $(DNSMASQ) | $(DOCKER_COMPOSE_DEVELOPMENT
 	echo nameserver 1.1.1.1   | sudo tee -a /etc/resolv.conf
 	echo nameserver 9.9.9.9   | sudo tee -a /etc/resolv.conf
 	for con in $(shell nmcli con show --active | tail -n +2 | awk '{ print $$1 }'); do \
-		nmcli con mod "$$con" ipv4.dns "$(shell $(IP) route | grep -E 'docker[0-9]' | awk '{ print $$9 }' | grep '.') 127.0.0.1 1.1.1.1 9.9.9.9"; \
+		nmcli con mod "$$con" +ipv4.dns "$(shell $(IP) route | grep -E 'docker[0-9]' | awk '{ print $$9 }' | grep '.')"; \
 		nmcli con down "$$con"; \
 		nmcli con up "$$con"; \
 		sudo nmcli con reload; \
