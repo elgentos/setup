@@ -32,7 +32,7 @@ $(DNSMASQ): | $(BASH) $(UFW)
 	dnsmasq --test
 	sudo mkdir -p "$(DNSMASQ)"
 	@echo "$(CI)" | grep -q 'true' \
-		&& echo 'sudo service dnsmasq restart' \
+		&& echo '[SKIP] sudo service dnsmasq restart' \
 		|| sudo service dnsmasq restart;
 
 dnsmasq: | $(DNSMASQ)
