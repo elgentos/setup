@@ -22,6 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ubuntu:${{ matrix.version }}
+      env:
+        SSH_AUTH_SOCK: /ssh-agent
       volumes:
         - /ssh-agent:/ssh-agent
     name: optional @Ubuntu ${{ matrix.version }}
@@ -64,6 +66,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ubuntu:${{ matrix.version }}
+      env:
+        SSH_AUTH_SOCK: /ssh-agent
       volumes:
         - /ssh-agent:/ssh-agent
     name: optional composer @Ubuntu ${{ matrix.version }}
