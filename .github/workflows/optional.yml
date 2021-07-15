@@ -11,10 +11,10 @@ jobs:
     strategy:
       matrix:
         version:
-          - 20.04
-          - 20.10
-          - 21.04
-          - 21.10
+          - '20.04'
+          - '20.10'
+          - '21.04'
+          - '21.10'
         installer:
           - ./install
         target:
@@ -50,10 +50,10 @@ jobs:
     strategy:
       matrix:
         version:
-          - 20.04
-          - 20.10
-          - 21.04
-          - 21.10
+          - '20.04'
+          - '20.10'
+          - '21.04'
+          - '21.10'
         php: [8]
         composer: [2]
         extensions: [zip]
