@@ -10,14 +10,18 @@ jobs:
   install:
     strategy:
       matrix:
-        version: ['20.04']
+        version:
+          - 20.04
+          - 20.10
+          - 21.04
+          - 21.10
         installer:
-          - 'make INTERACTIVE=0'
           - ./install
-          - ./docker-make
         target:
           - ag brave firefox gcloud gimp google-chrome multitail ssg symlinks tmux tmuxinator_completion
-    runs-on: ubuntu-${{ matrix.version }}
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:${{ matrix.version }}
     name: optional @Ubuntu ${{ matrix.version }}
     env:
       TTY: 0
@@ -45,13 +49,19 @@ jobs:
   composer:
     strategy:
       matrix:
-        version: ['20.04']
+        version:
+          - 20.04
+          - 20.10
+          - 21.04
+          - 21.10
         php: [8]
         composer: [2]
         extensions: [zip]
         target:
           - composer-changelogs composer-lock-diff
-    runs-on: ubuntu-${{ matrix.version }}
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:${{ matrix.version }}
     name: optional composer @Ubuntu ${{ matrix.version }}
     steps:
       - uses: actions/checkout@v2

@@ -10,12 +10,16 @@ jobs:
   Makefile:
     strategy:
       matrix:
-        version: ['20.04']
+        version:
+          - 20.04
+          - 20.10
+          - 21.04
+          - 21.10
         installer:
-          - 'make install INTERACTIVE=0'
           - ./install
-          - ./docker-make install
-    runs-on: ubuntu-${{ matrix.version }}
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:${{ matrix.version }}
     name: Ubuntu ${{ matrix.version }}
     env:
       TTY: 0
