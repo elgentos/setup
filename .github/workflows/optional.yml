@@ -22,6 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ubuntu:${{ matrix.version }}
+      volumes:
+        - /ssh-agent:/ssh-agent
     name: optional @Ubuntu ${{ matrix.version }}
     env:
       TTY: 0
@@ -62,6 +64,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ubuntu:${{ matrix.version }}
+      volumes:
+        - /ssh-agent:/ssh-agent
     name: optional composer @Ubuntu ${{ matrix.version }}
     steps:
       - uses: actions/checkout@v2
