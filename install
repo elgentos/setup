@@ -83,6 +83,6 @@ done
 
 echo "[Make ${TARGETS[*]}]";
 # shellcheck disable=SC2086
-make ${MAKE_OPTIONS[*]} "${TARGETS[*]}";
+make ${MAKE_OPTIONS[*]} ${TARGETS[*]};
 
 echo "Finished";

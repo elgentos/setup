@@ -20,18 +20,23 @@ jobs:
       DEBIAN_FRONTEND: noninteractive
     steps:
       - uses: actions/checkout@v2
-      - name: Install Node
+      - name: Copy SSH key
         if: ${{ env.ACT }}
         run: |
-          apt update -y
-          apt install nodejs -y
+          mkdir -p ~/.ssh
+          cp -f .ssh/* ~/.ssh
       - name: Setup SSH key
+        if: ${{ !env.ACT }}
         uses: shimataro/ssh-key-action@v2
         with:
           known_hosts: unnecessary
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Remove Node
-        if: ${{ env.ACT }}
-        run: apt remove nodejs -y
       - name: Install all software
-        run: ./install all
+        run: |
+          ./install all
+
+          # Verify installation.
+          for optional in $(grep -nR 'optional:: |' | cut -d'|' -f2- | sort -u); \
+            do echo "VERIFY $optional"; \
+            bash -c 'make -q "$optional"'; \
+          done
