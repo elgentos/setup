@@ -2,6 +2,13 @@
 
 set -e;
 
+# If the script runs as root, assume this is a bare OS.
+# shellcheck disable=SC2046
+if [ $(id -u) = 0 ]; then
+  apt update -y;
+  DEBIAN_FRONTEND=noninteractive apt install sudo build-essential tzdata keyboard-configuration -y;
+fi
+
 # If the make package cannot be satisfied, assume the apt repositories need to
 # be updated.
 echo "[Prime APT repositories]";
@@ -37,16 +44,30 @@ if ! [ -f Makefile ]; then
   pushd setup-main;
 fi
 
+MAKE_OPTIONS=(
+  --trace
+  --no-builtin-rules
+  --no-builtin-variables
+  --print-directory
+  --warn-undefined-variables
+  "CI=${CI}"
+)
+
+JOBS=$(nproc --all)
+${JOBS} -gt 0 && MAKE_OPTIONS+=("-j${JOBS}")
+
 # First test if we need to make the SSH key.
 echo "[Ensure SSH key exists]";
 if ! 2>/dev/null make ssh-key --quiet; then
-  2>/dev/null make ssh-key;
+  # shellcheck disable=SC2086
+  make ssh-key ${MAKE_OPTIONS[*]};
   echo "";
   echo "Make sure your key is registered to your GitHub account before proceeding.";
   echo "  https://github.com/settings/keys";
   echo "";
   # shellcheck disable=SC2162
-  read -p "Press enter to continue, after installing the SSH key. . .";
+  cut -d: -f3 < /proc/1/cgroup | grep -q '/docker/' \
+    || read -p "Press enter to continue, after installing the SSH key. . .";
 fi
 
 # Once the SSH key is installed, proceed with the rest of the installation.
@@ -61,6 +82,7 @@ for target in $(echo "$*" | tr ' ' '\n' | sort -u | uniq); do
 done
 
 echo "[Make ${TARGETS[*]}]";
-2>/dev/null make "-j$(nproc --all)" --trace "INTERACTIVE=${INTERACTIVE:-1}" "${TARGETS[*]}";
+# shellcheck disable=SC2086
+make ${MAKE_OPTIONS[*]} "${TARGETS[*]}";
 
 echo "Finished";

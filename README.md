@@ -10,15 +10,11 @@ Current supported operating systems:
 
 [![Install](https://github.com/elgentos/setup/workflows/Install/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22Install%22)
 
+```
+wget -qO- https://raw.githubusercontent.com/elgentos/setup/main/install | bash
+```
 
-Run one the following, depending on the availability of download tools:
-
-| Tool | Command                                                                             |
-|:----:|:------------------------------------------------------------------------------------|
-| wget | `source <(wget -qO- https://raw.githubusercontent.com/elgentos/setup/main/install)` |
-| curl | `source <(curl -sf  https://raw.githubusercontent.com/elgentos/setup/main/install)` |
-
-Or, if `wget` or `curl` are not available, simply download
+Or, if `wget` is not available, simply download
 [the installer](https://raw.githubusercontent.com/elgentos/setup/main/install)
 to run it directly:
 
@@ -118,4 +114,19 @@ variable. It defaults to `ubuntu:20.04`.
 
 ```
 IMAGE=ubuntu:20.10 ./docker-make all
+```
+
+## Run GitHub actions locally
+
+Using [act](https://github.com/nektos/act), GitHub actions can be tested locally
+without having to push them to an existing branch.
+
+```
+make act
+```
+
+Because the file `.actrc` is preconfigured, simply run:
+
+```
+act
 ```
