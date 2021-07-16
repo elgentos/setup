@@ -1,0 +1,4 @@
+--rm
+-P ubuntu-20.04=ubuntu:20.04
+-s SSH_PRIVATE_KEY=$(cat $(pwd)/.ssh/id_rsa)
+--use-gitignore=false

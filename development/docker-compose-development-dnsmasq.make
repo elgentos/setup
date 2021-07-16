@@ -1,4 +1,4 @@
-$(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): $(DNSMASQ) | $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE) $(BASH) $(UFW) $(IP)
+$(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): | $(DNSMASQ) $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE) $(BASH) $(UFW) $(IP)
 	$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev down
 	$(BASH) -c '[ -f /.dockerenv ] || sudo rm -f /etc/resolv.conf'
 	sudo touch /etc/resolv.conf

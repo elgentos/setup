@@ -1,4 +1,5 @@
 AG := $(shell command -v ag || echo /usr/bin/ag)
+ACT := $(shell command -v act || echo /usr/local/bin/act)
 CURL := $(shell command -v curl || echo /usr/bin/curl)
 IP := $(shell command -v ip || echo /usr/sbin/ip)
 JQ := $(shell command -v jq || echo /usr/bin/jq)

@@ -7,41 +7,31 @@ on:
     branches: [ main ]
 
 jobs:
-  Makefile:
+  install:
     strategy:
       matrix:
         version:
           - '20.04'
-          - '20.10'
-          - '21.04'
-          - '21.10'
-        installer:
-          - ./install
-    runs-on: ubuntu-latest
-    container:
-      image: ubuntu:${{ matrix.version }}
-      env:
-        SSH_AUTH_SOCK: /ssh-agent
-      volumes:
-        - /ssh-agent:/ssh-agent
+    runs-on: ubuntu-${{ matrix.version }}
     name: Ubuntu ${{ matrix.version }}
     env:
       TTY: 0
+      INTERACTIVE: 0
+      DEBIAN_FRONTEND: noninteractive
     steps:
       - uses: actions/checkout@v2
-      - name: Setup GitHub SSH
-        uses: MrSquaare/ssh-setup-action@v1
+      - name: Install Node
+        if: ${{ env.ACT }}
+        run: |
+          apt update -y
+          apt install nodejs -y
+      - name: Setup SSH key
+        uses: shimataro/ssh-key-action@v2
         with:
-          host: github.com
-          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          private-key-name: id_rsa
-      - name: Setup GitHub Gist SSH
-        uses: MrSquaare/ssh-setup-action@v1
-        with:
-          host: gist.github.com
-          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          private-key-name: id_rsa_gist
-      - name: Update APT repositories
-        run: sudo apt update -y
-      - name: Install required software
-        run: ${{ matrix.installer }}
+          known_hosts: unnecessary
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Remove Node
+        if: ${{ env.ACT }}
+        run: apt remove nodejs -y
+      - name: Install all software
+        run: ./install all
