@@ -22,6 +22,21 @@ to run it directly:
 ./install
 ```
 
+To pass in additional installation requests, replace `bash` with
+`bash -s - <recipe>`, where `<recipe>` can be any of the [optional](#optional)
+software recipes, or simply `optional` for all optional recipes.
+
+```
+wget -qO- https://raw.githubusercontent.com/elgentos/setup/main/install | bash -s - optional
+```
+
+Or when [the installer](https://raw.githubusercontent.com/elgentos/setup/main/install)
+has been downloaded locally, run:
+
+```
+install optional
+```
+
 ## Result
 
 The following files have been created in the home directory:
@@ -52,8 +67,6 @@ The following software has been installed:
 - [ZSH](https://www.zsh.org/)
 
 # Optional
-
-[![Optional](https://github.com/elgentos/setup/workflows/Optional/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22Optional%22)
 
 To cherry-pick optional software, use the following targets:
 
@@ -92,8 +105,6 @@ The following adds `gimp`, `symlinks` and `ssg` to the installation.
 ```
 
 # Development
-
-[![Development](https://github.com/elgentos/setup/workflows/Development/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22Develpoment%22)
 
 In order to locally test a Make target, run the following:
 
