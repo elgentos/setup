@@ -13,6 +13,7 @@ $(GITPROJECTS):
 
 $(GIT): | $(GITCONFIG) $(GITIGNORE) $(GITPROJECTS) $(VIM)
 	sudo apt install git -y
+	echo "Adding GIT domains to $(SSH_KNOWN_HOSTS): $(GITDOMAINS)"
 	for domain in $(GITDOMAINS); do \
   		ssh-keyscan "$$domain" >> $(SSH_KNOWN_HOSTS); \
 	done
