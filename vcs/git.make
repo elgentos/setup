@@ -13,12 +13,7 @@ $(GITPROJECTS):
 
 $(GIT): | $(GITCONFIG) $(GITIGNORE) $(GITPROJECTS) $(VIM)
 	sudo apt install git -y
-	echo "Adding GIT domains to $(SSH_KNOWN_HOSTS): $(GITDOMAINS)"
-	for domain in $(GITDOMAINS); do \
-  		echo "Adding known host: $$domain"; \
-		grep '\.' "$(SSH_KNOWN_HOSTS)" | awk '{print "<"$1">"}' | sort -u | grep -q "<$$domain>" \
-			|| ssh-keyscan "$$domain" >> $(SSH_KNOWN_HOSTS); \
-	done
+	make $(SSH_KNOWN_HOSTS)
 
 $(GITCONFIG_USER): | $(GIT) $(GITCONFIG)
 	@echo $(INTERACTIVE) | grep -q '1' \

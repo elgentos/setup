@@ -26,7 +26,6 @@ ssh-config: | $(SSH_CONFIG)
 .PHONY: $(SSH_KNOWN_HOSTS)
 $(SSH_KNOWN_HOSTS): | $(SSH) $(GIT)
 	for domain in $(GITDOMAINS) $(shell grep Hostname $(SSH_CONFIG_TEMPLATE) | awk '{print $$2}'); do \
-		echo "Adding known host: $$domain"; \
 		grep '\.' "$(SSH_KNOWN_HOSTS)" | awk '{print "<"$1">"}' | sort -u | grep -q "<$$domain>" \
 			|| ssh-keyscan "$$domain" >> $(SSH_KNOWN_HOSTS); \
 	done
