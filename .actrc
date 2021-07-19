@@ -1,5 +1,6 @@
 --rm
 -P ubuntu-20.04=ubuntu:20.04
+-P ubuntu-latest=ubuntu:latest
 -s SSH_PRIVATE_KEY=$(cat .ssh/id_rsa)
 --use-gitignore=false
 --userns elgentos-setup
