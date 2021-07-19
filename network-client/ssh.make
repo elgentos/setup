@@ -22,6 +22,7 @@ $(SSH_CONFIG): | $(SSH) $(SSH_CONFIG_TEMPLATE)
 
 ssh-config: | $(SSH_CONFIG)
 
+.PHONY: $(SSH_KNOWN_HOSTS)
 $(SSH_KNOWN_HOSTS): | $(SSH_CONFIG_TEMPLATE)
 	for domain in "$(GITDOMAINS) $(shell grep Hostname $(SSH_CONFIG_TEMPLATE) | awk '{print $$2}')"; do \
 		echo "Adding known host: $$domain"; \
