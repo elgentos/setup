@@ -13,8 +13,9 @@ $(GITPROJECTS):
 
 $(GIT): | $(GITCONFIG) $(GITIGNORE) $(GITPROJECTS) $(VIM)
 	sudo apt install git -y
-	ssh-keyscan github.com >> ~/.ssh/known_hosts
-	ssh-keyscan gist.github.com >> ~/.ssh/known_hosts
+	for domain in $(GITDOMAINS); do \
+  		ssh-keyscan "$$domain" >> $(SSH_KNOWN_HOSTS); \
+	done
 
 $(GITCONFIG_USER): | $(GIT) $(GITCONFIG)
 	@echo $(INTERACTIVE) | grep -q '1' \

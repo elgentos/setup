@@ -1,3 +1,5 @@
 SSG := $(shell command -v ssg || echo /usr/bin/ssg)
 SSH := $(shell command -v ssh || /usr/bin/ssh)
 SSH_KEY := $(shell echo "$$HOME/.ssh/id_rsa")
+SSH_CONFIG := $(shell echo "$$HOME/.ssh/config")
+SSH_KNOWN_HOSTS := $(shell echo "$$HOME/.ssh/known_hosts")
