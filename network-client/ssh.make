@@ -14,14 +14,21 @@ $(SSH_KEY): | $(SSH)
 
 ssh-key: | $(SSH_KEY)
 
-$(SSH_CONFIG): | $(SSH) $(GIT)
+$(SSH_CONFIG_TEMPLATE): | $(GIT)
 	$(GIT) clone git@gitlab.elgentos.nl:elgentos/ssg.git $(GITPROJECTS)/ssg
-	echo "Include $(GITPROJECTS)/ssg/ssh/config" >> $(SSH_CONFIG)
-	for domain in $(shell grep Hostname $(GITPROJECTS)/ssg/ssh/config | awk '{print $$2}'); do \
-  		echo "Adding known host: $$domain"; \
-		ssh-keyscan "$$domain" >> $(SSH_KNOWN_HOSTS); \
-	done
+
+$(SSH_CONFIG): | $(SSH) $(SSH_CONFIG_TEMPLATE)
+	echo "Include $(SSH_CONFIG_TEMPLATE)" >> $(SSH_CONFIG)
 
 ssh-config: | $(SSH_CONFIG)
 
-install:: | $(SSH_KEY) $(SSH_CONFIG)
+$(SSH_KNOWN_HOSTS): | $(SSH_CONFIG_TEMPLATE)
+	for domain in "$(GITDOMAINS) $(shell grep Hostname $(SSH_CONFIG_TEMPLATE) | awk '{print $$2}')"; do \
+		echo "Adding known host: $$domain"; \
+		grep '\.' "$(SSH_KNOWN_HOSTS)" | awk '{print "<"$1">"}' | sort -u | grep -q "<$$domain>" \
+			|| ssh-keyscan "$$domain" >> $(SSH_KNOWN_HOSTS); \
+	done
+
+ssh-known-hosts: | $(SSH_KNOWN_HOSTS)
+
+install:: | $(SSH_KEY) $(SSH_CONFIG) $(SSH_KNOWN_HOSTS)

@@ -16,7 +16,8 @@ $(GIT): | $(GITCONFIG) $(GITIGNORE) $(GITPROJECTS) $(VIM)
 	echo "Adding GIT domains to $(SSH_KNOWN_HOSTS): $(GITDOMAINS)"
 	for domain in $(GITDOMAINS); do \
   		echo "Adding known host: $$domain"; \
-  		ssh-keyscan "$$domain" >> $(SSH_KNOWN_HOSTS); \
+		grep '\.' "$(SSH_KNOWN_HOSTS)" | awk '{print "<"$1">"}' | sort -u | grep -q "<$$domain>" \
+			|| ssh-keyscan "$$domain" >> $(SSH_KNOWN_HOSTS); \
 	done
 
 $(GITCONFIG_USER): | $(GIT) $(GITCONFIG)
