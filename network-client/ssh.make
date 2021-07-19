@@ -27,7 +27,7 @@ ssh-config: | $(SSH_CONFIG)
 $(SSH_KNOWN_HOSTS): | $(SSH) $(GIT)
 	for domain in $(GITDOMAINS) $(shell grep Hostname $(SSH_CONFIG_TEMPLATE) | awk '{print $$2}'); do \
 		grep '\.' "$(SSH_KNOWN_HOSTS)" | awk '{print "<"$1">"}' | sort -u | grep -q "<$$domain>" \
-			|| ssh-keyscan "$$domain" >> $(SSH_KNOWN_HOSTS); \
+			|| ssh-keyscan "$$domain" 2>/dev/null >> $(SSH_KNOWN_HOSTS); \
 	done
 
 ssh-known-hosts: | $(SSH_KNOWN_HOSTS)
