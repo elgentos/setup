@@ -30,8 +30,8 @@ $(DNSMASQ): | $(BASH) $(UFW)
 	echo cache-size=1000          | sudo tee -a /etc/dnsmasq.conf
 	dnsmasq --test
 	sudo mkdir -p "$(DNSMASQ)"
-	sudo $(SYSTEMCTL) disable --now systemd-resolved
-	sudo service dnsmasq restart
+	@echo $(SWAPDNS) | grep -q '1' && sudo $(SYSTEMCTL) disable --now systemd-resolved || echo ''
+	@echo $(SWAPDNS) | grep -q '1' && sudo service dnsmasq restart || echo ''
 
 dnsmasq: | $(DNSMASQ)
 
