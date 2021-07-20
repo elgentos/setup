@@ -45,11 +45,8 @@ if ! [ -f Makefile ]; then
 fi
 
 MAKE_OPTIONS=(
-  --trace
   --no-builtin-rules
   --no-builtin-variables
-  --print-directory
-  --warn-undefined-variables
   "CI=${CI}"
 )
 
