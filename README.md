@@ -19,22 +19,7 @@ Or, if `wget` is not available, simply download
 to run it directly:
 
 ```
-./install
-```
-
-To pass in additional installation requests, replace `bash` with
-`bash -s - <recipe>`, where `<recipe>` can be any of the [optional](#optional)
-software recipes, or simply `optional` for all optional recipes.
-
-```
-wget -qO- https://raw.githubusercontent.com/elgentos/setup/main/install | bash -s - optional
-```
-
-Or when [the installer](https://raw.githubusercontent.com/elgentos/setup/main/install)
-has been downloaded locally, run:
-
-```
-install optional
+bash install
 ```
 
 ## Result
