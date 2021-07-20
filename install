@@ -59,7 +59,7 @@ JOBS=$(nproc --all)
 
 # First test if we need to make the SSH key.
 echo "[Ensure SSH key exists]";
-if ! 2>/dev/null make ssh-key -q; then
+if ! 2>/dev/null make ssh-key --quiet; then
   # shellcheck disable=SC2086
   make ssh-key ${MAKE_OPTIONS[*]};
   echo "";
@@ -80,7 +80,7 @@ OPTIONS="$*"
 if [ $# -lt 1 ]; then
   # Ask for installation targets.
   echo "[Prepare optional software dialog]";
-  if ! 2>/dev/null make dialog -q; then
+  if ! 2>/dev/null make dialog --quiet; then
     # shellcheck disable=SC2086
     make dialog ${MAKE_OPTIONS[*]};
   fi
