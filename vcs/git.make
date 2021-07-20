@@ -13,7 +13,7 @@ $(GITPROJECTS):
 
 $(GIT): | $(GITCONFIG) $(GITIGNORE) $(GITPROJECTS) $(VIM)
 	sudo apt install git -y
-	make $(SSH_KNOWN_HOSTS)
+	make ssh-known-hosts
 
 $(GITCONFIG_USER): | $(GIT) $(GITCONFIG)
 	@echo $(INTERACTIVE) | grep -q '1' \
