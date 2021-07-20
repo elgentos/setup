@@ -62,8 +62,9 @@ if ! 2>/dev/null make ssh-key --quiet; then
   # shellcheck disable=SC2086
   make ssh-key ${MAKE_OPTIONS[*]};
   echo "";
-  echo "Make sure your key is registered to your GitHub account before proceeding.";
+  echo "Make sure your key is registered to your GitHub and GitLab accounts before proceeding.";
   echo "  https://github.com/settings/keys";
+  echo "  https://gitlab.elgentos.nl/-/profile/keys";
   echo "";
   # shellcheck disable=SC2162
   cut -d: -f3 < /proc/1/cgroup | grep -q '/docker/' \

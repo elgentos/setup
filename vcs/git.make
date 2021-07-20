@@ -13,8 +13,7 @@ $(GITPROJECTS):
 
 $(GIT): | $(GITCONFIG) $(GITIGNORE) $(GITPROJECTS) $(VIM)
 	sudo apt install git -y
-	ssh-keyscan github.com >> ~/.ssh/known_hosts
-	ssh-keyscan gist.github.com >> ~/.ssh/known_hosts
+	make $(SSH_KNOWN_HOSTS)
 
 $(GITCONFIG_USER): | $(GIT) $(GITCONFIG)
 	@echo $(INTERACTIVE) | grep -q '1' \
