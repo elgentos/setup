@@ -50,10 +50,6 @@ MAKE_OPTIONS=(
   "CI=${CI}"
 )
 
-JOBS=$(nproc --all)
-# shellcheck disable=SC2086
-[ $JOBS -gt 0 ] && MAKE_OPTIONS+=("-j${JOBS}")
-
 # First test if we need to make the SSH key.
 echo "[Ensure SSH key exists]";
 if ! 2>/dev/null make ssh-key --quiet; then
