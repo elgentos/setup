@@ -19,18 +19,16 @@ $(SSH_CONFIG_TEMPLATE): | $(GIT) $(SSH_KNOWN_HOSTS)
 
 $(SSH_CONFIG): | $(SSH) $(SSH_CONFIG_TEMPLATE)
 	echo "Include $(SSH_CONFIG_TEMPLATE)" >> $(SSH_CONFIG)
-	make ssh-known-hosts
+	make -B ssh-known-hosts
 
 ssh-config: | $(SSH_CONFIG)
 
-.PHONY: $(SSH_KNOWN_HOSTS)
 $(SSH_KNOWN_HOSTS): | $(SSH) $(GIT)
 	@for domain in $(GITDOMAINS) $(shell grep Hostname $(SSH_CONFIG_TEMPLATE) | awk '{print $$2}'); do \
-		grep '\.' "$(SSH_KNOWN_HOSTS)" | awk '{print "<"$1">"}' | sort -u | grep -q "<$$domain>" \
+		grep '\.' "$(SSH_KNOWN_HOSTS)" | awk '{print "<"$$1">"}' | sort -u | grep -q "<$$domain>" \
 			|| ssh-keyscan "$$domain" 2>/dev/null >> $(SSH_KNOWN_HOSTS); \
 	done
 
-.PHONY: ssh-known-hosts
 ssh-known-hosts: | $(SSH_KNOWN_HOSTS)
 
-install:: | $(SSH_KEY) $(SSH_CONFIG) $(SSH_KNOWN_HOSTS)
+install:: | $(SSH_KEY) $(SSH_CONFIG)

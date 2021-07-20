@@ -54,11 +54,12 @@ MAKE_OPTIONS=(
 )
 
 JOBS=$(nproc --all)
-${JOBS} -gt 0 && MAKE_OPTIONS+=("-j${JOBS}")
+# shellcheck disable=SC2086
+[ $JOBS -gt 0 ] && MAKE_OPTIONS+=("-j${JOBS}")
 
 # First test if we need to make the SSH key.
 echo "[Ensure SSH key exists]";
-if ! 2>/dev/null make ssh-key --quiet; then
+if ! 2>/dev/null make ssh-key -q; then
   # shellcheck disable=SC2086
   make ssh-key ${MAKE_OPTIONS[*]};
   echo "";
@@ -73,9 +74,39 @@ fi
 
 # Once the SSH key is installed, proceed with the rest of the installation.
 TARGETS=(install)
+OPTIONS="$*"
 
-for target in $(echo "$*" | tr ' ' '\n' | sort -u | uniq); do
-  if 2>/dev/null make --quiet "$target"; then
+# If no targets are provided, ask for them.
+if [ $# -lt 1 ]; then
+  # Ask for installation targets.
+  echo "[Prepare optional software dialog]";
+  if ! 2>/dev/null make dialog -q; then
+    # shellcheck disable=SC2086
+    make dialog ${MAKE_OPTIONS[*]};
+  fi
+
+  options=()
+
+  for option in $(make -qp | grep 'optional:: |' | cut -d'|' -f2- | sort -u); do
+    if ! 2>/dev/null make -q "$option"; then
+      options+=("$option $option on")
+    fi
+  done
+
+  # shellcheck disable=SC2046
+  # shellcheck disable=SC2086
+  [ ${#options[@]} -gt 0 ] && OPTIONS=$(dialog \
+    --title 'Select software' \
+    --backtitle 'Optional workstation software' \
+    --separate-output \
+    --stdout \
+    --checklist 'Select optional software' \
+    0 0 0 ${options[*]} \
+  );
+fi
+
+for target in $(echo "$OPTIONS" | tr ' ' '\n' | sort -u | uniq); do
+  if 2>/dev/null make -q "$target"; then
     echo "[Skip $target] Already installed";
   else
     TARGETS+=("$target");
@@ -84,6 +115,6 @@ done
 
 echo "[Make ${TARGETS[*]}]";
 # shellcheck disable=SC2086
-make ${MAKE_OPTIONS[*]} ${TARGETS[*]};
+make -q ${TARGETS[*]} || make ${MAKE_OPTIONS[*]} ${TARGETS[*]};
 
 echo "Finished";
