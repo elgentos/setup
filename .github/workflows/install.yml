@@ -37,7 +37,7 @@ jobs:
           ./install all
 
           # Verify installation.
-          for target in $(make -qp | egrep '(optional:: \||intall:: \|)' | grep -v no-verify | cut -d'|' -f2- | sort -u); \
+          for target in $(make -qp | egrep '(optional:: \||install:: \|)' | grep -v '/' | cut -d'|' -f2- | sort -u); \
             do echo "VERIFY $target"; \
             zsh -c "make --trace -q $target"; \
           done
