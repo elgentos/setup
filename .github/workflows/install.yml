@@ -37,7 +37,7 @@ jobs:
           ./install all
 
           # Verify installation.
-          for optional in $(grep -nR 'optional:: |' | grep -v no-verify | cut -d'|' -f2- | sort -u); \
+          for optional in $(make -qp | grep 'optional:: |' | grep -v no-verify | cut -d'|' -f2- | sort -u); \
             do echo "VERIFY $optional"; \
             zsh -c "make --trace -q $optional"; \
           done
