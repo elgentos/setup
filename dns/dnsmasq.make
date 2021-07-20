@@ -1,5 +1,4 @@
 $(DNSMASQ): | $(BASH) $(UFW)
-	$(BASH) -c '[ -f /.dockerenv ] || sudo $(SYSTEMCTL) disable --now systemd-resolved'
 	$(BASH) -c '[ -f /.dockerenv ] || sudo rm -f /etc/resolv.conf'
 	echo 'nameserver 127.0.0.1' | sudo tee    /etc/resolv.conf
 	echo 'nameserver 1.1.1.1'   | sudo tee -a /etc/resolv.conf
@@ -31,7 +30,8 @@ $(DNSMASQ): | $(BASH) $(UFW)
 	echo cache-size=1000          | sudo tee -a /etc/dnsmasq.conf
 	dnsmasq --test
 	sudo mkdir -p "$(DNSMASQ)"
-	$(BASH) -c '[ -f /.dockerenv ] || sudo service dnsmasq restart'
+	sudo $(SYSTEMCTL) disable --now systemd-resolved
+	sudo service dnsmasq restart
 
 dnsmasq: | $(DNSMASQ)
 
