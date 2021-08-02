@@ -11,7 +11,7 @@ $(DNSMASQ): | $(BASH) $(UFW)
 			&& sudo service network-manager restart \
 			|| echo 'Skipping NetworkManager restart.'
 	sleep 2
-	for con in $(shell nmcli con show --active | tail -n +2 | awk '{ print $$1 }'); do \
+	for con in $(shell nmcli con show --active | tail -n +2 | awk '!($$(NF)="")!($$(NF-1)="")!($$(NF-2)="")'); do \
 		nmcli con mod "$$con" ipv4.ignore-auto-dns yes; \
 		nmcli con mod "$$con" ipv4.dns '127.0.0.1 1.1.1.1 9.9.9.9'; \
 		nmcli con down "$$con"; \
