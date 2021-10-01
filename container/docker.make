@@ -20,7 +20,7 @@ docker: | $(DOCKER_CONFIG)
 
 $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
 	sudo $(CURL) -L $(shell $(CURL) -L https://api.github.com/repos/docker/compose/releases/latest \
-			| jq '.assets[] | select(.name == "docker-compose-Linux-x86_64").browser_download_url' \
+			| jq '.assets[] | select(.name == "docker-compose-linux-x86_64").browser_download_url' \
 			| sed 's/"//g') \
 		--output $(DOCKER_COMPOSE)
 	sudo chmod +x $(DOCKER_COMPOSE)
