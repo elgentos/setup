@@ -35,4 +35,4 @@ $(DNSMASQ): | $(BASH) $(UFW)
 
 dnsmasq: | $(DNSMASQ)
 
-install:: | dnsmasq
+optional:: | dnsmasq
