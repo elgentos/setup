@@ -82,7 +82,7 @@ if [ $# -lt 1 ]; then
 
   for option in $(make -qp | grep 'optional:: |' | cut -d'|' -f2- | sort -u); do
     if ! 2>/dev/null make -q "$option"; then
-      options+=("$option $option on")
+      options+=("$option $option off")
     fi
   done
 
