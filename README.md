@@ -38,7 +38,6 @@ The following software has been installed:
 - [Composer](https://getcomposer.org/)
 - [cURL](https://curl.haxx.se/)
 - [Docker](https://www.docker.com/)
-- [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
 - [Docker compose](https://docs.docker.com/compose/)
 - [Docker compose development](https://github.com/JeroenBoersma/docker-compose-development)
 - [GIT](https://git-scm.com/)
@@ -80,6 +79,10 @@ To cherry-pick optional software, use the following targets:
 - [`tmux`](https://tracker.debian.org/pkg/tmux)
 - [`tmuxinator`](https://tracker.debian.org/pkg/tmuxinator)
 - [`tmuxinator_completion`](https://github.com/tmuxinator/tmuxinator/tree/master/completion)
+
+## Networking
+
+- [`dnsmasq`](http://www.thekelleys.org.uk/dnsmasq/doc.html)
 
 ## Example
 
