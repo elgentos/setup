@@ -30,4 +30,4 @@ $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ): | $(DNSMASQ) $(DOCKER_COMPOSE_DEVELOPMENT
 
 docker-compose-development-dnsmasq: | $(DOCKER_COMPOSE_DEVELOPMENT_DNSMASQ)
 
-install:: | docker-compose-development-dnsmasq
+optional:: | docker-compose-development-dnsmasq
