@@ -8,6 +8,7 @@ $(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(
 		sudo $(UFW) allow in on "$$iface" to any port 80 proto tcp; \
 		sudo $(UFW) allow in on "$$iface" to any port 443 proto tcp; \
 		sudo $(UFW) allow in on "$$iface" to any port 9000 proto tcp; \
+		sudo $(UFW) allow in on "$$iface" to any port 9003 proto tcp; \
 	done
 	echo $(INTERACTIVE) | grep -q '1' \
 		&& "$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" setup \
