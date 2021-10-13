@@ -19,7 +19,7 @@ $(DOCKER_CONFIG): | $(DOCKER)
 docker: | $(DOCKER_CONFIG)
 
 $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
-	sudo $(CURL) -L $(shell $(CURL) -L https://api.github.com/repos/docker/compose/releases/latest \
+	sudo $(CURL) -L $(shell $(CURL) -L https://api.github.com/repos/docker/compose/releases/tags/$(DOCKER_COMPOSE_VERSION) \
 			| jq '.assets[] | select(.name == "docker-compose-linux-x86_64").browser_download_url' \
 			| sed 's/"//g') \
 		--output $(DOCKER_COMPOSE)
