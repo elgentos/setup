@@ -2,7 +2,7 @@ $(DOCKER_COMPOSE_DEVELOPMENT_WORKSPACE_BIN): | $(DOCKER_COMPOSE_DEVELOPMENT)
 	mkdir -p "$(DOCKER_COMPOSE_DEVELOPMENT_WORKSPACE_BIN)"
 
 $(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(GIT) $(GITPROJECTS) $(UFW) $(IP) $(SSH_KEY)
-	$(GIT) clone git@github.com:JeroenBoersma/docker-compose-development.git $(DOCKER_COMPOSE_DEVELOPMENT)
+	$(GIT) clone https://github.com/JeroenBoersma/docker-compose-development.git $(DOCKER_COMPOSE_DEVELOPMENT)
 	sudo service docker start
 	for iface in $(shell $(IP) route | grep -Eo 'docker[0-9]' | uniq); do \
 		sudo $(UFW) allow in on "$$iface" to any port 80 proto tcp; \
