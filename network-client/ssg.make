@@ -1,6 +1,6 @@
 $(SSG): | $(GIT) $(NPM) $(NVM) $(BASH) $(SSH_KEY)
 	rm -rf $(GITPROJECTS)/ssg-js
-	$(GIT) clone git@github.com:elgentos/ssg-js.git $(GITPROJECTS)/ssg-js
+	$(GIT) clone https://github.com/elgentos/ssg-js.git $(GITPROJECTS)/ssg-js
 	cd $(GITPROJECTS)/ssg-js \
 		&& 		$(BASH) -c "source $(NVM) && $(NPM) install" \
 		&& sudo $(BASH) -c "source $(NVM) && $(NPM) install -g ssg-js"
