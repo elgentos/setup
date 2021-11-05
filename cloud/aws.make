@@ -1,6 +1,6 @@
 $(AWS): | $(GIT) $(DOCKER) $(SSH_KEY)
 	$(GIT) clone \
-		git@gist.github.com:87e29fd4aa06ec42216c80a6e3649fa5.git \
+		https://gist.github.com/87e29fd4aa06ec42216c80a6e3649fa5.git \
 		$(GITPROJECTS)/aws-cli
 	chmod +x $(GITPROJECTS)/aws-cli/aws.sh
 	sudo ln -s $(GITPROJECTS)/aws-cli/aws.sh $(AWS)
