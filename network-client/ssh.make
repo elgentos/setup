@@ -15,7 +15,7 @@ $(SSH_KEY): | $(SSH)
 ssh-key: | $(SSH_KEY)
 
 $(SSH_CONFIG_TEMPLATE): | $(GIT) $(SSH_KNOWN_HOSTS)
-	$(GIT) clone git@gitlab.elgentos.nl:elgentos/ssg.git $(GITPROJECTS)/ssg
+	$(GIT) clone git@gitlab.elgentos.nl:elgentos/ssg.git $(GITPROJECTS)/ssg || true
 
 $(SSH_CONFIG): | $(SSH) $(SSH_CONFIG_TEMPLATE)
 	echo "Include $(SSH_CONFIG_TEMPLATE)" >> $(SSH_CONFIG)
