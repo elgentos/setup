@@ -33,7 +33,6 @@ The following files have been created in the home directory:
 
 The following software has been installed:
 
-- [AWS CLI](https://gist.github.com/JeroenBoersma/87e29fd4aa06ec42216c80a6e3649fa5) w/💘
 - [Bash](https://www.gnu.org/software/bash/)
 - [Composer](https://getcomposer.org/)
 - [cURL](https://curl.haxx.se/)
@@ -53,10 +52,6 @@ The following software has been installed:
 # Optional
 
 To cherry-pick optional software, use the following targets:
-
-## Cloud management
-
-- [gcloud](https://cloud.google.com/sdk/gcloud/)
 
 ## Web browsers
 
