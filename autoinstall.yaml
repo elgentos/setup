@@ -1,18 +1,33 @@
 #cloud-config
 autoinstall:
   version: 1
+
   identity:
     hostname: elgentos-ubuntu-p14s
     username: elgentos
     password: "$6$06Ot4bgyw5j3L8Dn$N8o2btGghAI0KynX4Mab7krf.9Z/mtAyWrftK26d8Z8zSLzxgxuqwm7ArRXrV6iwMTWwF4GUS3ZfdEvA/YWIl0"  # elgentos123
+
+  source:
+    id: ubuntu-desktop-minimal
+
+  shutdown: poweroff
+
+  timezone: Europe/Amsterdam
+
+  keyboard:
+    layout: en
+
   drivers:
     install: true
+
   ssh:
     install-server: true
     allow-pw: true
+
   storage:
     layout:
       name: lvm
+
   packages:
     - build-essential
     - composer
@@ -40,6 +55,7 @@ autoinstall:
     - wget
     - xclip
     - zsh
+
   snaps:
     - name: chromium
     - name: discord
@@ -50,25 +66,30 @@ autoinstall:
     - name: sqlitebrowser
     - name: steam
     - name: slack
+
   late-commands:
-    - curtin in-target -- sudo -u elgentos curl -fsS https://dl.brave.com/install.sh | sh
-    - echo "Installing Gnome extensions"
-    - curtin in-target -- sudo -u elgentos gnome-extensions enable clipboard-indicator@tudmotu.com
-    - curtin in-target -- sudo -u elgentos gnome-extensions enable caffeine@patapon.info
-    - curtin in-target -- sudo -u elgentos gnome-extensions enable donotdisturbwhilecall@janlaping.de
-    - echo "Installing Warp"
-    - curtin in-target -- sudo -u elgentos wget -O warp.dev https://app.warp.dev/download?package=deb
-    - curtin in-target -- sudo -u elgentos apt install ./warp.dev
-    - echo "Installing 1password-cli"
-    - curtin in-target -- sudo -u elgentos curl -sS https://downloads.1password.com/linux/keys/1password.asc
-    - curtin in-target -- sudo -u elgentos gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
-    - curtin in-target -- sudo -u elgentos echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main"
-    - curtin in-target -- sudo -u elgentos tee /etc/apt/sources.list.d/1password.list
-    - curtin in-target -- sudo -u elgentos mkdir -p /etc/debsig/policies/AC2D62742012EA22/
-    - curtin in-target -- sudo -u elgentos curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol
-    - curtin in-target -- sudo -u elgentos tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
-    - curtin in-target -- sudo -u elgentos mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
-    - curtin in-target -- sudo -u elgentos curl -sS https://downloads.1password.com/linux/keys/1password.asc
-    - curtin in-target -- sudo -u elgentos gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
-    - curtin in-target -- sudo -u elgentos apt update
-    - curtin in-target -- sudo -u elgentos apt install 1password-cli
+    - curtin in-target --target=/target -- curl -fsS https://dl.brave.com/install.sh | sh
+    # Installing Gnome extensions
+    - curtin in-target --target=/target -- gnome-extensions enable clipboard-indicator@tudmotu.com
+    - curtin in-target --target=/target -- gnome-extensions enable caffeine@patapon.info
+    - curtin in-target --target=/target -- gnome-extensions enable donotdisturbwhilecall@janlaping.de
+    # Installing Warp
+    - curtin in-target --target=/target -- wget -O warp.dev https://app.warp.dev/download?package=deb
+    - curtin in-target --target=/target -- apt install ./warp.dev
+    # Installing 1password-cli
+    - curtin in-target --target=/target -- curl -sS https://downloads.1password.com/linux/keys/1password.asc
+    - curtin in-target --target=/target -- gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
+    - curtin in-target --target=/target -- echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main"
+    - curtin in-target --target=/target -- tee /etc/apt/sources.list.d/1password.list
+    - curtin in-target --target=/target -- mkdir -p /etc/debsig/policies/AC2D62742012EA22/
+    - curtin in-target --target=/target -- curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol
+    - curtin in-target --target=/target -- tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
+    - curtin in-target --target=/target -- mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
+    - curtin in-target --target=/target -- curl -sS https://downloads.1password.com/linux/keys/1password.asc
+    - curtin in-target --target=/target -- gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+    - curtin in-target --target=/target -- apt update
+    - curtin in-target --target=/target -- apt install 1password-cli
+    # Install oh-my-zsh
+    - curtin in-target --target=/target -- sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+    # Install nvm
+    - curtin in-target --target=/target -- wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
