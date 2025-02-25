@@ -5,6 +5,8 @@ autoinstall:
     hostname: elgentos-ubuntu-p14s
     username: elgentos
     password: "2cNQyUx5bUsMegnv75uMa0VyJfoPMdSGuDTWqQNqiKQwYu/rqMuaD1OyyD6BjfuUHtnnNbAtpE3AHdN/o3CKw."  # elgentos123
+  drivers:
+    install: true
   ssh:
     install-server: true
     allow-pw: true
