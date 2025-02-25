@@ -213,7 +213,6 @@ autoinstall:
     layout:
       name: lvm
   packages:
-    - 1password-cli
     - build-essential
     - composer
     - docker-compose
@@ -229,7 +228,6 @@ autoinstall:
     - jq
     - lsb-release
     - multitail
-    - mydumper
     - ncdu
     - silversearcher-ag
     - tig
@@ -237,11 +235,9 @@ autoinstall:
     - ufw
     - vim
     - vlc
-    - warp-terminal
     - xclip
     - zsh
   snaps:
-    - name: brave
     - name: chromium
     - name: discord
     - name: firefox
@@ -252,8 +248,8 @@ autoinstall:
     - name: steam
     - name: slack
   late-commands:
-    - curtin in-target --target=/target -- bash -c "sh <(curl -fsSL https://raw.githubusercontent.com/elgentos/setup/main/install)"
     - curtin in-target -- sudo -u elgentos gnome-extensions enable clipboard-indicator@tudmotu.com
     - curtin in-target -- sudo -u elgentos gnome-extensions enable caffeine@patapon.info
     - curtin in-target -- sudo -u elgentos gnome-extensions enable donotdisturbwhilecall@janlaping.de
     - curtin in-target -- bash -c "apt update"
+    - curtin in-target --target=/target -- bash -c "sh <(curl -fsSL https://raw.githubusercontent.com/elgentos/setup/main/install)"
