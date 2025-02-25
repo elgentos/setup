@@ -1,0 +1,58 @@
+#cloud-config
+autoinstall:
+  version: 1
+  identity:
+    hostname: elgentos-ubuntu-p14s
+    username: elgentos
+    password: "2cNQyUx5bUsMegnv75uMa0VyJfoPMdSGuDTWqQNqiKQwYu/rqMuaD1OyyD6BjfuUHtnnNbAtpE3AHdN/o3CKw."  # elgentos123
+  ssh:
+    install-server: true
+    allow-pw: true
+  storage:
+    layout:
+      name: lvm
+  packages:
+    - 1password-cli
+    - brave-browser
+    - build-essential
+    - composer
+    - docker-compose
+    - docker.io
+    - firefox
+    - gimp
+    - git
+    - gnome-shell-extension-caffeine
+    - gnome-shell-extension-clipboard-indicator
+    - gnome-shell-extensions
+    - google-chrome-stable
+    - htop
+    - httrack
+    - jq
+    - lsb-release
+    - multitail
+    - mydumper
+    - ncdu
+    - silversearcher-ag
+    - slack-desktop
+    - tig
+    - ubuntu-desktop
+    - ufw
+    - vim
+    - vlc
+    - warp-terminal
+    - xclip
+    - zsh
+  snap:
+    - chromium
+    - discord
+    - firefox
+    - gcolor3
+    - postman
+    - spotify
+    - sqlitebrowser
+    - steam
+  late-commands:
+    - curtin in-target --target=/target -- bash -c "sh <(curl -fsSL https://raw.githubusercontent.com/elgentos/setup/main/install)"
+    - curtin in-target -- sudo -u elgentos gnome-extensions enable clipboard-indicator@tudmotu.com
+    - curtin in-target -- sudo -u elgentos gnome-extensions enable caffeine@patapon.info
+    - curtin in-target -- sudo -u elgentos gnome-extensions enable donotdisturbwhilecall@janlaping.de
