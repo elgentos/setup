@@ -34,8 +34,6 @@ autoinstall:
     - gimp
     - git
     - gpg
-    - gnome-shell-extension-caffeine
-    - gnome-shell-extension-clipboard-indicator
     - gnome-shell-extensions
     - htop
     - httrack
@@ -67,9 +65,9 @@ autoinstall:
   late-commands:
     - curtin in-target --target=/target -- curl -fsS https://dl.brave.com/install.sh | sh
     # Installing Gnome extensions
-    - curtin in-target --target=/target -- gnome-extensions enable clipboard-indicator@tudmotu.com
-    - curtin in-target --target=/target -- gnome-extensions enable caffeine@patapon.info
-    - curtin in-target --target=/target -- gnome-extensions enable donotdisturbwhilecall@janlaping.de
+    #- curtin in-target --target=/target -- gnome-extensions enable clipboard-indicator@tudmotu.com
+    #- curtin in-target --target=/target -- gnome-extensions enable caffeine@patapon.info
+    #- curtin in-target --target=/target -- gnome-extensions enable donotdisturbwhilecall@janlaping.de
     # Installing Warp
     - curtin in-target --target=/target -- wget -O warp.dev https://app.warp.dev/download?package=deb
     - curtin in-target --target=/target -- apt install ./warp.dev
