@@ -11,7 +11,7 @@ autoinstall:
         source: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/1password.gpg] https://downloads.1password.com/linux/debian/amd64 stable main"
         key: |
           -----BEGIN PGP PUBLIC KEY BLOCK-----
-
+          
           mQINBFkeAh4BEACy6fUHiFi/YvXZ2E5Gs7qFL8TSKQGLt0g8w/NtBotMNveW2Nzg
           aXcmJ2E0aXY7nBRtpIgRRrb7XuskDZwGmVx4PQshaZuIozS0T1kdMitobi4k3g2M
           551yf1bPWl1neVJ5MmbpknnaIG6VjMHxcRKE0xXDYhpBtt7QQQw1HT8vOjUOXBUf
@@ -59,6 +59,151 @@ autoinstall:
           P4I7jHwe0BN3iNAG1nKbGg==
           =hYVe
           -----END PGP PUBLIC KEY BLOCK-----
+      warp-terminal:
+        source: "deb [arch=amd64 signed-by=/etc/apt/keyrings/warpdotdev.gpg] https://releases.warp.dev/linux/deb stable main"
+        key: |
+          -----BEGIN PGP PUBLIC KEY BLOCK-----
+  
+          mQINBGXJOCwBEADBfryUo8Yx7sbp6KRk08YqKQBVGA7VmNhC/3dRQvK4hbL49Kxv
+          icOyIQXykuKrgZ68Z1q1/eyDr476i0jNVTcUBrihwa0GYOAQZH17jderFuGp/hS2
+          KivpQxCNceMdb8hbxphm6wEA3Tb+j2KFAC0BQfkbjRl0tQZx6z8nW9uM9ieHxt8O
+          oK0E3Zi64PL9eYlSblTMxkkIsOKT8R6xn/YhTwUAgSqx4/GHKWjdkqg1T19zc1ZF
+          NCdaSS/vdSw6Riqu8bG8fBnBczE5jyr2aQKjFe56ljNXGg9tI5CvAv7l+EOj+FMK
+          7IZF4wNcDdhpsnlHNp6+sldwQKohmlkD6iBnFOKLAS+WIRJvts9TPt3L0Yx8P6pe
+          Pxv+AgB/quyySIFoOt7UbMEh/Fntz5+a74ZLrrUdTC2UKi69iVHdKyMMsM8XB6IE
+          CcfdApaogxAsegdpMvVLg7BXsxjJsKm7ErkhSFosz5Hpm/g3yFW2+o2jgJjrPDIf
+          JweFVL+6sIivgTxRE5cUpPZiEhBN3IXrgkQsTwThdZbfvlqxgF59BuVhtRDaNMvH
+          iPg4f35yTbNa1ed0fENMd2s79P3YVNZsoSf9irPtIhW1RnhYA5TcAodNb3FCAWZF
+          dn/ZRn4L2IuCJ4QJZw8FMVVcu4J7WXu0dR200+qbAOmlJAn0mWWf0tSRgQARAQAB
+          tE9XYXJwIExpbnV4IE1haW50YWluZXJzIChQYWNrYWdlIFNpZ25pbmcgQXV0aG9y
+          aXR5KSA8bGludXgtbWFpbnRhaW5lcnNAd2FycC5kZXY+iQJXBBMBCABBFiEECRMW
+          XHjVt6QbQqxlf/erOdYPgD8FAmXJOCwCGwMFCQPCZwAFCwkIBwICIgIGFQoJCAsC
+          BBYCAwECHgcCF4AACgkQf/erOdYPgD/mzBAAp26zH7xqqKeEaDMzikwxlElMcSpF
+          3hQIwWMrJYyl7DK/jAi3rtnbUa/APTVpkqN+EL6yUoBem1xCy9S03W1Y8rx3Dsg+
+          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
+          =CAs0
+          -----END PGP PUBLIC KEY BLOCK-----
+      mydumper:
+        source: "deb [arch=amd64 signed-by=/etc/apt/keyrings/mydumper.asc] https://mydumper.github.io/mydumper/repo/apt/ubuntu noble main"
+        key: |
+          -----BEGIN PGP PUBLIC KEY BLOCK-----
+          
+          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
+          Y44=
+          =HI+Z
+          -----END PGP PUBLIC KEY BLOCK-----
   drivers:
     install: true
   ssh:
@@ -69,7 +214,6 @@ autoinstall:
       name: lvm
   packages:
     - 1password-cli
-    - brave-browser
     - build-essential
     - composer
     - docker-compose
@@ -80,7 +224,6 @@ autoinstall:
     - gnome-shell-extension-caffeine
     - gnome-shell-extension-clipboard-indicator
     - gnome-shell-extensions
-    - google-chrome-stable
     - htop
     - httrack
     - jq
@@ -89,7 +232,6 @@ autoinstall:
     - mydumper
     - ncdu
     - silversearcher-ag
-    - slack-desktop
     - tig
     - ubuntu-desktop
     - ufw
@@ -99,6 +241,7 @@ autoinstall:
     - xclip
     - zsh
   snaps:
+    - name: brave
     - name: chromium
     - name: discord
     - name: firefox
@@ -107,6 +250,7 @@ autoinstall:
     - name: spotify
     - name: sqlitebrowser
     - name: steam
+    - name: slack
   late-commands:
     - curtin in-target --target=/target -- bash -c "sh <(curl -fsSL https://raw.githubusercontent.com/elgentos/setup/main/install)"
     - curtin in-target -- sudo -u elgentos gnome-extensions enable clipboard-indicator@tudmotu.com
