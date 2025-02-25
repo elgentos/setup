@@ -3,7 +3,7 @@ $(SLACK): | $(CURL)
 	sudo dpkg --list | awk '{ print $2 }' | grep -qE 'kde-cli-tools|kde-runtime|trash-cli|libglib2.0-bin|gvfs-bin' \
 		|| sudo apt install gvfs-bin -y
 	$(CURL) -L $(shell $(CURL) -L https://slack.com/intl/en-nl/downloads/instructions/ubuntu \
-			| grep -oe 'https://downloads.slack-edge.com/releases/linux/[0-9]*.[0-9]*.[0-9]*/prod/x64/slack-desktop-[0-9]*.[0-9]*.[0-9]*-amd64.deb') \
+			| grep -oe 'https://downloads.slack-edge.com/desktop-releases/linux/x64/[0-9]*\.[0-9]*\.[0-9]*/slack-desktop-[0-9]*\.[0-9]*\.[0-9]*-amd64.deb') \
 		--output /tmp/slack.deb
 	sudo dpkg --install /tmp/slack.deb
 	rm -f /tmp/slack.deb
