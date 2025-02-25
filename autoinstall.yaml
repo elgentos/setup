@@ -44,7 +44,7 @@ autoinstall:
     - warp-terminal
     - xclip
     - zsh
-  snap:
+  snaps:
     - chromium
     - discord
     - firefox
