@@ -248,8 +248,8 @@ autoinstall:
     - name: steam
     - name: slack
   late-commands:
+    - curtin in-target -- sudo curl -fsS https://dl.brave.com/install.sh | sh
     - curtin in-target -- sudo -u elgentos gnome-extensions enable clipboard-indicator@tudmotu.com
     - curtin in-target -- sudo -u elgentos gnome-extensions enable caffeine@patapon.info
     - curtin in-target -- sudo -u elgentos gnome-extensions enable donotdisturbwhilecall@janlaping.de
     - curtin in-target -- bash -c "apt update"
-    - curtin in-target --target=/target -- bash -c "sh <(curl -fsSL https://raw.githubusercontent.com/elgentos/setup/main/install)"
