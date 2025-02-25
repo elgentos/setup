@@ -20,10 +20,11 @@ autoinstall:
   ssh:
     install-server: true
     allow-pw: true
-
+    
   storage:
     layout:
       name: lvm
+      password: pleasechangemeasap
 
   packages:
     - build-essential
