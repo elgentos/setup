@@ -7,15 +7,12 @@ autoinstall:
     username: elgentos
     password: "$6$06Ot4bgyw5j3L8Dn$N8o2btGghAI0KynX4Mab7krf.9Z/mtAyWrftK26d8Z8zSLzxgxuqwm7ArRXrV6iwMTWwF4GUS3ZfdEvA/YWIl0"  # elgentos123
 
-  source:
-    id: ubuntu-desktop-minimal
-
   shutdown: poweroff
 
   timezone: Europe/Amsterdam
 
   keyboard:
-    layout: en
+    layout: us
 
   drivers:
     install: true
