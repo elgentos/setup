@@ -45,14 +45,14 @@ autoinstall:
     - xclip
     - zsh
   snaps:
-    - chromium
-    - discord
-    - firefox
-    - gcolor3
-    - postman
-    - spotify
-    - sqlitebrowser
-    - steam
+    - name: chromium
+    - name: discord
+    - name: firefox
+    - name: gcolor3
+    - name: postman
+    - name: spotify
+    - name: sqlitebrowser
+    - name: steam
   late-commands:
     - curtin in-target --target=/target -- bash -c "sh <(curl -fsSL https://raw.githubusercontent.com/elgentos/setup/main/install)"
     - curtin in-target -- sudo -u elgentos gnome-extensions enable clipboard-indicator@tudmotu.com
