@@ -73,13 +73,8 @@ autoinstall:
     - curtin in-target -- resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv
     # Install Brave
     - curtin in-target --target=/target -- curl -fsS https://dl.brave.com/install.sh | sh
-    # Installing Gnome extensions
-    #- curtin in-target --target=/target -- gnome-extensions enable clipboard-indicator@tudmotu.com
-    #- curtin in-target --target=/target -- gnome-extensions enable caffeine@patapon.info
-    #- curtin in-target --target=/target -- gnome-extensions enable donotdisturbwhilecall@janlaping.de
     # Installing Warp
-    - curtin in-target --target=/target -- wget -O warp.deb https://app.warp.dev/download?package=deb
-    - curtin in-target --target=/target -- apt install ./warp.deb
+    - curtin in-target --target=/target -- wget -O warp.deb https://app.warp.dev/download?package=deb && dpkg -i warp.deb
     # Installing 1password-cli
     - curtin in-target --target=/target -- curl -sS https://downloads.1password.com/linux/keys/1password.asc
     - curtin in-target --target=/target -- gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
@@ -92,8 +87,13 @@ autoinstall:
     - curtin in-target --target=/target -- curl -sS https://downloads.1password.com/linux/keys/1password.asc
     - curtin in-target --target=/target -- gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
     - curtin in-target --target=/target -- apt update
+    - curtin in-target --target=/target -- apt install 1password
     - curtin in-target --target=/target -- apt install 1password-cli
     # Install oh-my-zsh
     - curtin in-target --target=/target -- sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
     # Install nvm
     - curtin in-target --target=/target -- wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+    # Installing Gnome extensions
+    #- curtin in-target --target=/target -- gnome-extensions enable clipboard-indicator@tudmotu.com
+    #- curtin in-target --target=/target -- gnome-extensions enable caffeine@patapon.info
+    #- curtin in-target --target=/target -- gnome-extensions enable donotdisturbwhilecall@janlaping.de
