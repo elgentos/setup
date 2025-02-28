@@ -71,28 +71,31 @@ autoinstall:
     # Resize 100GB partition to full space available
     - curtin in-target -- lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
     - curtin in-target -- resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv
+  
     # Install Brave
-    - curtin in-target --target=/target -- curl -fsS https://dl.brave.com/install.sh | sh
+    - curtin in-target --target=/target -- wget -qO- https://dl.brave.com/install.sh | sh
+  
     # Installing Warp
     - curtin in-target --target=/target -- /bin/bash -c "wget --content-disposition -O /warp.deb 'https://app.warp.dev/download?package=deb' && dpkg -i /warp.deb"
+  
     # Installing 1password-cli
-    - curtin in-target --target=/target -- curl -sS https://downloads.1password.com/linux/keys/1password.asc
-    - curtin in-target --target=/target -- gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
-    - curtin in-target --target=/target -- echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main"
-    - curtin in-target --target=/target -- tee /etc/apt/sources.list.d/1password.list
+    - curtin in-target --target=/target -- wget -O /tmp/1password.asc https://downloads.1password.com/linux/keys/1password.asc
+    - curtin in-target --target=/target -- gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg /tmp/1password.asc
+    - curtin in-target --target=/target -- echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | tee /etc/apt/sources.list.d/1password.list
     - curtin in-target --target=/target -- mkdir -p /etc/debsig/policies/AC2D62742012EA22/
-    - curtin in-target --target=/target -- curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol
-    - curtin in-target --target=/target -- tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
+    - curtin in-target --target=/target -- wget -O /etc/debsig/policies/AC2D62742012EA22/1password.pol https://downloads.1password.com/linux/debian/debsig/1password.pol
     - curtin in-target --target=/target -- mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
-    - curtin in-target --target=/target -- curl -sS https://downloads.1password.com/linux/keys/1password.asc
-    - curtin in-target --target=/target -- gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+    - curtin in-target --target=/target -- wget -O /tmp/debsig.gpg https://downloads.1password.com/linux/keys/1password.asc
+    - curtin in-target --target=/target -- gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg /tmp/debsig.gpg
     - curtin in-target --target=/target -- apt update
-    - curtin in-target --target=/target -- apt install 1password
-    - curtin in-target --target=/target -- apt install 1password-cli
+    - curtin in-target --target=/target -- apt install -y 1password 1password-cli
+  
     # Install oh-my-zsh
-    - curtin in-target --target=/target -- sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+    - curtin in-target --target=/target -- sh -c "$(wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  
     # Install nvm
     - curtin in-target --target=/target -- wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+
     # Installing Gnome extensions
     #- curtin in-target --target=/target -- gnome-extensions enable clipboard-indicator@tudmotu.com
     #- curtin in-target --target=/target -- gnome-extensions enable caffeine@patapon.info
