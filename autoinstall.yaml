@@ -33,6 +33,7 @@ autoinstall:
   packages:
     - build-essential
     - composer
+    - dnsutils
     - docker-compose
     - docker.io
     - firefox
@@ -48,6 +49,7 @@ autoinstall:
     - ncdu
     - silversearcher-ag
     - tig
+    - traceroute
     - ubuntu-desktop
     - ufw
     - vim
