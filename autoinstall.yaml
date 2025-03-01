@@ -37,6 +37,7 @@ autoinstall:
     - docker-compose
     - docker.io
     - firefox
+    - fonts-powerline
     - gimp
     - git
     - gpg
