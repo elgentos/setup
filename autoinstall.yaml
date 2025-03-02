@@ -120,17 +120,20 @@ autoinstall:
 
     # Generate SSH key
     - curtin in-target --target=/target -- bash -c '
-      USERNAME=$(getent passwd 1000 | cut -d\':\' -f1);
-      USER_HOME="/home/$USERNAME";
-      echo "Detected user $USERNAME";
-      if [ -d "$USER_HOME" ]; then
-        sudo -u $USERNAME mkdir -p "$USER_HOME/.ssh";
-        sudo -u $USERNAME ssh-keygen -t rsa -b 4096 -C "$USERNAME@elgentos.nl" -f "$USER_HOME/.ssh/id_rsa" -N "";
-        sudo -u $USERNAME chmod 700 "$USER_HOME/.ssh";
-        sudo -u $USERNAME chmod 600 "$USER_HOME/.ssh/id_rsa";
-        sudo -u $USERNAME chmod 644 "$USER_HOME/.ssh/id_rsa.pub";
-        echo "SSH key generated for $USERNAME";
-      fi'
+      USERNAME=$(getent passwd 1000 | cut -d":" -f1)
+      USER_HOME="/home/$USERNAME"
+      echo "Detected user $USERNAME"
+  
+      if [ ! -d "$USER_HOME/.ssh" ]; then
+          sudo -u "$USERNAME" mkdir -p "$USER_HOME/.ssh"
+      fi
+  
+      sudo -u "$USERNAME" ssh-keygen -t rsa -b 4096 -C "$USERNAME@legentos.nl" -f "$USER_HOME/.ssh/id_rsa" -N ""
+      sudo -u "$USERNAME" chmod 700 "$USER_HOME/.ssh"
+      sudo -u "$USERNAME" chmod 600 "$USER_HOME/.ssh/id_rsa"
+      sudo -u "$USERNAME" chmod 644 "$USER_HOME/.ssh/id_rsa.pub"
+  
+      echo "SSH key generated for $USERNAME"'
 
     - curtin in-target --target=/target -- bash -c '
       echo "Installation paused. Create /tmp/continue to proceed.";
