@@ -9,6 +9,8 @@ autoinstall:
 
   shutdown: poweroff
 
+  reboot: true
+
   timezone: Europe/Amsterdam
 
   keyboard:
