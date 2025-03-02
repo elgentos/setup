@@ -76,7 +76,7 @@ autoinstall:
     - curtin in-target --target=/target -- resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv
   
     # Install Brave
-    - curtin in-target --target=/target -- wget -qO- https://dl.brave.com/install.sh | sh
+    - curtin in-target --target=/target -- bash -c "wget -qO- https://dl.brave.com/install.sh | sh"
   
     # Installing Warp
     - curtin in-target --target=/target -- /bin/bash -c "wget --content-disposition -O /tmp/warp.deb 'https://app.warp.dev/download?package=deb' && dpkg -i /tmp/warp.deb"
@@ -88,6 +88,7 @@ autoinstall:
   
     # Installing 1password-cli
     - curtin in-target --target=/target -- bash -c '
+      apt-get update && apt-get install -y curl gpg &&
       curl -sS https://downloads.1password.com/linux/keys/1password.asc |
       gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg &&
       echo "deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main" |
