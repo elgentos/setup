@@ -115,3 +115,12 @@ autoinstall:
     #- curtin in-target --target=/target -- gnome-extensions enable clipboard-indicator@tudmotu.com
     #- curtin in-target --target=/target -- gnome-extensions enable caffeine@patapon.info
     #- curtin in-target --target=/target -- gnome-extensions enable donotdisturbwhilecall@janlaping.de
+
+    - curtin in-target --target=/target -- bash -c '
+      USERNAME=$(getent passwd 1000 | cut -d\':\' -f1);
+      USER_HOME="/home/$USERNAME";
+      echo "Detected user $USERNAME";'
+
+    - curtin in-target --target=/target -- bash -c '
+      echo "Installation paused. Create /tmp/continue to proceed.";
+      while [ ! -f /tmp/continue ]; do sleep 5; done'
