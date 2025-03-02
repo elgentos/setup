@@ -86,12 +86,12 @@ autoinstall:
   
     # Installing 1password-cli
     - curtin in-target --target=/target -- bash -c '
-      curl -sS https://downloads.1password.com/linux/keys/1password.asc |
-      gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg &&
-      echo "deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main" |
-      tee /etc/apt/sources.list.d/1password.list &&
-      apt update &&
-      apt install -y 1password'
+        apt update && apt install -y curl ca-certificates gnupg;
+        curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | 
+        gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg;
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main" | 
+        tee /etc/apt/sources.list.d/1password.list;
+        apt update && apt install -y 1password'
 
     # Install docker and docker compose plugin
     - curtin in-target --target=/target -- bash -c '
