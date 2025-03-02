@@ -65,6 +65,7 @@ autoinstall:
     - name: firefox
     - name: gcolor3
     - name: postman
+    - name: phpstorm
     - name: spotify
     - name: sqlitebrowser
     - name: steam
@@ -79,7 +80,7 @@ autoinstall:
     - curtin in-target --target=/target -- bash -c "wget -qO- https://dl.brave.com/install.sh | sh"
   
     # Installing Warp
-    - curtin in-target --target=/target -- /bin/bash -c "wget --content-disposition -O /tmp/warp.deb 'https://app.warp.dev/download?package=deb' && dpkg -i /tmp/warp.deb"
+    - curtin in-target --target=/target -- bash -c "wget --content-disposition -O /tmp/warp.deb 'https://app.warp.dev/download?package=deb' && dpkg -i /tmp/warp.deb"
 
     # Raise inotify watches limit
     - curtin in-target --target=/target -- sh -c 'echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf'
@@ -109,10 +110,10 @@ autoinstall:
       apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin'
 
     # Install oh-my-zsh
-    - curtin in-target --target=/target -- sh -c "$(wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash"
   
     # Install nvm
-    - curtin in-target --target=/target -- wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+    - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash"
 
     # Installing Gnome extensions
     #- curtin in-target --target=/target -- gnome-extensions enable clipboard-indicator@tudmotu.com
