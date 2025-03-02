@@ -120,7 +120,7 @@ autoinstall:
 
     # Generate SSH key
     - curtin in-target --target=/target -- bash -c '
-      USERNAME=$(getent passwd 1000 | cut -d':' -f1);
+      USERNAME=$(getent passwd 1000 | cut -d\':\' -f1);
       USER_HOME="/home/$USERNAME";
       echo "Detected user $USERNAME";
       if [ -d "$USER_HOME" ]; then
