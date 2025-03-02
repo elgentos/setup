@@ -9,8 +9,6 @@ autoinstall:
 
   shutdown: poweroff
 
-  reboot: true
-
   timezone: Europe/Amsterdam
 
   keyboard:
@@ -22,7 +20,7 @@ autoinstall:
   ssh:
     install-server: true
     allow-pw: true
-    
+
   storage:
     layout:
       name: lvm
@@ -75,10 +73,10 @@ autoinstall:
     # Resize 100GB partition to full space available
     - curtin in-target --target=/target -- lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
     - curtin in-target --target=/target -- resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv
-  
+
     # Install Brave
     - curtin in-target --target=/target -- bash -c "wget -qO- https://dl.brave.com/install.sh | sh"
-  
+
     # Installing Warp
     - curtin in-target --target=/target -- bash -c "wget --content-disposition -O /tmp/warp.deb 'https://app.warp.dev/download?package=deb' && dpkg -i /tmp/warp.deb"
 
@@ -86,7 +84,7 @@ autoinstall:
     - curtin in-target --target=/target -- sh -c 'echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf'
     - curtin in-target --target=/target -- sh -c 'echo "fs.inotify.max_user_instances=512" >> /etc/sysctl.conf'
     - curtin in-target --target=/target -- sh -c 'sysctl -p'
-  
+
     # Installing 1password-cli
     - curtin in-target --target=/target -- bash -c '
       apt-get update && apt-get install -y curl gpg &&
@@ -111,7 +109,7 @@ autoinstall:
 
     # Install oh-my-zsh
     - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash"
-  
+
     # Install nvm
     - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash"
 
