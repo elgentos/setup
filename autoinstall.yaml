@@ -39,7 +39,9 @@ autoinstall:
     - gimp
     - git
     - gpg
+    - chrome-gnome-shell
     - gnome-shell-extensions
+    - gnome-tweaks
     - htop
     - httrack
     - jq
@@ -112,29 +114,3 @@ autoinstall:
 
     # Install nvm
     - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash"
-
-    # Installing Gnome extensions
-    #- curtin in-target --target=/target -- gnome-extensions enable clipboard-indicator@tudmotu.com
-    #- curtin in-target --target=/target -- gnome-extensions enable caffeine@patapon.info
-    #- curtin in-target --target=/target -- gnome-extensions enable donotdisturbwhilecall@janlaping.de
-
-    # Generate SSH key
-    - curtin in-target --target=/target -- bash -c '
-      USERNAME=$(getent passwd 1000 | cut -d":" -f1)
-      USER_HOME="/home/$USERNAME"
-      echo "Detected user $USERNAME"
-  
-      if [ ! -d "$USER_HOME/.ssh" ]; then
-          sudo -u "$USERNAME" mkdir -p "$USER_HOME/.ssh"
-      fi
-  
-      sudo -u "$USERNAME" ssh-keygen -t rsa -b 4096 -C "$USERNAME@legentos.nl" -f "$USER_HOME/.ssh/id_rsa" -N ""
-      sudo -u "$USERNAME" chmod 700 "$USER_HOME/.ssh"
-      sudo -u "$USERNAME" chmod 600 "$USER_HOME/.ssh/id_rsa"
-      sudo -u "$USERNAME" chmod 644 "$USER_HOME/.ssh/id_rsa.pub"
-  
-      echo "SSH key generated for $USERNAME"'
-
-    - curtin in-target --target=/target -- bash -c '
-      echo "Installation paused. Create /tmp/continue to proceed.";
-      while [ ! -f /tmp/continue ]; do sleep 5; done'
