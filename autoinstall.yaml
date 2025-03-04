@@ -48,6 +48,8 @@ autoinstall:
     - lsb-release
     - multitail
     - ncdu
+    - python3-pip
+    - python3-setuptools
     - silversearcher-ag
     - tig
     - traceroute
@@ -86,6 +88,11 @@ autoinstall:
     - curtin in-target --target=/target -- sh -c 'echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf'
     - curtin in-target --target=/target -- sh -c 'echo "fs.inotify.max_user_instances=512" >> /etc/sysctl.conf'
     - curtin in-target --target=/target -- sh -c 'sysctl -p'
+
+    # Install Backblaze B2 CLI globally
+    - curtin in-target --target=/target -- bash -c '
+      pip3 install --upgrade pip &&
+      pip3 install --system b2'
 
     # Installing 1password-cli
     - curtin in-target --target=/target -- bash -c '
