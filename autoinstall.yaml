@@ -119,7 +119,7 @@ autoinstall:
 
     # Install Backblaze B2 CLI in a virtual environment
     - curtin in-target --target=/target -- bash -c '
-      python3 -m venv /target/root/b2-venv &&  # Create a virtual environment
-      source /target/root/b2-venv/bin/activate &&  # Activate the virtual environment
-      pip install --upgrade pip &&  # Upgrade pip inside the virtual environment
-      pip install b2'  # Install Backblaze B2 CLI in the virtual environment
+      python3 -m venv /target/root/b2-venv &&
+      source /target/root/b2-venv/bin/activate &&
+      pip install --upgrade pip &&
+      pip install b2'
