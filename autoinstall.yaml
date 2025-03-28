@@ -89,11 +89,6 @@ autoinstall:
     - curtin in-target --target=/target -- sh -c 'echo "fs.inotify.max_user_instances=512" >> /etc/sysctl.conf'
     - curtin in-target --target=/target -- sh -c 'sysctl -p'
 
-    # Install Backblaze B2 CLI globally
-    - curtin in-target --target=/target -- bash -c '
-      pip3 install --upgrade pip &&
-      pip3 install --system b2'
-
     # Installing 1password-cli
     - curtin in-target --target=/target -- bash -c '
       apt-get update && apt-get install -y curl gpg &&
@@ -121,3 +116,10 @@ autoinstall:
 
     # Install nvm
     - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash"
+
+    # Install Backblaze B2 CLI in a virtual environment
+    - curtin in-target --target=/target -- bash -c '
+      python3 -m venv /target/root/b2-venv &&  # Create a virtual environment
+      source /target/root/b2-venv/bin/activate &&  # Activate the virtual environment
+      pip install --upgrade pip &&  # Upgrade pip inside the virtual environment
+      pip install b2'  # Install Backblaze B2 CLI in the virtual environment
