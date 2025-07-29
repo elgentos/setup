@@ -4,10 +4,10 @@ $(SLACK): | $(CURL)
 		|| sudo apt install gvfs-bin -y
 	SLACK_URL=$(shell $(CURL) -L https://slack.com/intl/en-nl/downloads/instructions/ubuntu \
          | grep -oe 'https://downloads.slack-edge.com/desktop-releases/linux/x64/[0-9]*\.[0-9]*\.[0-9]*/slack-desktop-[0-9]*\.[0-9]*\.[0-9]*-amd64.deb')
-     if [ -z "$SLACK_URL" ]; then
-       echo "Failed to retrieve Slack URL"
-       exit 1
-     fi
+	  if [ -z "$SLACK_URL" ]; then
+		echo "Failed to retrieve Slack URL"
+		exit 1
+	  fi
      $(CURL) -L $SLACK_URL --output /tmp/slack.deb
 	sudo dpkg --install /tmp/slack.deb
 	rm -f /tmp/slack.deb
