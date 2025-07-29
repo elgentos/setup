@@ -65,15 +65,20 @@ To cherry-pick optional software, use the following targets:
 
 ## Tools
 
+- [`act`](https://github.com/nektos/act)
 - [`ag`](https://github.com/ggreer/the_silver_searcher)
+- [`dialog`](https://launchpad.net/ubuntu/+source/dialog)
 - [`composer-changelogs`](https://packagist.org/packages/pyrech/composer-changelogs)
 - [`composer-lock-diff`](https://packagist.org/packages/davidrjonas/composer-lock-diff)
+- [`eza`](https://eza.rocks/)
 - [`multitail`](https://linux.die.net/man/1/multitail)
 - [`ssg`](https://github.com/elgentos/ssg-js) (SSH GUI)
 - [`symlinks`](https://tracker.debian.org/pkg/symlinks)
 - [`tmux`](https://tracker.debian.org/pkg/tmux)
 - [`tmuxinator`](https://tracker.debian.org/pkg/tmuxinator)
 - [`tmuxinator_completion`](https://github.com/tmuxinator/tmuxinator/tree/master/completion)
+- [`ufw`](https://launchpad.net/ubuntu/+source/ufw)
+- [`warp`](https://www.warp.dev/)
 
 ## Networking
 
@@ -104,10 +109,10 @@ To test all installations, run:
 ```
 
 To specify the Docker image that runs the build, provide the `IMAGE` environment
-variable. It defaults to `ubuntu:20.04`.
+variable. It defaults to `ubuntu:24.04`.
 
 ```
-IMAGE=ubuntu:20.10 ./docker-make all
+IMAGE=ubuntu:21.04 ./docker-make all
 ```
 
 ## Run GitHub actions locally

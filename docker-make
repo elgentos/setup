@@ -21,7 +21,7 @@ COMMANDS=(
 IFS=';'
 docker run \
   --rm \
-  -v $PWD:/setup \
+  -v $PWD:/setup \e
   -v $HOME/.ssh:/home/app/.ssh:rw \
   -v $SSH_AUTH_SOCK:/ssh-agent:ro \
   -v /var/run/docker.sock:/var/run/docker.sock \
@@ -29,5 +29,5 @@ docker run \
   --net bridge \
   "${TTY_FLAG:--i}" \
   -w /setup \
-  "${IMAGE:=ubuntu:20.04}" \
+  "${IMAGE:=ubuntu:24.04}" \
   bash -c "${COMMANDS[*]}"
