@@ -5,9 +5,9 @@ $(DOCKER): | $(LSB_RELEASE) $(CURL) $(SOFTWARE_PROPERTIES_COMMON)
     sudo curl -fsSL https://download.docker.com/linux/$(DISTRO)/gpg -o /etc/apt/keyrings/docker.asc
     sudo chmod a+r /etc/apt/keyrings/docker.asc
     echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/$(DISTRO) \
-      $(shell $(LSB_RELEASE) -cs) stable" | \
-      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+		"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/$(DISTRO) \
+		$(shell $(LSB_RELEASE) -cs) stable" | \
+		sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt-get update -y
 	sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 	sudo usermod -aG docker $(shell whoami)
