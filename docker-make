@@ -21,7 +21,7 @@ COMMANDS=(
 IFS=';'
 docker run \
   --rm \
-  -v $PWD:/setup \e
+  -v $PWD:/setup \
   -v $HOME/.ssh:/home/app/.ssh:rw \
   -v $SSH_AUTH_SOCK:/ssh-agent:ro \
   -v /var/run/docker.sock:/var/run/docker.sock \
