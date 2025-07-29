@@ -1,0 +1,38 @@
+name: Install
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  install:
+    runs-on: debian-12
+    name: Debian 12
+    env:
+      TTY: 0
+      INTERACTIVE: 0
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - uses: actions/checkout@v2
+      - name: Copy SSH key
+        if: ${{ env.ACT }}
+        run: |
+          mkdir -p ~/.ssh
+          cp -f .ssh/* ~/.ssh
+      - name: Setup SSH key
+        if: ${{ !env.ACT }}
+        uses: shimataro/ssh-key-action@v2
+        with:
+          known_hosts: unnecessary
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Install all software
+        run: |
+          ./install all
+          # Verify installation.
+          for target in $(make -qp | egrep '(optional:: \||install:: \|)' | grep -v '/' | cut -d'|' -f2- | sort -u); \
+            do echo "<$target>" | grep -q "<flags>" && continue; \
+            echo "VERIFY $target"; \
+            zsh -c "make --trace -q $target"; \
+          done
