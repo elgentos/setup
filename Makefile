@@ -1,5 +1,5 @@
 INTERACTIVE:=$(shell cat /proc/1/cgroup | cut -d: -f3 | grep -q '/docker/' && echo 0 || echo 1)
-INSIDE_DOCKER:=$(shell cat /proc/1/cgroup | cut -d: -f3 | grep -q '/docker/' && echo 1 || echo 0)
+INSIDE_DOCKER:=$(shell cat /proc/1/cgroup | cut -d: -f3 | grep -q '/docker/' && echo 1 echo 0)
 DISTRO := $(shell lsb_release -is | tr '[:upper:]' '[:lower:]')
 ARCH := $(shell dpkg --print-architecture)
 CI=0
