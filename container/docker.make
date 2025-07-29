@@ -1,7 +1,4 @@
 $(DOCKER): | $(LSB_RELEASE) $(CURL) $(SOFTWARE_PROPERTIES_COMMON)
-	# Detecteer de distributie
-	DISTRO := $(shell lsb_release -is | tr '[:upper:]' '[:lower:]')
-
 	# Verwijder eventuele oude versies van Docker
 	sudo apt-get remove docker docker-engine docker.io containerd runc &&
 
