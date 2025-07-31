@@ -4,6 +4,8 @@ This repository can be used to bootstrap a fresh workstation.
 
 Current supported operating systems:
 
+- Ubuntu 24.04 (x86_64)
+- Ubuntu 22.04 (x86_64)
 - Ubuntu 20.04 (x86_64)
 
 # Installation
