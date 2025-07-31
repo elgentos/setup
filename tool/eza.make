@@ -6,6 +6,6 @@ $(EZA):
 	sudo apt update
 	sudo apt install -y eza
 
-eza: $(EZA)
+eza: | $(EZA)
 
 install:: | eza

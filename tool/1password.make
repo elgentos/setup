@@ -17,6 +17,6 @@ $(1PASSWORD): | $(CURL)
 	sudo dpkg --install /tmp/1password.deb || true
 	rm -f /tmp/1password.deb
 
-1password: $(1PASSWORD)
+1password: | $(1PASSWORD)
 
-install:: | 1password
+optional:: | 1password

@@ -1,5 +1,4 @@
 1PASSWORD := $(shell command -v 1password || echo /usr/bin/1password)
-OPCLI := $(shell command -v op || echo /usr/bin/op)
 AG := $(shell command -v ag || echo /usr/bin/ag)
 ACT := $(shell command -v act || echo /usr/local/bin/act)
 CURL := $(shell command -v curl || echo /usr/bin/curl)
