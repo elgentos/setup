@@ -8,4 +8,4 @@ $(EZA):
 
 eza: | $(EZA)
 
-install:: | eza
+optional:: | eza
