@@ -2,11 +2,9 @@ INTERACTIVE:=$(shell cat /proc/1/cgroup | cut -d: -f3 | grep -q '/docker/' && ec
 INSIDE_DOCKER:=$(shell cat /proc/1/cgroup | cut -d: -f3 | grep -q '/docker/' && echo 1 || echo 0)
 CI=0
 
-
 install:: | flags
 optional::
 
-.PHONY: all
 all: | install optional
 
 include */*.vars.make */*/*.vars.make */*.make */*/*.make
