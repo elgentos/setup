@@ -1,11 +1,11 @@
 $(DOCKER): | $(LSB_RELEASE) $(CURL) $(SOFTWARE_PROPERTIES_COMMON)
 	sudo apt-get update
-	sudo apt-get install -y ca-certificates curl gnupg lsb-release
+	sudo apt-get install ca-certificates curl gnupg lsb-release -y
 	sudo mkdir -p /etc/apt/keyrings
-	curl -fsSL https://download.docker.com/linux/$(DISTRO)/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-	echo "deb [arch=$(ARCH) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$(DISTRO) $(shell lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+	curl -fsSL https://download.docker.com/linux/$(shell lsb_release -is | tr '[:upper:]' '[:lower:]')/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+	echo "deb [arch=$(shell dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$(shell lsb_release -is | tr '[:upper:]' '[:lower:]') $(shell lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 	sudo apt-get update
-	sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+	sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
 	sudo usermod -aG docker $(shell whoami)
 	sudo systemctl enable docker
 

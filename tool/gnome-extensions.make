@@ -3,4 +3,4 @@ $(GNOME-EXTENSIONS):
 
 gnome-extensions: | $(gnome-extensions)
 
-optional:: | ag
+optional:: | gnome-extensions

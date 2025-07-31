@@ -1,5 +1,5 @@
 $(DIALOG):
-	sudo add-apt-repository universe
+	sudo apt install software-properties-common -y
 	sudo apt update
 	sudo apt install dialog -y
 

@@ -1,7 +1,5 @@
 INTERACTIVE:=$(shell cat /proc/1/cgroup | cut -d: -f3 | grep -q '/docker/' && echo 0 || echo 1)
-INSIDE_DOCKER:=$(shell cat /proc/1/cgroup | cut -d: -f3 | grep -q '/docker/' && echo 1 echo 0)
-DISTRO := $(shell lsb_release -is | tr '[:upper:]' '[:lower:]')
-ARCH := $(shell dpkg --print-architecture)
+INSIDE_DOCKER:=$(shell cat /proc/1/cgroup | cut -d: -f3 | grep -q '/docker/' && echo 1 || echo 0)
 CI=0
 
 install:: | flags
@@ -12,6 +10,10 @@ all: | install optional
 include */*.vars.make */*/*.vars.make */*.make */*/*.make
 
 flags:
+	@echo "Selected optional targets:"
+	@for option in $(OPTIONS); do \
+		echo $$option; \
+	done
 	@echo "INTERACTIVE: $(INTERACTIVE)"
 	@echo "INSIDE_DOCKER: $(INSIDE_DOCKER)"
 	@echo "CI: $(CI)"
