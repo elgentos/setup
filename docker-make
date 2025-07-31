@@ -4,16 +4,32 @@ set -e
 
 make docker
 
-COMMANDS=(
-  'set -e'
-  'apt update -y'
-  'DEBIAN_FRONTEND=noninteractive apt install sudo build-essential tzdata keyboard-configuration -y'
-  "groupadd -g $(id -g "$USER") app"
-  "useradd -u $(id -u "$USER") -g $(id -g "$USER") --groups app,sudo app"
-  'chown app:app /home/app'
-  'passwd --delete app'
-  "su app -c 'make INTERACTIVE=0 SWAPDNS=0 CI=${CI} --trace --debug ${*}'"
-)
+COMMANDS=("
+  set -e
+  apt update -y
+  DEBIAN_FRONTEND=noninteractive apt install sudo build-essential tzdata keyboard-configuration -y
+  TARGET_UID=1000
+  EXISTING_USER=\$(getent passwd \$TARGET_UID | cut -d: -f1)
+  EXISTING_GROUP=\$(getent passwd \$TARGET_UID | cut -d: -f4 | xargs getent group | cut -d: -f1)
+
+  if [ -z \"\$EXISTING_USER\" ]; then
+    echo 'No existing user with UID 1000, creating app:app...'
+    groupadd -g \$TARGET_UID app
+    useradd -m -u \$TARGET_UID -g \$TARGET_UID --groups sudo app
+    TARGET_USER=app
+    TARGET_GROUP=app
+  else
+    echo \"Reusing existing user: \$EXISTING_USER and group: \$EXISTING_GROUP\"
+    TARGET_USER=\$EXISTING_USER
+    TARGET_GROUP=\$EXISTING_GROUP
+  fi
+
+  mkdir -p /home/\$TARGET_USER
+  chown \$TARGET_USER:\$TARGET_GROUP /home/\$TARGET_USER
+  passwd --delete \$TARGET_USER || true
+
+  su \$TARGET_USER -c 'make INTERACTIVE=0 SWAPDNS=0 CI=\${CI} --trace --debug \${*}'
+")
 
 [[ "$TINKER" == "" ]] || COMMANDS+=("$TINKER")
 [[ "${TTY:-1}" == "1" ]] && TTY_FLAG='-it'
@@ -29,5 +45,5 @@ docker run \
   --net bridge \
   "${TTY_FLAG:--i}" \
   -w /setup \
-  "${IMAGE:=ubuntu:20.04}" \
+  "${IMAGE:=ubuntu:24.04}" \
   bash -c "${COMMANDS[*]}"

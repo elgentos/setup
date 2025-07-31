@@ -10,6 +10,7 @@ zsh: | $(ZSH) $(ZSHRC)
 $(OH_MY_ZSH): | $(ZSH) $(CURL) $(BASH) $(GIT)
 	$(CURL) -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh \
 		| ZSH=$(shell dirname $(OH_MY_ZSH)) $(BASH) -s -- --keep-zshrc --unattended
+	sudo apt install fonts-powerline -y
 
 oh-my-zsh: | $(OH_MY_ZSH)
 
