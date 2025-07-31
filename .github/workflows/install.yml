@@ -13,7 +13,6 @@ jobs:
         version:
           - '24.04'
           - '22.04'
-          - '20.04'
     runs-on: ubuntu-${{ matrix.version }}
     name: Ubuntu ${{ matrix.version }}
     env:
