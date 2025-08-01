@@ -1,8 +1,7 @@
 $(JETBRAINS_TOOLBOX): | $(JQ) $(CURL)
 	$(CURL) -L --output - $(shell $(CURL) 'https://data.services.jetbrains.com/products/releases?code=TBA&latest=true&type=release' | $(JQ) '.TBA[0].downloads.linux.link' | sed 's/"//g') | tar zxf - -C /tmp
-	mkdir -p $(JETBRAINS_TOOLBOX)
-	mv /tmp/jetbrains-toolbox-*/ $(JETBRAINS_TOOLBOX)
-	cd $(JETBRAINS_TOOLBOX) ./jetbrains-toolbox
+	mv /tmp/jetbrains-toolbox-*/bin/ $(JETBRAINS_TOOLBOX)/bin
+	chmod -x $(JETBRAINS_TOOLBOX)/jetbrains-toolbox.desktop
 
 $(JETBRAINS_TOOLBOX_SETTINGS): | $(JETBRAINS_TOOLBOX)
 	mkdir -p $(shell dirname $(JETBRAINS_TOOLBOX_SETTINGS))
