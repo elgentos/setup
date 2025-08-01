@@ -38,6 +38,7 @@ The following software has been installed:
 - [Composer](https://getcomposer.org/)
 - [cURL](https://curl.haxx.se/)
 - [Docker](https://www.docker.com/)
+- [Dialog](https://launchpad.net/ubuntu/+source/dialog)
 - [Docker compose](https://docs.docker.com/compose/)
 - [Docker compose development](https://github.com/JeroenBoersma/docker-compose-development)
 - [GIT](https://git-scm.com/)
@@ -66,12 +67,14 @@ To cherry-pick optional software, use the following targets:
 
 ## Tools
 
+- [`1password`](https://1password.com/)
 - [`act`](https://github.com/nektos/act)
 - [`ag`](https://github.com/ggreer/the_silver_searcher)
 - [`dialog`](https://launchpad.net/ubuntu/+source/dialog)
 - [`composer-changelogs`](https://packagist.org/packages/pyrech/composer-changelogs)
 - [`composer-lock-diff`](https://packagist.org/packages/davidrjonas/composer-lock-diff)
 - [`eza`](https://eza.rocks/)
+- [`gedit`](https://gedit-text-editor.org/)
 - [`multitail`](https://linux.die.net/man/1/multitail)
 - [`ssg`](https://github.com/elgentos/ssg-js) (SSH GUI)
 - [`symlinks`](https://tracker.debian.org/pkg/symlinks)

@@ -1,6 +1,7 @@
 $(GEDIT):
+	sudo apt update
 	sudo apt install gedit -y
 
 gedit: | $(GEDIT)
 
-install:: | gedit
+optional:: | gedit
