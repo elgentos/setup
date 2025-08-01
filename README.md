@@ -6,6 +6,7 @@ Current supported operating systems:
 
 - Ubuntu 24.04 (x86_64)
 - Ubuntu 22.04 (x86_64)
+- Debian 12 (x86_64)
 
 # Installation
 
