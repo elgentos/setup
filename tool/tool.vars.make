@@ -8,6 +8,7 @@ JQ := $(shell command -v jq || echo /usr/bin/jq)
 LSB_RELEASE := $(shell command -v lsb_release || echo /usr/bin/lsb_release)
 MULTITAIL := $(shell command -v multitail || echo /usr/bin/multitail)
 SYMLINKS := $(shell command -v symlinks || echo /usr/bin/symlinks)
+TERMINATOR := $(shell command -v terminator || echo /usr/bin/terminator)
 TMUX := $(shell command -v tmux || echo /usr/bin/tmux)
 TMUXINATOR := $(shell command -v tmuxinator || echo /usr/bin/tmuxinator)
 TMUXINATOR_COMPLETION_ZSH = /usr/local/share/zsh/site-functions/_tmuxinator

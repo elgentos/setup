@@ -77,11 +77,9 @@ To cherry-pick optional software, use the following targets:
 - [`gedit`](https://gedit-text-editor.org/)
 - [`multitail`](https://linux.die.net/man/1/multitail)
 - [`ssg`](https://github.com/elgentos/ssg-js) (SSH GUI)
-- [`symlinks`](https://tracker.debian.org/pkg/symlinks)
-- [`tmux`](https://tracker.debian.org/pkg/tmux)
-- [`tmuxinator`](https://tracker.debian.org/pkg/tmuxinator)
-- [`tmuxinator_completion`](https://github.com/tmuxinator/tmuxinator/tree/master/completion)
+- [`terminator`](https://tracker.debian.org/pkg/terminator)
 - [`ufw`](https://launchpad.net/ubuntu/+source/ufw)
+- [`vscode`](https://code.visualstudio.com/)
 - [`warp`](https://www.warp.dev/)
 
 ## Networking
@@ -90,10 +88,10 @@ To cherry-pick optional software, use the following targets:
 
 ## Example
 
-The following adds `gimp`, `symlinks` and `ssg` to the installation.
+The following adds `1password`, `warp` and `ssg` to the installation.
 
 ```
-./install gimp symlinks ssg
+./install 1password warp ssg
 ```
 
 # Development
