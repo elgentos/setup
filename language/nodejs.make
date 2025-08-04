@@ -5,7 +5,7 @@ $(NVM): | $(CURL) $(BASH) $(ZSHRC)
 	echo '[ -s "$$NVM_DIR/bash_completion" ] && \. "$$NVM_DIR/bash_completion"  # This loads nvm bash_completion' >> $(ZSHRC)
 
 $(NODE): | $(NVM) $(BASH)
-	$(BASH) -c 'source $(NVM) && nvm install 16'
+	$(BASH) -c 'source $(NVM) && nvm install 18'
 
 node: | $(NODE)
 
