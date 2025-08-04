@@ -8,5 +8,5 @@ $(FIREFOX):
 
 firefox: | $(FIREFOX)
 
-browsers:: firefox
-optional:: firefox
+browsers:: | firefox
+optional:: | firefox
