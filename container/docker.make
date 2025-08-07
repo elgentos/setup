@@ -30,10 +30,8 @@ $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
 docker-compose: | $(DOCKER_COMPOSE)
 
 $(BACKBLAZE): | $(DOCKER_COMPOSE)
-	wget https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux --output /tmp/b2
-	mv /tmp/b2 $(BACKBLAZE)
+	wget https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux -O $(BACKBLAZE)
 	chmod +x $(BACKBLAZE)
-	rm -f /tmp/b2
 
 backblaze: | $(BACKBLAZE)
 
