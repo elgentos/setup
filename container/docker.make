@@ -30,8 +30,8 @@ $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
 docker-compose: | $(DOCKER_COMPOSE)
 
 $(BACKBLAZE):
-	wget https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux -O ~/development/bin/b2 && chmod +x ~/development/bin/b2
-	b2 account authorize
+	wget https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux -O ~/development/bin/b2
+	chmod +x ~/development/bin/b2
 
 backblaze: | $(BACKBLAZE)
 
