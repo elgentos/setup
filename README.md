@@ -42,6 +42,7 @@ The following software has been installed:
 - [Dialog](https://launchpad.net/ubuntu/+source/dialog)
 - [Docker compose](https://docs.docker.com/compose/)
 - [Docker compose development](https://github.com/JeroenBoersma/docker-compose-development)
+- [Docker BackBlaze](https://github.com/Backblaze/B2_Command_Line_Tool/)
 - [GIT](https://git-scm.com/)
 - [JetBrains Toolbox](https://www.jetbrains.com/toolbox-app/)
 - [jq](https://stedolan.github.io/jq/)
