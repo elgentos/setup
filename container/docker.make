@@ -29,4 +29,10 @@ $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
 
 docker-compose: | $(DOCKER_COMPOSE)
 
-install:: | docker docker-compose
+$(BACKBLAZE):
+	wget https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux -O ~/development/bin/b2 && chmod +x ~/development/bin/b2
+	b2 account authorize
+
+backblaze: | $(BACKBLAZE)
+
+install:: | docker docker-compose backblaze
