@@ -9,7 +9,7 @@ $(DOCKER): | $(LSB_RELEASE) $(CURL) $(SOFTWARE_PROPERTIES_COMMON)
 	sudo usermod -aG docker $(shell whoami)
 	sudo systemctl enable docker
 
-$(DOCKER_CONFIG): | $(DOCKER)
+$(DOCKER_CONFIG): | $(DOCKER) $(BACKBLAZE)
 	sudo usermod -aG docker $(shell whoami)
 	echo $(INTERACTIVE) | grep -q '1' && su -c 'docker run --rm hello-world' $(shell whoami) || echo 'Skipping Docker test'
 	mkdir -p $(shell dirname $(DOCKER_CONFIG))
@@ -35,4 +35,4 @@ $(BACKBLAZE): | $(DOCKER_COMPOSE)
 
 backblaze: | $(BACKBLAZE)
 
-install:: | backblaze docker docker-compose
+install:: | docker docker-compose
