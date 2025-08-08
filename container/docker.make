@@ -9,7 +9,7 @@ $(DOCKER): | $(LSB_RELEASE) $(CURL) $(SOFTWARE_PROPERTIES_COMMON)
 	sudo usermod -aG docker $(shell whoami)
 	sudo systemctl enable docker
 
-$(DOCKER_CONFIG): | $(DOCKER) $(BACKBLAZE)
+$(DOCKER_CONFIG): | $(DOCKER)
 	sudo usermod -aG docker $(shell whoami)
 	echo $(INTERACTIVE) | grep -q '1' && su -c 'docker run --rm hello-world' $(shell whoami) || echo 'Skipping Docker test'
 	mkdir -p $(shell dirname $(DOCKER_CONFIG))
@@ -30,7 +30,7 @@ $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
 docker-compose: | $(DOCKER_COMPOSE)
 
 $(BACKBLAZE): | $(DOCKER_COMPOSE)
-	mkdir -p $(BACKBLAZE)
+	mkdir -p ~/development/bin
 	wget https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux -O $(BACKBLAZE)
 	chmod +x $(BACKBLAZE)
 
