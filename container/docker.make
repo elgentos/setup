@@ -35,4 +35,5 @@ $(BACKBLAZE): | $(DOCKER_COMPOSE)
 
 backblaze: | $(BACKBLAZE)
 
-install:: | docker docker-compose backblaze
+install:: | docker docker-compose
+optional:: | backblaze
