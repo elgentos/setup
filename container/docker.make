@@ -30,10 +30,10 @@ $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
 docker-compose: | $(DOCKER_COMPOSE)
 
 $(BACKBLAZE): | $(DOCKER_COMPOSE)
-	mkdir -p ~/development/bin
 	wget https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux -O $(BACKBLAZE)
 	chmod +x $(BACKBLAZE)
 
 backblaze: | $(BACKBLAZE)
 
-install:: | docker docker-compose backblaze
+install:: | docker docker-compose
+optional:: | backblaze
