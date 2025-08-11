@@ -1,9 +1,11 @@
 $(DOCKER): | $(LSB_RELEASE) $(CURL) $(SOFTWARE_PROPERTIES_COMMON)
-	sudo apt install apt-transport-https ca-certificates gnupg-agent -y
-	$(CURL) -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(shell $(LSB_RELEASE) -cs) stable"
-	sudo apt update -y
-	sudo apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+	sudo apt-get update
+	sudo apt-get install ca-certificates curl gnupg lsb-release -y
+	sudo mkdir -p /etc/apt/keyrings
+	curl -fsSL https://download.docker.com/linux/$(shell lsb_release -is | tr '[:upper:]' '[:lower:]')/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+	echo "deb [arch=$(shell dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$(shell lsb_release -is | tr '[:upper:]' '[:lower:]') $(shell lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+	sudo apt-get update
+	sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
 	sudo usermod -aG docker $(shell whoami)
 	sudo systemctl enable docker
 
@@ -27,4 +29,11 @@ $(DOCKER_COMPOSE): | $(DOCKER) $(CURL) $(JQ)
 
 docker-compose: | $(DOCKER_COMPOSE)
 
+$(BACKBLAZE): | $(DOCKER_COMPOSE)
+	wget https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux -O $(BACKBLAZE)
+	chmod +x $(BACKBLAZE)
+
+backblaze: | $(BACKBLAZE)
+
 install:: | docker docker-compose
+optional:: | backblaze
