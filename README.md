@@ -62,6 +62,7 @@ To cherry-pick optional software, use the following targets:
 - [brave](https://brave.com/)
 - [firefox](https://www.mozilla.org/en-US/firefox/)
 - [google-chrome](https://www.google.com/chrome/)
+- [zen](https://zen-browser.app/download)
 
 ## Productivity
 
