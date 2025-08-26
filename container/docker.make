@@ -1,4 +1,4 @@
-$(DOCKER): | $(LSB_RELEASE) $(CURL) $(SOFTWARE_PROPERTIES_COMMON)
+$(DOCKER): | $(LSB_RELEASE) $(CURL)
 	sudo apt-get update
 	sudo apt-get install ca-certificates curl gnupg lsb-release -y
 	sudo mkdir -p /etc/apt/keyrings
