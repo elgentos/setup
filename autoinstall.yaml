@@ -25,6 +25,7 @@ autoinstall:
     layout:
       name: lvm
       password: pleasechangemeasap
+      encrypted: true
 
   interactive-sections:
     - network
