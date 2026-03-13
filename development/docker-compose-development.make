@@ -12,9 +12,9 @@ $(DOCKER_COMPOSE_DEVELOPMENT): | $(DOCKER) $(DOCKER_COMPOSE) $(DOCKER_CONFIG) $(
 	done
 	echo $(INTERACTIVE) | grep -q '1' \
 		&& "$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" setup \
-		|| DOMAINSUFFIX=.localhost egrep 'php[0-9][0-9]:' "$(DOCKER_COMPOSE_DEVELOPMENT)/docker-compose.yml" \
+		|| egrep 'php[0-9][0-9]:' "$(DOCKER_COMPOSE_DEVELOPMENT)/docker-compose.yml" \
 			| grep -v '-' | sort -ru | awk '{gsub(":","",$1); print $1}' | head -1 \
-			| "$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" setup
+			| DOMAINSUFFIX=.localhost "$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" setup
 
 $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE): | $(DOCKER_COMPOSE_DEVELOPMENT) $(ZSHRC)
 	"$(DOCKER_COMPOSE_DEVELOPMENT)/bin/dev" profile > $(DOCKER_COMPOSE_DEVELOPMENT_PROFILE)
