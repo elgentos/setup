@@ -12,3 +12,5 @@ TMUXINATOR := $(shell command -v tmuxinator || echo /usr/bin/tmuxinator)
 TMUXINATOR_COMPLETION_ZSH = /usr/local/share/zsh/site-functions/_tmuxinator
 TMUXINATOR_COMPLETION_BASH = /etc/bash_completion.d/tmuxinator.bash
 UFW := $(shell command -v ufw || echo /usr/sbin/ufw)
+HOMEBREW := $(shell command -v brew || echo /home/linuxbrew/.linuxbrew/bin/brew)
+CLAUDE := $(shell command -v claude || echo /home/linuxbrew/.linuxbrew/bin/claude)
