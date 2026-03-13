@@ -61,7 +61,7 @@ if ! 2>/dev/null make ssh-key --quiet; then
   echo "  https://gitlab.elgentos.nl/-/profile/keys";
   echo "";
   # shellcheck disable=SC2162
-  cut -d: -f3 < /proc/1/cgroup | grep -q '/docker/' \
+  (grep -q '/docker/' /proc/1/cgroup 2>/dev/null || test -f /.dockerenv) \
     || read -p "Press enter to continue, after installing the SSH key. . .";
 fi
 

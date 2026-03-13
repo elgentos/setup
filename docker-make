@@ -29,5 +29,5 @@ docker run \
   --net bridge \
   "${TTY_FLAG:--i}" \
   -w /setup \
-  "${IMAGE:=ubuntu:20.04}" \
+  "${IMAGE:=ubuntu:24.04}" \
   bash -c "${COMMANDS[*]}"

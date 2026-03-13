@@ -1,5 +1,5 @@
-INTERACTIVE:=$(shell cat /proc/1/cgroup | cut -d: -f3 | grep -q '/docker/' && echo 0 || echo 1)
-INSIDE_DOCKER:=$(shell cat /proc/1/cgroup | cut -d: -f3 | grep -q '/docker/' && echo 1 || echo 0)
+INTERACTIVE:=$(shell (cat /proc/1/cgroup 2>/dev/null | grep -q '/docker/' || test -f /.dockerenv) && echo 0 || echo 1)
+INSIDE_DOCKER:=$(shell (cat /proc/1/cgroup 2>/dev/null | grep -q '/docker/' || test -f /.dockerenv) && echo 1 || echo 0)
 CI=0
 
 install:: | flags

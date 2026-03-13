@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         version:
-          - '20.04'
+          - '24.04'
           - latest
     runs-on: ubuntu-${{ matrix.version }}
     name: Ubuntu ${{ matrix.version }}
@@ -20,7 +20,7 @@ jobs:
       INTERACTIVE: 0
       DEBIAN_FRONTEND: noninteractive
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Copy SSH key
         if: ${{ env.ACT }}
         run: |

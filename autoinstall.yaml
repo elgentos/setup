@@ -40,7 +40,7 @@ autoinstall:
     - gimp
     - git
     - gpg
-    - chrome-gnome-shell
+    - gnome-browser-connector
     - gnome-shell-extensions
     - gnome-tweaks
     - htop
@@ -117,7 +117,7 @@ autoinstall:
     - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash"
 
     # Install nvm
-    - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash"
+    - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash"
 
     # Install Backblaze B2 CLI in a virtual environment
     - curtin in-target --target=/target -- bash -c '

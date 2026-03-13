@@ -4,7 +4,7 @@ This repository can be used to bootstrap a fresh workstation.
 
 Current supported operating systems:
 
-- Ubuntu 20.04 (x86_64)
+- Ubuntu 24.04 LTS (x86_64)
 
 # Installation
 
@@ -104,10 +104,10 @@ To test all installations, run:
 ```
 
 To specify the Docker image that runs the build, provide the `IMAGE` environment
-variable. It defaults to `ubuntu:20.04`.
+variable. It defaults to `ubuntu:24.04`.
 
 ```
-IMAGE=ubuntu:20.10 ./docker-make all
+IMAGE=ubuntu:24.04 ./docker-make all
 ```
 
 ## Run GitHub actions locally
