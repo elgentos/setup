@@ -119,6 +119,9 @@ autoinstall:
     # Install nvm
     - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash"
 
+    # Ensure the elgentos user exists (identity is interactive, so it may not be created yet)
+    - curtin in-target --target=/target -- bash -c 'id elgentos &>/dev/null || useradd -m -s /bin/zsh elgentos'
+
     # Install Homebrew
     - curtin in-target --target=/target -- su - elgentos -c '
       NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
