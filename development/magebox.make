@@ -1,5 +1,5 @@
 $(MAGEBOX): | $(HOMEBREW)
-	$(HOMEBREW) install qoliber/magebox/magebox
+	CI="" $(HOMEBREW) install qoliber/magebox/magebox
 	$(MAGEBOX) bootstrap --unattended --tld=localhost
 	mkdir -p $(HOME)/workspace/elgentos/example/pub
 	cd $(HOME)/workspace/elgentos/example && $(MAGEBOX) init elgentos.example
