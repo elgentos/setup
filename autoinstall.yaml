@@ -119,6 +119,20 @@ autoinstall:
     # Install nvm
     - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash"
 
+    # Install Homebrew
+    - curtin in-target --target=/target -- su - elgentos -c '
+      NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
+      echo "eval \"\$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"" >> ~/.zshrc'
+
+    # Install MageBox via Homebrew
+    - curtin in-target --target=/target -- su - elgentos -c '
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" &&
+      brew install qoliber/magebox/magebox &&
+      magebox bootstrap --unattended --tld=localhost &&
+      mkdir -p ~/workspace/elgentos/example/pub &&
+      cd ~/workspace/elgentos/example && magebox init elgentos.example &&
+      echo "<?php phpinfo();" > ~/workspace/elgentos/example/pub/index.php'
+
     # Install Backblaze B2 CLI in a virtual environment
     - curtin in-target --target=/target -- bash -c '
       python3 -m venv /target/root/b2-venv &&
