@@ -122,6 +122,9 @@ autoinstall:
     # Ensure the elgentos user exists (identity is interactive, so it may not be created yet)
     - curtin in-target --target=/target -- bash -c 'id elgentos &>/dev/null || useradd -m -s /bin/zsh elgentos'
 
+    # Prepare Homebrew prefix directory with correct ownership
+    - curtin in-target --target=/target -- bash -c 'mkdir -p /home/linuxbrew/.linuxbrew && chown -R elgentos:elgentos /home/linuxbrew'
+
     # Install Homebrew
     - curtin in-target --target=/target -- su - elgentos -c '
       NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
