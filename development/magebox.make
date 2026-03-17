@@ -1,6 +1,6 @@
 $(MAGEBOX): | $(HOMEBREW)
 	$(HOMEBREW) install qoliber/magebox/magebox
-	$(MAGEBOX) bootstrap
+	$(MAGEBOX) bootstrap --unattended
 
 magebox: | $(MAGEBOX)
 
