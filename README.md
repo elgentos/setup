@@ -38,7 +38,7 @@ The following software has been installed:
 - [cURL](https://curl.haxx.se/)
 - [Docker](https://www.docker.com/)
 - [Docker compose](https://docs.docker.com/compose/)
-- [Docker compose development](https://github.com/JeroenBoersma/docker-compose-development)
+- [MageBox](https://magebox.dev)
 - [GIT](https://git-scm.com/)
 - [JetBrains Toolbox](https://www.jetbrains.com/toolbox-app/)
 - [jq](https://stedolan.github.io/jq/)
