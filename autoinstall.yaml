@@ -151,35 +151,9 @@ autoinstall:
       echo "<?php phpinfo();" > ~/workspace/elgentos/example/pub/index.php'
 
     # Add first-boot script to install mkcert CA (can't run in curtin chroot)
-    - curtin in-target --target=/target -- bash -c '
-      cat > /usr/local/bin/magebox-first-boot.sh << "SCRIPT"
-#!/bin/bash
-set -euo pipefail
-export HOME=/home/elgentos
-export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-su - elgentos -c "eval \"\$(brew shellenv)\" && mkcert -install && magebox restart"
-systemctl disable magebox-first-boot.service
-rm -f /etc/systemd/system/magebox-first-boot.service /usr/local/bin/magebox-first-boot.sh
-SCRIPT
-      chmod +x /usr/local/bin/magebox-first-boot.sh'
+    - curtin in-target --target=/target -- bash -c 'printf "#!/bin/bash\nset -euo pipefail\nexport HOME=/home/elgentos\nexport PATH=\"/home/linuxbrew/.linuxbrew/bin:\$PATH\"\nsu - elgentos -c \"eval \\\"\\\$(brew shellenv)\\\" && mkcert -install && magebox restart\"\nsystemctl disable magebox-first-boot.service\nrm -f /etc/systemd/system/magebox-first-boot.service /usr/local/bin/magebox-first-boot.sh\n" > /usr/local/bin/magebox-first-boot.sh && chmod +x /usr/local/bin/magebox-first-boot.sh'
 
-    - curtin in-target --target=/target -- bash -c '
-      cat > /etc/systemd/system/magebox-first-boot.service << "UNIT"
-[Unit]
-Description=MageBox first-boot mkcert CA install
-After=network-online.target
-Wants=network-online.target
-ConditionPathExists=/usr/local/bin/magebox-first-boot.sh
-
-[Service]
-Type=oneshot
-ExecStart=/usr/local/bin/magebox-first-boot.sh
-RemainAfterExit=no
-
-[Install]
-WantedBy=multi-user.target
-UNIT
-      systemctl enable magebox-first-boot.service'
+    - curtin in-target --target=/target -- bash -c 'printf "[Unit]\nDescription=MageBox first-boot mkcert CA install\nAfter=network-online.target\nWants=network-online.target\nConditionPathExists=/usr/local/bin/magebox-first-boot.sh\n\n[Service]\nType=oneshot\nExecStart=/usr/local/bin/magebox-first-boot.sh\nRemainAfterExit=no\n\n[Install]\nWantedBy=multi-user.target\n" > /etc/systemd/system/magebox-first-boot.service && systemctl enable magebox-first-boot.service'
 
     # Install Backblaze B2 CLI in a virtual environment
     - curtin in-target --target=/target -- su - elgentos -c '
