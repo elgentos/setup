@@ -76,6 +76,9 @@ autoinstall:
     - name: slack
 
   late-commands:
+    # Ensure the elgentos user exists (identity is interactive, so it may not be created yet)
+    - curtin in-target --target=/target -- bash -c 'id elgentos &>/dev/null || useradd -m -s /bin/zsh elgentos'
+
     # Resize 100GB partition to full space available
     - curtin in-target --target=/target -- lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
     - curtin in-target --target=/target -- resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv
@@ -119,9 +122,6 @@ autoinstall:
 
     # Install nvm
     - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash"
-
-    # Ensure the elgentos user exists (identity is interactive, so it may not be created yet)
-    - curtin in-target --target=/target -- bash -c 'id elgentos &>/dev/null || useradd -m -s /bin/zsh elgentos'
 
     # Prepare Homebrew prefix directory with correct ownership
     - curtin in-target --target=/target -- bash -c 'mkdir -p /home/linuxbrew/.linuxbrew && chown -R elgentos:elgentos /home/linuxbrew'
