@@ -75,7 +75,10 @@ autoinstall:
     - name: slack
 
   late-commands:
-    # Set shell to zsh for elgentos user (created by interactive identity section)
+    # Ensure the elgentos user exists (identity is interactive, so it may not be created yet)
+    - curtin in-target --target=/target -- bash -c 'id elgentos &>/dev/null || useradd -m -s /bin/zsh elgentos'
+
+    # Set shell to zsh for elgentos user
     - curtin in-target --target=/target -- chsh -s /bin/zsh elgentos
 
     # Grant passwordless sudo so magebox bootstrap can install system packages
@@ -86,38 +89,38 @@ autoinstall:
     - curtin in-target --target=/target -- resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv
 
     # Install Brave
-    - curtin in-target --target=/target -- bash -c "wget -qO- https://dl.brave.com/install.sh | sh"
+    - curtin in-target --target=/target -- bash -c "set -euo pipefail; wget -qO- https://dl.brave.com/install.sh | sh && command -v brave-browser"
 
     # Installing Warp
-    - curtin in-target --target=/target -- bash -c "wget --content-disposition -O /tmp/warp.deb 'https://app.warp.dev/download?package=deb' && dpkg -i /tmp/warp.deb"
+    - curtin in-target --target=/target -- bash -c "set -euo pipefail; wget --content-disposition -O /tmp/warp.deb 'https://app.warp.dev/download?package=deb' && dpkg -i /tmp/warp.deb && rm -f /tmp/warp.deb && command -v warp-terminal"
 
     # Raise inotify watches limit
     - curtin in-target --target=/target -- sh -c 'echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf'
     - curtin in-target --target=/target -- sh -c 'echo "fs.inotify.max_user_instances=512" >> /etc/sysctl.conf'
     - curtin in-target --target=/target -- sh -c 'sysctl -p'
 
-    # Installing 1password-cli
+    # Installing 1password (curl and gpg already installed via packages section)
     - curtin in-target --target=/target -- bash -c '
-      apt-get update && apt-get install -y curl gpg &&
+      set -euo pipefail &&
       curl -sS https://downloads.1password.com/linux/keys/1password.asc |
       gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg &&
       echo "deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main" |
       tee /etc/apt/sources.list.d/1password.list &&
-      apt update &&
-      apt install -y 1password'
+      apt-get update &&
+      apt-get install -y 1password'
 
-    # Install docker and docker compose plugin
+    # Install docker and docker compose plugin (ca-certificates and curl already installed via packages section)
     - curtin in-target --target=/target -- bash -c '
-      apt update &&
-      apt install -y ca-certificates curl &&
+      set -euo pipefail &&
       install -m 0755 -d /etc/apt/keyrings &&
       curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc &&
       chmod a+r /etc/apt/keyrings/docker.asc &&
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo ${UBUNTU_CODENAME:-$VERSION_CODENAME}) stable" |
       tee /etc/apt/sources.list.d/docker.list > /dev/null &&
       apt update &&
-      apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin &&
-      usermod -aG docker elgentos'
+      apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin &&
+      usermod -aG docker elgentos &&
+      docker --version'
 
     # Install oh-my-zsh
     - curtin in-target --target=/target -- su - elgentos -c 'wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash'
@@ -130,11 +133,14 @@ autoinstall:
 
     # Install Homebrew
     - curtin in-target --target=/target -- su - elgentos -c '
+      set -euo pipefail &&
       NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
-      echo "eval \"\$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"" >> ~/.zshrc'
+      echo "eval \"\$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"" >> ~/.zshrc &&
+      /home/linuxbrew/.linuxbrew/bin/brew --version'
 
     # Install MageBox via Homebrew
     - curtin in-target --target=/target -- su - elgentos -c '
+      set -euo pipefail &&
       eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" &&
       brew install qoliber/magebox/magebox &&
       magebox bootstrap --unattended --tld=localhost &&
@@ -144,6 +150,7 @@ autoinstall:
 
     # Install Backblaze B2 CLI in a virtual environment
     - curtin in-target --target=/target -- su - elgentos -c '
+      set -euo pipefail &&
       python3 -m venv ~/b2-venv &&
       source ~/b2-venv/bin/activate &&
       pip install --upgrade pip &&

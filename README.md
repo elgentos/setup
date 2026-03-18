@@ -6,7 +6,22 @@ Current supported operating systems:
 
 - Ubuntu 24.04 LTS (x86_64)
 
-# Installation
+## Installation
+
+There are two installation paths:
+
+### Autoinstall (full OS install)
+
+The `autoinstall.yaml` file can be used with Ubuntu Server's autoinstall to provision a workstation from scratch. It handles partitioning, package installation, and late-commands that install additional software.
+
+To validate the autoinstall config:
+
+```
+source .venv/bin/activate
+python3 autoinstall-validate.py
+```
+
+### Post-install (existing OS)
 
 [![Install](https://github.com/elgentos/setup/workflows/Install/badge.svg)](https://github.com/elgentos/setup/actions?query=workflow%3A%22Install%22)
 
@@ -22,23 +37,28 @@ to run it directly:
 bash install
 ```
 
-## Result
+## What gets installed
 
-The following files have been created in the home directory:
+### Via autoinstall (late-commands)
 
-- [`.gitconfig`](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration)
-- [`.gitconfig-user`](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration)
-- [`.gitignore`](https://git-scm.com/docs/gitignore)
-- [`.zshrc`](http://zsh.sourceforge.net/Doc/Release/Files.html#Files)
+- [1Password](https://1password.com/)
+- [Backblaze B2 CLI](https://www.backblaze.com/docs/cloud-storage-command-line-tools)
+- [Brave](https://brave.com/)
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
+- [Docker](https://www.docker.com/) + [Docker Compose](https://docs.docker.com/compose/)
+- [Homebrew](https://brew.sh/)
+- [MageBox](https://magebox.dev)
+- [nvm](https://github.com/nvm-sh/nvm)
+- [Oh My Zsh](https://ohmyz.sh/)
+- [Warp](https://www.warp.dev/)
 
-The following software has been installed:
+### Via Makefile
 
 - [Bash](https://www.gnu.org/software/bash/)
 - [Composer](https://getcomposer.org/)
 - [cURL](https://curl.haxx.se/)
 - [Docker](https://www.docker.com/)
-- [Docker compose](https://docs.docker.com/compose/)
-- [MageBox](https://magebox.dev)
+- [Docker Compose](https://docs.docker.com/compose/)
 - [GIT](https://git-scm.com/)
 - [JetBrains Toolbox](https://www.jetbrains.com/toolbox-app/)
 - [jq](https://stedolan.github.io/jq/)
@@ -49,21 +69,25 @@ The following software has been installed:
 - [Vim](https://www.vim.org/)
 - [ZSH](https://www.zsh.org/)
 
-# Optional
+### Snaps (via autoinstall)
+
+- Chromium, Discord, gcolor3, Postman, PHPStorm, Spotify, SQLite Browser, Steam, Slack
+
+## Optional
 
 To cherry-pick optional software, use the following targets:
 
-## Web browsers
+### Web browsers
 
 - [brave](https://brave.com/)
 - [firefox](https://www.mozilla.org/en-US/firefox/)
 - [google-chrome](https://www.google.com/chrome/)
 
-## Productivity
+### Productivity
 
 - [`gimp`](https://www.gimp.org/)
 
-## Tools
+### Tools
 
 - [`ag`](https://github.com/ggreer/the_silver_searcher)
 - [`composer-changelogs`](https://packagist.org/packages/pyrech/composer-changelogs)
@@ -75,11 +99,11 @@ To cherry-pick optional software, use the following targets:
 - [`tmuxinator`](https://tracker.debian.org/pkg/tmuxinator)
 - [`tmuxinator_completion`](https://github.com/tmuxinator/tmuxinator/tree/master/completion)
 
-## Networking
+### Networking
 
 - [`dnsmasq`](http://www.thekelleys.org.uk/dnsmasq/doc.html)
 
-## Example
+### Example
 
 The following adds `gimp`, `symlinks` and `ssg` to the installation.
 

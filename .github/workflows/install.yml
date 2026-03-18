@@ -7,6 +7,16 @@ on:
     branches: [ main ]
 
 jobs:
+  validate-autoinstall:
+    runs-on: ubuntu-latest
+    name: Validate autoinstall.yaml
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: pip install pyyaml jsonschema
+      - name: Validate autoinstall config
+        run: python3 autoinstall-validate.py
+
   install:
     strategy:
       matrix:
