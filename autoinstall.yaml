@@ -117,6 +117,16 @@ autoinstall:
       apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin &&
       usermod -aG docker elgentos'
 
+    # Install Nginx
+    - curtin in-target --target=/target -- apt install -y nginx
+
+    # Install mkcert
+    - curtin in-target --target=/target -- bash -c '
+      apt install -y libnss3-tools &&
+      curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" &&
+      chmod +x mkcert-v*-linux-amd64 &&
+      mv mkcert-v*-linux-amd64 /usr/local/bin/mkcert'
+
     # Install oh-my-zsh
     - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash"
 
