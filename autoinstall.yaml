@@ -147,7 +147,7 @@ autoinstall:
       magebox config set default_php 8.4 &&
       magebox config set tld localhost &&
       mkdir -p ~/workspace/elgentos/example/pub &&
-      cd ~/workspace/elgentos/example && magebox init elgentos.localhost &&
+      cd ~/workspace/elgentos/example && magebox init elgentos.example &&
       echo "<?php phpinfo();" > ~/workspace/elgentos/example/pub/index.php'
 
     # Add first-boot script to install mkcert CA (can't run in curtin chroot)
