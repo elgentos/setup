@@ -5,7 +5,6 @@ autoinstall:
   identity:
     hostname: elgentos-ubuntu-p14s
     username: elgentos
-    password: "$6$06Ot4bgyw5j3L8Dn$N8o2btGghAI0KynX4Mab7krf.9Z/mtAyWrftK26d8Z8zSLzxgxuqwm7ArRXrV6iwMTWwF4GUS3ZfdEvA/YWIl0"  # elgentos123
 
   shutdown: poweroff
 
@@ -76,8 +75,11 @@ autoinstall:
     - name: slack
 
   late-commands:
-    # Ensure the elgentos user exists (identity is interactive, so it may not be created yet)
-    - curtin in-target --target=/target -- bash -c 'id elgentos &>/dev/null || useradd -m -s /bin/zsh elgentos'
+    # Set shell to zsh for elgentos user (created by interactive identity section)
+    - curtin in-target --target=/target -- chsh -s /bin/zsh elgentos
+
+    # Grant passwordless sudo so magebox bootstrap can install system packages
+    - curtin in-target --target=/target -- bash -c 'echo "elgentos ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/elgentos'
 
     # Resize 100GB partition to full space available
     - curtin in-target --target=/target -- lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
@@ -116,16 +118,6 @@ autoinstall:
       apt update &&
       apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin &&
       usermod -aG docker elgentos'
-
-    # Install Nginx
-    - curtin in-target --target=/target -- apt install -y nginx
-
-    # Install mkcert
-    - curtin in-target --target=/target -- bash -c '
-      apt install -y libnss3-tools &&
-      curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" &&
-      chmod +x mkcert-v*-linux-amd64 &&
-      mv mkcert-v*-linux-amd64 /usr/local/bin/mkcert'
 
     # Install oh-my-zsh
     - curtin in-target --target=/target -- bash -c "wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash"
