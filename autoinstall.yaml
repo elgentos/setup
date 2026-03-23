@@ -76,7 +76,10 @@ autoinstall:
 
   late-commands:
     # Ensure the elgentos user exists (identity is interactive, so it may not be created yet)
-    - curtin in-target --target=/target -- bash -c 'id elgentos &>/dev/null || useradd -m -s /bin/zsh -p "$6$06Ot4bgyw5j3L8Dn$N8o2btGghAI0KynX4Mab7krf.9Z/mtAyWrftK26d8Z8zSLzxgxuqwm7ArRXrV6iwMTWwF4GUS3ZfdEvA/YWIl0" elgentos'
+    - curtin in-target --target=/target -- bash -c 'id elgentos &>/dev/null || useradd -m -s /bin/zsh elgentos'
+
+    # Set password to elgentos123 (identity is interactive so password from that section is ignored)
+    - curtin in-target --target=/target -- bash -c 'echo "elgentos:elgentos123" | chpasswd'
 
     # Set shell to zsh for elgentos user
     - curtin in-target --target=/target -- chsh -s /bin/zsh elgentos

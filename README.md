@@ -14,6 +14,8 @@ There are two installation paths:
 
 The `autoinstall.yaml` file can be used with Ubuntu Server's autoinstall to provision a workstation from scratch. It handles partitioning, package installation, and late-commands that install additional software.
 
+After each change in this file, you should validate it!
+
 To validate the autoinstall config:
 
 ```
