@@ -48,6 +48,7 @@ autoinstall:
     - jq
     - lsb-release
     - multitail
+    - mysql-client
     - ncdu
     - python3-pip
     - python3-setuptools
@@ -85,7 +86,7 @@ autoinstall:
     - curtin in-target --target=/target -- chsh -s /bin/zsh elgentos
 
     # Grant passwordless sudo so magebox bootstrap can install system packages
-    - curtin in-target --target=/target -- bash -c 'echo "elgentos ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/elgentos && chmod 0440 /etc/sudoers.d/elgentos'
+    - curtin in-target --target=/target -- bash -c 'usermod -aG sudo elgentos && echo "elgentos ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/elgentos && chmod 0440 /etc/sudoers.d/elgentos'
 
     # Resize 100GB partition to full space available
     - curtin in-target --target=/target -- lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
@@ -140,6 +141,9 @@ autoinstall:
       NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
       echo "eval \"\$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"" >> ~/.zshrc &&
       /home/linuxbrew/.linuxbrew/bin/brew --version'
+
+    # Remove php8.3 and related packages (installed as composer dependency); MageBox manages PHP
+    - curtin in-target --target=/target -- bash -c 'apt-get purge -y php8.3* libapache2-mod-php8.3 && apt-get autoremove -y'
 
     # Install MageBox via Homebrew
     - curtin in-target --target=/target -- su - elgentos -c '
