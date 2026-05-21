@@ -143,7 +143,7 @@ autoinstall:
       /home/linuxbrew/.linuxbrew/bin/brew --version'
 
     # Remove php8.3 and related packages (installed as composer dependency); MageBox manages PHP
-    - curtin in-target --target=/target -- bash -c 'apt-get purge -y php8.3* libapache2-mod-php8.3 && apt-get autoremove -y'
+    - curtin in-target --target=/target -- bash -c 'pkgs=$(dpkg-query -W -f="${binary:Package}\n" 2>/dev/null | grep -E "^(php8\.3|libapache2-mod-php8\.3)" || true); if [ -n "$pkgs" ]; then apt-get purge -y $pkgs; fi; apt-get autoremove -y'
 
     # Install MageBox via Homebrew
     - curtin in-target --target=/target -- su - elgentos -c '
