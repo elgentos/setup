@@ -81,8 +81,9 @@ autoinstall:
     # Falls back to creating "elgentos" if no user was created.
     - curtin in-target --target=/target -- bash -c 'id -nu 1000 &>/dev/null || useradd -m -s /bin/zsh elgentos; id -nu 1000 > /etc/primary-user'
 
-    # Set password to elgentos123 (identity is interactive so password from that section is ignored)
-    - curtin in-target --target=/target -- bash -c 'echo "$(cat /etc/primary-user):elgentos123" | chpasswd'
+    # Fallback password elgentos123 when the user has no usable password (e.g. created
+    # by the useradd fallback above); a password chosen interactively is kept as-is
+    - curtin in-target --target=/target -- bash -c 'u=$(cat /etc/primary-user) && if [ "$(passwd -S "$u" | cut -d" " -f2)" != "P" ]; then echo "$u:elgentos123" | chpasswd; fi'
 
     # Set shell to zsh for the primary user
     - curtin in-target --target=/target -- bash -c 'chsh -s /bin/zsh "$(cat /etc/primary-user)"'
