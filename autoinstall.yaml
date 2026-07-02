@@ -76,17 +76,19 @@ autoinstall:
     - name: slack
 
   late-commands:
-    # Ensure the elgentos user exists (identity is interactive, so it may not be created yet)
-    - curtin in-target --target=/target -- bash -c 'id elgentos &>/dev/null || useradd -m -s /bin/zsh elgentos'
+    # Detect the user created during the interactive identity step (first UID 1000 user)
+    # and persist the name so all later commands (and the first-boot script) can use it.
+    # Falls back to creating "elgentos" if no user was created.
+    - curtin in-target --target=/target -- bash -c 'id -nu 1000 &>/dev/null || useradd -m -s /bin/zsh elgentos; id -nu 1000 > /etc/primary-user'
 
     # Set password to elgentos123 (identity is interactive so password from that section is ignored)
-    - curtin in-target --target=/target -- bash -c 'echo "elgentos:elgentos123" | chpasswd'
+    - curtin in-target --target=/target -- bash -c 'echo "$(cat /etc/primary-user):elgentos123" | chpasswd'
 
-    # Set shell to zsh for elgentos user
-    - curtin in-target --target=/target -- chsh -s /bin/zsh elgentos
+    # Set shell to zsh for the primary user
+    - curtin in-target --target=/target -- bash -c 'chsh -s /bin/zsh "$(cat /etc/primary-user)"'
 
     # Grant passwordless sudo so magebox bootstrap can install system packages
-    - curtin in-target --target=/target -- bash -c 'usermod -aG sudo elgentos && echo "elgentos ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/elgentos && chmod 0440 /etc/sudoers.d/elgentos'
+    - curtin in-target --target=/target -- bash -c 'u=$(cat /etc/primary-user) && usermod -aG sudo "$u" && echo "$u ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/$u" && chmod 0440 "/etc/sudoers.d/$u"'
 
     # Resize 100GB partition to full space available
     - curtin in-target --target=/target -- lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
@@ -123,20 +125,20 @@ autoinstall:
       tee /etc/apt/sources.list.d/docker.list > /dev/null &&
       apt update &&
       apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin &&
-      usermod -aG docker elgentos &&
+      usermod -aG docker "$(cat /etc/primary-user)" &&
       docker --version'
 
     # Install oh-my-zsh
-    - curtin in-target --target=/target -- su - elgentos -c 'wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash'
+    - curtin in-target --target=/target -- su - "$(cat /target/etc/primary-user)" -c 'wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash'
 
     # Install nvm
-    - curtin in-target --target=/target -- su - elgentos -c 'wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash'
+    - curtin in-target --target=/target -- su - "$(cat /target/etc/primary-user)" -c 'wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash'
 
     # Prepare Homebrew prefix directory with correct ownership
-    - curtin in-target --target=/target -- bash -c 'mkdir -p /home/linuxbrew/.linuxbrew && chown -R elgentos:elgentos /home/linuxbrew'
+    - curtin in-target --target=/target -- bash -c 'u=$(cat /etc/primary-user) && mkdir -p /home/linuxbrew/.linuxbrew && chown -R "$u:$u" /home/linuxbrew'
 
     # Install Homebrew
-    - curtin in-target --target=/target -- su - elgentos -c '
+    - curtin in-target --target=/target -- su - "$(cat /target/etc/primary-user)" -c '
       set -euo pipefail &&
       NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
       echo "eval \"\$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"" >> ~/.zshrc &&
@@ -146,7 +148,7 @@ autoinstall:
     - curtin in-target --target=/target -- bash -c 'pkgs=$(dpkg-query -W -f="${binary:Package}\n" 2>/dev/null | grep -E "^(php8\.3|libapache2-mod-php8\.3)" || true); if [ -n "$pkgs" ]; then apt-get purge -y $pkgs; fi; apt-get autoremove -y'
 
     # Install MageBox via Homebrew
-    - curtin in-target --target=/target -- su - elgentos -c '
+    - curtin in-target --target=/target -- su - "$(cat /target/etc/primary-user)" -c '
       set -euo pipefail &&
       eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" &&
       brew install qoliber/magebox/magebox &&
@@ -157,13 +159,16 @@ autoinstall:
       cd ~/workspace/elgentos/example && magebox init elgentos/example &&
       echo "<?php phpinfo();" > ~/workspace/elgentos/example/pub/index.php'
 
-    # Add first-boot script to install mkcert CA (can't run in curtin chroot)
-    - curtin in-target --target=/target -- bash -c 'printf "#!/bin/bash\nset -euo pipefail\nexport HOME=/home/elgentos\nexport PATH=\"/home/linuxbrew/.linuxbrew/bin:\$PATH\"\nsu - elgentos -c \"eval \\\"\\\$(brew shellenv)\\\" && mkcert -install && magebox restart\"\nsystemctl disable magebox-first-boot.service\nrm -f /etc/systemd/system/magebox-first-boot.service /usr/local/bin/magebox-first-boot.sh\n" > /usr/local/bin/magebox-first-boot.sh && chmod +x /usr/local/bin/magebox-first-boot.sh'
+    # Add first-boot scripts to install mkcert CA (can't run in curtin chroot).
+    # The user-level part is a separate script so no shell escaping is needed inside su -c.
+    - curtin in-target --target=/target -- bash -c 'printf "#!/bin/bash\nset -euo pipefail\neval \"\$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"\nmkcert -install\nmagebox restart\n" > /usr/local/bin/magebox-first-boot-user.sh && chmod +x /usr/local/bin/magebox-first-boot-user.sh'
+
+    - curtin in-target --target=/target -- bash -c 'printf "#!/bin/bash\nset -euo pipefail\nsu - \"\$(cat /etc/primary-user)\" -c /usr/local/bin/magebox-first-boot-user.sh\nsystemctl disable magebox-first-boot.service\nrm -f /etc/systemd/system/magebox-first-boot.service /usr/local/bin/magebox-first-boot.sh /usr/local/bin/magebox-first-boot-user.sh\n" > /usr/local/bin/magebox-first-boot.sh && chmod +x /usr/local/bin/magebox-first-boot.sh'
 
     - curtin in-target --target=/target -- bash -c 'printf "[Unit]\nDescription=MageBox first-boot mkcert CA install\nAfter=network-online.target\nWants=network-online.target\nConditionPathExists=/usr/local/bin/magebox-first-boot.sh\n\n[Service]\nType=oneshot\nExecStart=/usr/local/bin/magebox-first-boot.sh\nRemainAfterExit=no\n\n[Install]\nWantedBy=multi-user.target\n" > /etc/systemd/system/magebox-first-boot.service && systemctl enable magebox-first-boot.service'
 
     # Install Backblaze B2 CLI in a virtual environment
-    - curtin in-target --target=/target -- su - elgentos -c '
+    - curtin in-target --target=/target -- su - "$(cat /target/etc/primary-user)" -c '
       set -euo pipefail &&
       python3 -m venv ~/b2-venv &&
       source ~/b2-venv/bin/activate &&
@@ -171,7 +176,7 @@ autoinstall:
       pip install b2'
 
     # Install Claude Code
-    - curtin in-target --target=/target -- su - elgentos -c '
+    - curtin in-target --target=/target -- su - "$(cat /target/etc/primary-user)" -c '
       export NVM_DIR="$HOME/.nvm" &&
       . "$NVM_DIR/nvm.sh" &&
       nvm install --lts &&
